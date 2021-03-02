@@ -1,55 +1,32 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-const Header = (props) => {
-  return <h1>{props.course.name}</h1>;
+const Header = ({ course }) => {
+  return <h1>{course.name}</h1>;
 };
 
-const Content = (props) => {
-  let part1 = props.course.parts[0]
-  let part2 = props.course.parts[1]
-  let part3 = props.course.parts[2]
+const Part = ({ part }) => (
+  <p>
+    {part.name} {part.exercises}
+  </p>
+);
+
+const Content = ({ course }) => {
   return (
     <>
-      <p>
-        {part1.name} {part1.exercises}
-      </p>
-      <p>
-        {part2.name} {part2.exercises}
-      </p>
-      <p>
-        {part3.name} {part3.exercises}
-      </p>
+      {course.parts.map((part) => (
+        <Part key={part.id} part={part} />
+      ))}
     </>
   );
 };
 
-const Total = (props) => {
-  let total = props.course.parts[0].exercises
-  total += props.course.parts[1].exercises
-  total += props.course.parts[2].exercises
+const Total = ({ course }) => {
+  const total = course.parts.reduce((total, part) => total + part.exercises, 0);
   return <p>Number of exercises {total}</p>;
 };
 
-const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  }
-
+const Course = ({ course }) => {
   return (
     <div>
       <Header course={course} />
@@ -57,6 +34,32 @@ const App = () => {
       <Total course={course} />
     </div>
   );
+};
+
+const App = () => {
+  const course = {
+    id: 1,
+    name: "Half Stack application development",
+    parts: [
+      {
+        name: "Fundamentals of React",
+        exercises: 10,
+        id: 1,
+      },
+      {
+        name: "Using props to pass data",
+        exercises: 7,
+        id: 2,
+      },
+      {
+        name: "State of a component",
+        exercises: 14,
+        id: 3,
+      },
+    ],
+  };
+
+  return <Course course={course} />;
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));
