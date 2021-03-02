@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 const Header = ({ course }) => {
-  return <h1>{course.name}</h1>;
+  return <h2>{course.name}</h2>;
 };
 
 const Part = ({ part }) => (
@@ -23,7 +23,7 @@ const Content = ({ course }) => {
 
 const Total = ({ course }) => {
   const total = course.parts.reduce((total, part) => total + part.exercises, 0);
-  return <p>Number of exercises {total}</p>;
+  return <strong>Number of exercises {total}</strong>;
 };
 
 const Course = ({ course }) => {
