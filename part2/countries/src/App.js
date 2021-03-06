@@ -9,17 +9,28 @@ const Filter = ({ query, onChange }) => {
   );
 };
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, onShowClick }) => {
   return (
     <ul>
       {countries.map((country) => (
-        <Country key={country.alpha2Code} country={country} />
+        <Country
+          key={country.alpha2Code}
+          country={country}
+          onShowClick={onShowClick}
+        />
       ))}
     </ul>
   );
 };
 
-const Country = ({ country }) => <li>{country.name}</li>;
+const Country = ({ country, onShowClick }) => {
+  return (
+    <li>
+      {country.name}
+      <button onClick={() => onShowClick(country)}>show</button>
+    </li>
+  );
+};
 
 const Language = ({ lang }) => <li>{lang.name}</li>;
 
@@ -40,7 +51,7 @@ const CountryDetail = ({ country }) => {
   );
 };
 
-const Content = ({ countries }) => {
+const Content = ({ countries, onShowClick }) => {
   if (countries.length > 10) {
     return (
       <p>
@@ -48,7 +59,7 @@ const Content = ({ countries }) => {
       </p>
     );
   } else if (countries.length > 1) {
-    return <Countries countries={countries} />;
+    return <Countries countries={countries} onShowClick={onShowClick} />;
   } else if (countries.length === 1) {
     return <CountryDetail country={countries[0]} />;
   } else {
@@ -76,12 +87,16 @@ const App = () => {
     setQuery(event.target.value);
   };
 
+  const handleButtonClick = (country) => {
+    setQuery(country.name);
+  };
+
   console.log('countries', countriesToShow);
 
   return (
     <div>
       <Filter query={query} onChange={handleQueryChange} />
-      <Content countries={countriesToShow} />
+      <Content countries={countriesToShow} onShowClick={handleButtonClick} />
     </div>
   );
 };
