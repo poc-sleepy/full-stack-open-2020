@@ -19,4 +19,6 @@ const destroy = (id) => {
   return axios.delete(`${baseUrl}/${id}`).then((response) => response.data);
 };
 
-export default { getAll, create, update, destroy };
+const persons = { getAll, create, update, destroy };
+
+export default persons;
