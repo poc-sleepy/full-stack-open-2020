@@ -66,7 +66,7 @@ const App = () => {
       )
     : persons;
 
-  const handleFromSubmit = (event) => {
+  const handleFormSubmit = (event) => {
     event.preventDefault();
     if (persons.map((person) => person.name).includes(newName)) {
       alert(`${newName} is already added to phonebook`);
@@ -75,9 +75,13 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-      setPersons(persons.concat(personObject));
-      setNewName('');
-      setNewNumber('');
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+          setNewName('');
+          setNewNumber('');
+        });
     }
   };
 
@@ -102,7 +106,7 @@ const App = () => {
 
       <h3>Add a new</h3>
       <PersonForm
-        onSubmit={handleFromSubmit}
+        onSubmit={handleFormSubmit}
         newName={newName}
         newNameOnChange={handleNameChange}
         newNumber={newNumber}
