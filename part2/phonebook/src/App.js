@@ -25,8 +25,28 @@ const App = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    if (persons.map((person) => person.name).includes(newName)) {
-      alert(`${newName} is already added to phonebook`);
+    const personToUpdate = persons.find((person) => person.name === newName);
+    if (personToUpdate) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const personObject = {
+          ...personToUpdate,
+          number: newNumber,
+        };
+        personService
+          .update(personObject.id, personObject)
+          .then((returnedPerson) => {
+            const newerPersons = persons.map((person) =>
+              person.id === returnedPerson.id ? returnedPerson : person
+            );
+            setPersons(newerPersons);
+            setNewName('');
+            setNewNumber('');
+          });
+      }
     } else {
       const personObject = {
         name: newName,
