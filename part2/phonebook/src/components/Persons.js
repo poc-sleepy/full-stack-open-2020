@@ -13,7 +13,7 @@ const Persons = ({ persons, deletePerson }) => {
 const Person = ({ person, deletePerson }) => (
   <p>
     {person.name} {person.number}
-    <button onClick={() => deletePerson(person.id)}>delete</button>
+    <button onClick={() => deletePerson(person)}>delete</button>
   </p>
 );
 

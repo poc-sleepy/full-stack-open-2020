@@ -53,11 +53,15 @@ const App = () => {
     setUsesFilter(Boolean(event.target.value.trim()));
   };
 
-  const deletePerson = (id) => {
-    personService.destroy(id).then(() => {
-      const newPersons = persons.filter((person) => person.id !== id);
-      setPersons(newPersons);
-    });
+  const deletePerson = (personToDelete) => {
+    if (window.confirm(`Delete ${personToDelete.name}?`)) {
+      personService.destroy(personToDelete.id).then(() => {
+        const newPersons = persons.filter(
+          (person) => person.id !== personToDelete.id
+        );
+        setPersons(newPersons);
+      });
+    }
   };
 
   return (
