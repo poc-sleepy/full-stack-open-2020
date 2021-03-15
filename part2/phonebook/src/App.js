@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import { InfoNotification, ErrorNotification } from './components/Notification';
 import personService from './services/persons';
 
 const App = () => {
@@ -10,6 +11,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [query, setQuery] = useState('');
   const [usesFilter, setUsesFilter] = useState(false);
+  const [infoMessage, setInfoMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -45,6 +48,17 @@ const App = () => {
             setPersons(newerPersons);
             setNewName('');
             setNewNumber('');
+            setTimeout(() => {
+              setInfoMessage(null);
+            }, 5000);
+            setInfoMessage(`Updated ${returnedPerson.name}`);
+            setErrorMessage(null);
+          })
+          .catch((error) => {
+            setErrorMessage(
+              `Information of ${newName} has already been removed from server`
+            );
+            setPersons(persons.filter((person) => person.name !== newName));
           });
       }
     } else {
@@ -56,6 +70,11 @@ const App = () => {
         setPersons(persons.concat(returnedPerson));
         setNewName('');
         setNewNumber('');
+        setTimeout(() => {
+          setInfoMessage(null);
+        }, 5000);
+        setInfoMessage(`Added ${returnedPerson.name}`);
+        setErrorMessage(null);
       });
     }
   };
@@ -87,7 +106,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      <ErrorNotification message={errorMessage} />
+      <InfoNotification message={infoMessage} />
       <Filter query={query} onChange={handleQueryChange} />
 
       <h3>Add a new</h3>
