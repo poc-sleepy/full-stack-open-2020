@@ -1,20 +1,20 @@
-interface BmiParams {
-  height: number;
-  weight: number;
-}
+// interface BmiParams {
+//   height: number;
+//   weight: number;
+// }
 
-const parseBmiArguments = (args: Array<string>): BmiParams => {
-  if (args.length !== 4) {
-    throw new Error('calculateBmi needs 2 arguments. height and weight.');
-  }
-  const height = Number(args[2]);
-  const weight = Number(args[3]);
-  if (!isNaN(height) && !isNaN(weight)) {
-    return { height, weight };
-  } else {
-    throw new Error('Arguments must be Number.');
-  }
-};
+// const parseBmiArguments = (args: Array<string>): BmiParams => {
+//   if (args.length !== 4) {
+//     throw new Error('calculateBmi needs 2 arguments. height and weight.');
+//   }
+//   const height = Number(args[2]);
+//   const weight = Number(args[3]);
+//   if (!isNaN(height) && !isNaN(weight)) {
+//     return { height, weight };
+//   } else {
+//     throw new Error('Arguments must be Number.');
+//   }
+// };
 
 const calculateBmi = (height: number, weight: number): string => {
   if (height <= 0 || weight <= 0) {
@@ -30,5 +30,4 @@ const calculateBmi = (height: number, weight: number): string => {
   }
 };
 
-const { height, weight } = parseBmiArguments(process.argv);
-console.log(calculateBmi(height, weight));
+export default calculateBmi;
