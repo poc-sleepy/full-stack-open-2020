@@ -13,25 +13,25 @@ interface ResultObject {
   average: number;
 }
 
-interface exerciseParams {
-  target: number;
-  hours: Array<number>;
-}
+// interface exerciseParams {
+//   target: number;
+//   hours: Array<number>;
+// }
 
-const parseExerciseArguments = (args: Array<string>): exerciseParams => {
-  if (args.length < 4) {
-    throw new Error(
-      'calculateExercises needs more than 1 argument. target hours per day and exercise hours.'
-    );
-  }
-  const target = Number(args[2]);
-  const hours = args.slice(3).map((str) => Number(str));
-  if (!isNaN(target) && hours.filter((num) => isNaN(num)).length === 0) {
-    return { target, hours };
-  } else {
-    throw new Error('Arguments must be Number.');
-  }
-};
+// const parseExerciseArguments = (args: Array<string>): exerciseParams => {
+//   if (args.length < 4) {
+//     throw new Error(
+//       'calculateExercises needs more than 1 argument. target hours per day and exercise hours.'
+//     );
+//   }
+//   const target = Number(args[2]);
+//   const hours = args.slice(3).map((str) => Number(str));
+//   if (!isNaN(target) && hours.filter((num) => isNaN(num)).length === 0) {
+//     return { target, hours };
+//   } else {
+//     throw new Error('Arguments must be Number.');
+//   }
+// };
 
 const rateTrainingAverage = (
   averageDailyHour: number,
@@ -81,5 +81,7 @@ const calculateExercises = (
   };
 };
 
-const { target, hours } = parseExerciseArguments(process.argv);
-console.log(calculateExercises(hours, target));
+// const { target, hours } = parseExerciseArguments(process.argv);
+// console.log(calculateExercises(hours, target));
+
+export default calculateExercises;
