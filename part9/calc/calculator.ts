@@ -18,7 +18,8 @@ try {
   console.log(process.argv);
   console.log(calculator(1, 5, 'divide'));
 } catch (e) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   console.log('Something went wrong, error message: ', e.message);
 }
 
-export default calculator;
+export { calculator };
