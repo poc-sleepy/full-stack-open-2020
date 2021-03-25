@@ -52,7 +52,7 @@ const rateTrainingAverage = (
   } else if (param >= 1.5) {
     return { rating: 5, ratingDescription: 'GREAT' };
   } else {
-    return { rating: 0, ratingDescription: "Can't Jadge" };
+    return { rating: 0, ratingDescription: 'Can\'t Jadge' };
   }
 };
 
