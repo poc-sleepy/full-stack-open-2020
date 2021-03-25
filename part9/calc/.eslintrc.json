@@ -1,22 +1,17 @@
 {
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": ["@typescript-eslint"],
   "env": {
     "node": true,
     "es6": true
   },
-  "extends": [
-    "eslint:recommended", 
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 12
-  },
-  "plugins": ["@typescript-eslint"],
   "rules": {
-    "indent": ["error", 2, {"SwitchCase": 1}],
-    "linebreak-style": ["error", "windows"],
-    "quotes": ["error", "single"],
-    "semi": ["error", "always"],
+    "linebreak-style": ["error", "unix"],
+    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/quotes": ["error", "single"],
     "@typescript-eslint/semi": ["error"],
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -27,5 +22,6 @@
       { "argsIgnorePattern": "^_" }
     ],
     "no-case-declarations": "off"
-  }
+  },
+  "parser": "@typescript-eslint/parser"
 }

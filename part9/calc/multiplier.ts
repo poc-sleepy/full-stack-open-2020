@@ -3,7 +3,7 @@ type TestType = {
   value2: number;
 };
 
-const parseArguments = (args: Array<String>): TestType => {
+const parseArguments = (args: Array<string>): TestType => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
 
