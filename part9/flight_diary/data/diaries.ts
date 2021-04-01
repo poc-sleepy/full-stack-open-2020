@@ -1,6 +1,7 @@
 import { DiaryEntry } from '../src/types';
+import toNewDiaryEntry from '../src/utils';
 
-const diaryEntries: Array<DiaryEntry> = [
+const data = [
   {
     id: 1,
     date: '2017-01-01',
@@ -28,7 +29,13 @@ const diaryEntries: Array<DiaryEntry> = [
     weather: 'cloudy',
     visibility: 'good',
     comment: 'I almost failed the landing but I survived',
-  }
+  },
 ];
+
+const diaryEntries: DiaryEntry[] = data.map((entry) => {
+  const diary = toNewDiaryEntry(entry) as DiaryEntry;
+  diary.id = entry.id;
+  return diary;
+});
 
 export { diaryEntries };
