@@ -1,7 +1,12 @@
-import { NewPatient } from './types';
+import { Gender, NewPatient } from './types';
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isGender = (gender: any): gender is Gender => {
+  return Object.values(Gender).includes(gender);
 };
 
 const parseName = (param: unknown): string => {
@@ -25,8 +30,8 @@ const parseSsn = (param: unknown): string => {
   return param;
 };
 
-const parseGender = (param: unknown): string => {
-  if (!param || !isString(param)) {
+const parseGender = (param: unknown): Gender => {
+  if (!param || !isGender(param)) {
     throw new Error(`Invalid gender: ${param}`);
   }
   return param;
@@ -40,11 +45,11 @@ const parseOccupation = (param: unknown): string => {
 };
 
 type toNewPatientField = {
-  name: unknown,
-  dateOfBirth: unknown,
-  ssn: unknown,
-  gender: unknown,
-  occupation: unknown,
+  name: unknown;
+  dateOfBirth: unknown;
+  ssn: unknown;
+  gender: unknown;
+  occupation: unknown;
 };
 
 const toNewPatient = (params: toNewPatientField): NewPatient => {
