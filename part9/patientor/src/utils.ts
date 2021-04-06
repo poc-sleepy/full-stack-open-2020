@@ -59,6 +59,7 @@ const toNewPatient = (params: toNewPatientField): NewPatient => {
     ssn: parseSsn(params.ssn),
     gender: parseGender(params.gender),
     occupation: parseOccupation(params.occupation),
+    entries: [],
   };
 };
 
