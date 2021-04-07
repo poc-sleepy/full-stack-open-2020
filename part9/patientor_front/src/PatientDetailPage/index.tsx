@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import axios from 'axios';
-import { Container, Table, Icon, SemanticICONS } from 'semantic-ui-react';
+import { Container, Icon, SemanticICONS } from 'semantic-ui-react';
 
 import { Gender, Patient } from '../types';
 import { apiBaseUrl } from '../constants';
-import HealthRatingBar from '../components/HealthRatingBar';
 import { useStateValue } from '../state';
 import { useParams } from 'react-router-dom';
 
@@ -16,6 +14,19 @@ const PatientDetailPage = () => {
   const patient = Object.values(patients)
     .filter((val) => val !== undefined)
     .find((patient) => patient !== undefined && patient.id === id);
+
+  const fetchPatient = async () => {
+    try {
+      if (id !== undefined) {
+        const { data: patient } = await axios.get<Patient>(
+          `${apiBaseUrl}/patients/${id}`
+        );
+        dispatch({ type: 'GET_PATIENT', payload: patient });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const genderIconName = (gender: Gender): SemanticICONS => {
     switch (gender) {
@@ -33,6 +44,10 @@ const PatientDetailPage = () => {
   } else if (patient === undefined) {
     return <p>No patient matches</p>;
   } else {
+    if (patient.ssn === undefined) {
+      void fetchPatient();
+    }
+
     return (
       <div className="App">
         <Container>
