@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Container, Icon, SemanticICONS } from 'semantic-ui-react';
 
-import { Entry, Gender, Patient } from '../types';
+import { Diagnosis, Entry, Gender, Patient } from '../types';
 import { apiBaseUrl } from '../constants';
 import { useStateValue, getPatient } from '../state';
 import { useParams } from 'react-router-dom';
@@ -82,17 +82,53 @@ const Entries = (prop: { entries: Entry[] | undefined }) => {
 
 const EntrySingle = (prop: { entry: Entry }) => {
   const entry = prop.entry;
+
   return (
     <div>
       <p>
         {entry.date}: <i>{entry.description}</i>
       </p>
+      <Diagnoses diagnosisCodes={entry.diagnosisCodes} />
+    </div>
+  );
+};
+
+const Diagnoses = (prop: {
+  diagnosisCodes: Array<Diagnosis['code']> | undefined;
+}) => {
+  const diagnosisCodes = prop.diagnosisCodes;
+
+  if (diagnosisCodes === undefined) {
+    return null;
+  } else {
+    return (
       <ul>
-        {entry.diagnosisCodes?.map((diagnosisCode) => (
-          <li key={diagnosisCode}>{diagnosisCode}</li>
+        {diagnosisCodes?.map((diagnosisCode) => (
+          <DiagnosisSingle key={diagnosisCode} diagnosisCode={diagnosisCode} />
         ))}
       </ul>
-    </div>
+    );
+  }
+};
+
+const DiagnosisSingle = (prop: { diagnosisCode: Diagnosis['code'] }) => {
+  const [{ diagnoses }] = useStateValue();
+  const diagnosisCode = prop.diagnosisCode;
+
+  const findDiagnosis = (code: Diagnosis['code']): Diagnosis | undefined => {
+    if (diagnoses === undefined) {
+      return undefined;
+    } else if (Object.keys(diagnoses).includes(code)) {
+      return diagnoses[code];
+    } else {
+      return undefined;
+    }
+  };
+
+  return (
+    <li>
+      {diagnosisCode}: {findDiagnosis(diagnosisCode)?.name}
+    </li>
   );
 };
 
