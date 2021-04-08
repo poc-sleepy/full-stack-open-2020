@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Container, Icon, SemanticICONS } from 'semantic-ui-react';
 
-import { Gender, Patient } from '../types';
+import { Entry, Gender, Patient } from '../types';
 import { apiBaseUrl } from '../constants';
 import { useStateValue, getPatient } from '../state';
 import { useParams } from 'react-router-dom';
@@ -57,10 +57,43 @@ const PatientDetailPage = () => {
           </h2>
           <p>ssn: {patient.ssn}</p>
           <p>occupation: {patient.occupation}</p>
+          <Entries entries={patient.entries} />
         </Container>
       </div>
     );
   }
+};
+
+const Entries = (prop: { entries: Entry[] | undefined }) => {
+  const entries = prop.entries;
+  if (entries === undefined) {
+    return null;
+  } else {
+    return (
+      <>
+        <h3>entries</h3>
+        {entries.map((entry) => (
+          <EntrySingle key={entry.id} entry={entry} />
+        ))}
+      </>
+    );
+  }
+};
+
+const EntrySingle = (prop: { entry: Entry }) => {
+  const entry = prop.entry;
+  return (
+    <div>
+      <p>
+        {entry.date}: <i>{entry.description}</i>
+      </p>
+      <ul>
+        {entry.diagnosisCodes?.map((diagnosisCode) => (
+          <li key={diagnosisCode}>{diagnosisCode}</li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default PatientDetailPage;
