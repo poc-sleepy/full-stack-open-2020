@@ -1,8 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import { Container, Icon, SemanticICONS } from 'semantic-ui-react';
+import { Card, Container, Icon } from 'semantic-ui-react';
 
-import { Diagnosis, Entry, Gender, Patient } from '../types';
+import { Diagnosis, Entry, HealthCheckRating, Patient } from '../types';
+import { genderIconName, entryIconName } from '../utils';
 import { apiBaseUrl } from '../constants';
 import { useStateValue, getPatient } from '../state';
 import { useParams } from 'react-router-dom';
@@ -25,17 +26,6 @@ const PatientDetailPage = () => {
       }
     } catch (e) {
       console.error(e);
-    }
-  };
-
-  const genderIconName = (gender: Gender): SemanticICONS => {
-    switch (gender) {
-      case 'male':
-        return 'mars';
-      case 'female':
-        return 'venus';
-      default:
-        return 'genderless';
     }
   };
 
@@ -83,14 +73,102 @@ const Entries = (prop: { entries: Entry[] | undefined }) => {
 const EntrySingle = (prop: { entry: Entry }) => {
   const entry = prop.entry;
 
-  return (
-    <div>
-      <p>
-        {entry.date}: <i>{entry.description}</i>
-      </p>
-      <Diagnoses diagnosisCodes={entry.diagnosisCodes} />
-    </div>
+  switch (entry.type) {
+    case 'OccupationalHealthcare':
+      return (
+        <Card fluid={true}>
+          <Card.Content>
+            <Card.Header>
+              {entry.date} <Icon name={entryIconName(entry.type)} />{' '}
+              {entry.employerName}
+            </Card.Header>
+            <Card.Meta>{entry.description}</Card.Meta>
+            <Diagnoses diagnosisCodes={entry.diagnosisCodes} />
+          </Card.Content>
+        </Card>
+      );
+    case 'Hospital':
+      return (
+        <Card fluid={true}>
+          <Card.Content>
+            <Card.Header>
+              {entry.date} <Icon name={entryIconName(entry.type)} />
+            </Card.Header>
+            <Card.Meta>{entry.description}</Card.Meta>
+            <Diagnoses diagnosisCodes={entry.diagnosisCodes} />
+          </Card.Content>
+        </Card>
+      );
+    case 'HealthCheck':
+      return (
+        <Card fluid={true}>
+          <Card.Content>
+            <Card.Header>
+              {entry.date} <Icon name={entryIconName(entry.type)} />
+            </Card.Header>
+            <Card.Meta>{entry.description}</Card.Meta>
+            <Diagnoses diagnosisCodes={entry.diagnosisCodes} />
+            <HealthCheckRatingComponent
+              healthCheckRating={entry.healthCheckRating}
+            />
+          </Card.Content>
+        </Card>
+      );
+    default:
+      return assertNever(entry);
+  }
+};
+
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
   );
+};
+
+const HealthCheckRatingComponent = (prop: {
+  healthCheckRating: HealthCheckRating;
+}) => {
+  const rating = prop.healthCheckRating;
+  switch (rating) {
+    case 0:
+      return (
+        <>
+          <Icon name="heart" color="green" />
+          <Icon name="heart" color="green" />
+          <Icon name="heart" color="green" />
+          <Icon name="heart" color="green" />
+        </>
+      );
+    case 1:
+      return (
+        <>
+          <Icon name="heart" color="yellow" />
+          <Icon name="heart" color="yellow" />
+          <Icon name="heart" color="yellow" />
+          <Icon name="heart" color="grey" />
+        </>
+      );
+    case 2:
+      return (
+        <>
+          <Icon name="heart" color="orange" />
+          <Icon name="heart" color="orange" />
+          <Icon name="heart" color="grey" />
+          <Icon name="heart" color="grey" />
+        </>
+      );
+    case 3:
+      return (
+        <>
+          <Icon name="heart" color="red" />
+          <Icon name="heart" color="grey" />
+          <Icon name="heart" color="grey" />
+          <Icon name="heart" color="grey" />
+        </>
+      );
+    default:
+      return null;
+  }
 };
 
 const Diagnoses = (prop: {
