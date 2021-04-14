@@ -1,7 +1,9 @@
 import express from 'express';
+import { Note } from './types';
+
 const app = express();
 
-const notes = [
+const notes: Note[] = [
   {
     id: 1,
     content: 'HTML is easy',
@@ -28,6 +30,17 @@ app.get('/', (_request, response) => {
 
 app.get('/api/notes', (_request, response) => {
   response.json(notes);
+});
+
+app.get('/api/notes/:id', (request, response) => {
+  const id = Number(request.params.id);
+  const note = notes.find((note) => note.id === id);
+
+  if (note === undefined) {
+    response.status(404).end();
+  } else {
+    response.json(note);
+  }
 });
 
 const PORT = 3001;
