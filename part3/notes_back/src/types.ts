@@ -4,3 +4,8 @@ export type Note = {
   date: string;
   important: boolean;
 };
+
+export type NewNote = {
+  content: string;
+  important?: boolean;
+};
