@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { requestLogger, unknownEndpoint } from './middlewares';
 import { Note } from './types';
 import { toNewNote } from './utils';
@@ -31,6 +32,7 @@ const generateId = () => {
   return maxId + 1;
 };
 
+app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
 
