@@ -1,9 +1,24 @@
 import express from 'express';
+import morgan from 'morgan';
 import { Person } from './types';
 import { getRandomInt, toNewPerson } from './utils';
 
 const app = express();
 app.use(express.json());
+app.use(
+  morgan((tokens, req, res) => {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'),
+      '-',
+      tokens['response-time'](req, res),
+      'ms',
+      JSON.stringify(req.body),
+    ].join(' ');
+  })
+);
 
 let persons: Person[] = [
   { id: 1, name: 'Arto Hellas', number: '040-123456' },
