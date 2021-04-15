@@ -1,9 +1,9 @@
 import express from 'express';
+import { requestLogger, unknownEndpoint } from './middlewares';
 import { Note } from './types';
 import { toNewNote } from './utils';
 
 const app = express();
-app.use(express.json());
 
 let notes: Note[] = [
   {
@@ -30,6 +30,9 @@ const generateId = () => {
   const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
   return maxId + 1;
 };
+
+app.use(express.json());
+app.use(requestLogger);
 
 app.get('/', (_request, response) => {
   response.send('<h1>Hello World!</h1>');
@@ -73,6 +76,8 @@ app.delete('/api/notes/:id', (request, response) => {
 
   response.status(204).end();
 });
+
+app.use(unknownEndpoint);
 
 const PORT = 3001;
 app.listen(PORT, () => {
