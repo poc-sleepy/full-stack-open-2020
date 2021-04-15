@@ -1,5 +1,6 @@
 import express from 'express';
 import { Person } from './types';
+import { getRandomInt, toNewPerson } from './utils';
 
 const app = express();
 app.use(express.json());
@@ -10,6 +11,17 @@ let persons: Person[] = [
   { id: 3, name: 'Dan Abramov', number: '12-43-234345' },
   { id: 4, name: 'Mary Poppendieck', number: '39-23-6423122' },
 ];
+
+const generateId = (): number => {
+  const id = getRandomInt(100000);
+  const person = persons.find((p) => p.id === id);
+  if (person === undefined) {
+    console.log(id);
+    return id;
+  } else {
+    return generateId();
+  }
+};
 
 app.get('/ping', (_request, response) => {
   response.send('pong');
@@ -31,6 +43,25 @@ app.get('/api/persons/:id', (request, response) => {
     response.status(404).end();
   } else {
     response.json(person);
+  }
+});
+
+app.post('/api/persons', (request, response) => {
+  try {
+    const newPerson = toNewPerson(request.body);
+
+    if (persons.find((p) => p.name === newPerson.name) !== undefined) {
+      throw new Error(`name must be unique: ${newPerson.name}`);
+    }
+
+    const person = {
+      id: generateId(),
+      ...newPerson,
+    };
+    persons = persons.concat(person);
+    response.status(201).json(person);
+  } catch (e) {
+    response.status(400).send(e.message);
   }
 });
 
