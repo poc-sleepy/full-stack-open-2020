@@ -1,9 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 import morgan from 'morgan';
 import { Person } from './types';
 import { getRandomInt, toNewPerson } from './utils';
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(
   morgan((tokens, req, res) => {
