@@ -1,12 +1,16 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+import { Note } from './models/note';
 import { requestLogger, unknownEndpoint } from './middlewares';
-import { Note } from './types';
+import { NoteType } from './types';
 import { toNewNote } from './utils';
 
+void dotenv.config();
 const app = express();
 
-let notes: Note[] = [
+let notes: NoteType[] = [
   {
     id: 1,
     content: 'HTML is easy',
@@ -41,7 +45,9 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/api/notes', (_request, response) => {
-  response.json(notes);
+  void Note.find({}).then((notes) => {
+    response.json(notes);
+  });
 });
 
 app.get('/api/notes/:id', (request, response) => {
@@ -59,7 +65,7 @@ app.post('/api/notes', (request, response) => {
   try {
     const newNote = toNewNote(request.body);
 
-    const note: Note = {
+    const note: NoteType = {
       id: generateId(),
       content: newNote.content,
       date: new Date().toISOString(),
@@ -81,7 +87,7 @@ app.delete('/api/notes/:id', (request, response) => {
 
 app.use(unknownEndpoint);
 
-const PORT = 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
