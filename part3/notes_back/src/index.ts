@@ -50,8 +50,17 @@ app.get('/api/notes', (_request, response) => {
 app.get('/api/notes/:id', (request, response) => {
   // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
-    const note = await Note.findById(request.params.id);
-    response.json(note);
+    try {
+      const note = await Note.findById(request.params.id);
+      if (note !== null) {
+        response.json(note);
+      } else {
+        response.status(404).end();
+      }
+    } catch (e) {
+      console.log(e);
+      response.status(400).send({ error: 'malformatted id' });
+    }
   })();
 });
 
