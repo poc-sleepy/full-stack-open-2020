@@ -1,8 +1,13 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { Person } from './types';
+import dotenv from 'dotenv';
+
+import { Person } from './models/person';
+import { PersonType } from './types';
 import { getRandomInt, toNewPerson } from './utils';
+
+void dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -22,7 +27,7 @@ app.use(
   })
 );
 
-let persons: Person[] = [
+let persons: PersonType[] = [
   { id: 1, name: 'Arto Hellas', number: '040-123456' },
   { id: 2, name: 'Ada Lovelace', number: '39-44-5323523' },
   { id: 3, name: 'Dan Abramov', number: '12-43-234345' },
@@ -51,7 +56,10 @@ app.get('/info', (_request, response) => {
 });
 
 app.get('/api/persons', (_request, response) => {
-  response.json(persons);
+  void (async () => {
+    const persons = await Person.find({});
+    response.json(persons);
+  })();
 });
 
 app.get('/api/persons/:id', (request, response) => {
@@ -87,7 +95,7 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end();
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
