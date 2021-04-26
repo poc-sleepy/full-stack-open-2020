@@ -31,11 +31,6 @@ let notes: NoteType[] = [
   },
 ];
 
-const generateId = () => {
-  const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
-  return maxId + 1;
-};
-
 app.use(cors());
 app.use(express.json());
 app.use(requestLogger);
@@ -45,37 +40,37 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/api/notes', (_request, response) => {
-  void Note.find({}).then((notes) => {
+  // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
+  void (async () => {
+    const notes = await Note.find({});
     response.json(notes);
-  });
+  })();
 });
 
 app.get('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id);
-  const note = notes.find((note) => note.id === id);
-
-  if (note === undefined) {
-    response.status(404).end();
-  } else {
+  // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
+  void (async () => {
+    const note = await Note.findById(request.params.id);
     response.json(note);
-  }
+  })();
 });
 
 app.post('/api/notes', (request, response) => {
-  try {
-    const newNote = toNewNote(request.body);
-
-    const note: NoteType = {
-      id: generateId(),
-      content: newNote.content,
-      date: new Date().toISOString(),
-      important: newNote.important || false,
-    };
-    notes = notes.concat(note);
-    return response.json(note);
-  } catch (e) {
-    return response.status(400).send(e.message);
-  }
+  // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
+  void (async () => {
+    try {
+      const newNote = toNewNote(request.body);
+      const note = new Note({
+        content: newNote.content,
+        important: newNote.important || false,
+        date: new Date(),
+      });
+      const savedNote = await note.save();
+      response.json(savedNote);
+    } catch (e) {
+      response.status(400).send(e.message);
+    }
+  })();
 });
 
 app.delete('/api/notes/:id', (request, response) => {
