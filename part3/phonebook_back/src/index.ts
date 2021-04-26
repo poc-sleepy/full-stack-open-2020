@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 import { Person } from './models/person';
 import { PersonType } from './types';
-import { getRandomInt, toNewPerson } from './utils';
+import { toNewPerson } from './utils';
 
 void dotenv.config();
 
@@ -34,17 +34,6 @@ let persons: PersonType[] = [
   { id: 4, name: 'Mary Poppendieck', number: '39-23-6423122' },
 ];
 
-const generateId = (): number => {
-  const id = getRandomInt(100000);
-  const person = persons.find((p) => p.id === id);
-  if (person === undefined) {
-    console.log(id);
-    return id;
-  } else {
-    return generateId();
-  }
-};
-
 app.get('/ping', (_request, response) => {
   response.send('pong');
 });
@@ -63,31 +52,24 @@ app.get('/api/persons', (_request, response) => {
 });
 
 app.get('/api/persons/:id', (request, response) => {
-  const person = persons.find((p) => p.id === Number(request.params.id));
-  if (person === undefined) {
-    response.status(404).end();
-  } else {
+  void (async () => {
+    const person = await Person.findById(request.params.id);
     response.json(person);
-  }
+  })();
 });
 
 app.post('/api/persons', (request, response) => {
-  try {
-    const newPerson = toNewPerson(request.body);
-
-    if (persons.find((p) => p.name === newPerson.name) !== undefined) {
-      throw new Error(`name must be unique: ${newPerson.name}`);
+  // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
+  void (async () => {
+    try {
+      const newPerson = toNewPerson(request.body);
+      const person = new Person({ ...newPerson });
+      const savedPerson = await person.save();
+      response.json(savedPerson);
+    } catch (e) {
+      response.status(400).send(e.message);
     }
-
-    const person = {
-      id: generateId(),
-      ...newPerson,
-    };
-    persons = persons.concat(person);
-    response.status(201).json(person);
-  } catch (e) {
-    response.status(400).send(e.message);
-  }
+  })();
 });
 
 app.delete('/api/persons/:id', (request, response) => {
