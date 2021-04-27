@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import { Note } from './models/note';
-import { requestLogger, unknownEndpoint } from './middlewares';
+import { errorHandler, requestLogger, unknownEndpoint } from './middlewares';
 import { NoteType } from './types';
 import { toNewNote } from './utils';
 
@@ -47,7 +47,7 @@ app.get('/api/notes', (_request, response) => {
   })();
 });
 
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/notes/:id', (request, response, next) => {
   // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
     try {
@@ -58,8 +58,7 @@ app.get('/api/notes/:id', (request, response) => {
         response.status(404).end();
       }
     } catch (e) {
-      console.log(e);
-      response.status(400).send({ error: 'malformatted id' });
+      next(e);
     }
   })();
 });
@@ -90,6 +89,8 @@ app.delete('/api/notes/:id', (request, response) => {
 });
 
 app.use(unknownEndpoint);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
