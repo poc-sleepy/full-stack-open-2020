@@ -19,7 +19,7 @@ const parseBooleanOptionalField = (
   param: unknown,
   fieldName: string
 ): boolean | undefined => {
-  if (!param) {
+  if (param === undefined) {
     return undefined;
   } else if (isBoolean(param)) {
     return param;
@@ -41,4 +41,8 @@ export const toNewNote = (params: toNewNoteParams): NewNote => {
     newNote['important'] = important;
   }
   return newNote;
+};
+
+export const toUpdateNote = (params: toNewNoteParams): NewNote => {
+  return toNewNote(params);
 };
