@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 import { Note } from './models/note';
 import { errorHandler, requestLogger, unknownEndpoint } from './middlewares';
-import { toNewNote } from './utils';
+import { toNewNote, toUpdateNote } from './utils';
 
 void dotenv.config();
 const app = express();
@@ -55,6 +55,22 @@ app.post('/api/notes', (request, response) => {
       response.json(savedNote);
     } catch (e) {
       response.status(400).send(e.message);
+    }
+  })();
+});
+
+app.put('/api/notes/:id', (request, response, next) => {
+  void (async () => {
+    try {
+      const note = toUpdateNote(request.body);
+      const updatedNote = await Note.findByIdAndUpdate(
+        request.params.id,
+        note,
+        { new: true }
+      );
+      response.json(updatedNote);
+    } catch (e) {
+      next(e);
     }
   })();
 });
