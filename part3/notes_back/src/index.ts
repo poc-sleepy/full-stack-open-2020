@@ -4,32 +4,10 @@ import dotenv from 'dotenv';
 
 import { Note } from './models/note';
 import { errorHandler, requestLogger, unknownEndpoint } from './middlewares';
-import { NoteType } from './types';
 import { toNewNote } from './utils';
 
 void dotenv.config();
 const app = express();
-
-let notes: NoteType[] = [
-  {
-    id: 1,
-    content: 'HTML is easy',
-    date: '2019-05-30T17:30:31.098Z',
-    important: true,
-  },
-  {
-    id: 2,
-    content: 'Browser can execute only Javascript',
-    date: '2019-05-30T18:39:34.091Z',
-    important: false,
-  },
-  {
-    id: 3,
-    content: 'GET and POST are the most important methods of HTTP protocol',
-    date: '2019-05-30T19:20:14.298Z',
-    important: true,
-  },
-];
 
 app.use(cors());
 app.use(express.json());
@@ -81,11 +59,19 @@ app.post('/api/notes', (request, response) => {
   })();
 });
 
-app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id);
-  notes = notes.filter((note) => note.id !== id);
-
-  response.status(204).end();
+app.delete('/api/notes/:id', (request, response, next) => {
+  void (async () => {
+    try {
+      const result = await Note.findByIdAndRemove(request.params.id);
+      if (result === null) {
+        response.status(404).end();
+      } else {
+        response.status(204).end();
+      }
+    } catch (e) {
+      next(e);
+    }
+  })();
 });
 
 app.use(unknownEndpoint);
