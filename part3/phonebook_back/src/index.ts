@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 import { Person } from './models/person';
 import { PersonType } from './types';
-import { toNewPerson } from './utils';
+import { toNewPerson, toUpdatePerson } from './utils';
 import { errorHandler } from './middlewares';
 
 void dotenv.config();
@@ -46,6 +46,7 @@ app.get('/info', (_request, response) => {
 });
 
 app.get('/api/persons', (_request, response, next) => {
+  // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
     try {
       const persons = await Person.find({});
@@ -57,6 +58,7 @@ app.get('/api/persons', (_request, response, next) => {
 });
 
 app.get('/api/persons/:id', (request, response, next) => {
+  // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
     try {
       const person = await Person.findById(request.params.id);
@@ -81,7 +83,25 @@ app.post('/api/persons', (request, response, next) => {
   })();
 });
 
+app.put('/api/persons/:id', (request, response, next) => {
+  // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
+  void (async () => {
+    try {
+      const newPerson = toUpdatePerson(request.body);
+      const updatedPerson = await Person.findByIdAndUpdate(
+        request.params.id,
+        newPerson,
+        { new: true }
+      );
+      response.json(updatedPerson);
+    } catch (e) {
+      next(e);
+    }
+  })();
+});
+
 app.delete('/api/persons/:id', (request, response, next) => {
+  // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
     try {
       const result = await Person.findByIdAndDelete(request.params.id);

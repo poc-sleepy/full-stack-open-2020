@@ -24,3 +24,7 @@ export const toNewPerson = (params: toNewPersonParams): NewPerson => {
   const number = parseStringField(params.number, 'number');
   return { name, number };
 };
+
+export const toUpdatePerson = (params: toNewPersonParams): NewPerson => {
+  return toNewPerson(params);
+};
