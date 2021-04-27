@@ -4,7 +4,6 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 
 import { Person } from './models/person';
-import { PersonType } from './types';
 import { toNewPerson, toUpdatePerson } from './utils';
 import { errorHandler } from './middlewares';
 
@@ -28,21 +27,21 @@ app.use(
   })
 );
 
-const persons: PersonType[] = [
-  { id: 1, name: 'Arto Hellas', number: '040-123456' },
-  { id: 2, name: 'Ada Lovelace', number: '39-44-5323523' },
-  { id: 3, name: 'Dan Abramov', number: '12-43-234345' },
-  { id: 4, name: 'Mary Poppendieck', number: '39-23-6423122' },
-];
-
 app.get('/ping', (_request, response) => {
   response.send('pong');
 });
 
-app.get('/info', (_request, response) => {
-  response.send(
-    `<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`
-  );
+app.get('/info', (_request, response, next) => {
+  void (async () => {
+    try {
+      const personCount = await Person.countDocuments({});
+      response.send(
+        `<p>Phonebook has info for ${personCount} people</p><p>${new Date()}</p>`
+      );
+    } catch (e) {
+      next(e);
+    }
+  })();
 });
 
 app.get('/api/persons', (_request, response, next) => {
@@ -62,7 +61,11 @@ app.get('/api/persons/:id', (request, response, next) => {
   void (async () => {
     try {
       const person = await Person.findById(request.params.id);
-      response.json(person);
+      if (person == null) {
+        response.status(404).end();
+      } else {
+        response.json(person);
+      }
     } catch (e) {
       next(e);
     }
