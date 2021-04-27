@@ -10,7 +10,9 @@ const isString = (text: unknown): text is string => {
 
 const parseStringField = (param: unknown, fieldName: string): string => {
   if (!param || !isString(param)) {
-    throw new Error(`Invalid ${fieldName}: ${param}`);
+    const error =  new Error(`Invalid ${fieldName}: ${param}`);
+    error.name = 'InvalidValueError';
+    throw error;
   }
   return param;
 };

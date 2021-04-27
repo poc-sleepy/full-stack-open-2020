@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { Person } from './models/person';
 import { PersonType } from './types';
 import { toNewPerson } from './utils';
+import { errorHandler } from './middlewares';
 
 void dotenv.config();
 
@@ -44,21 +45,29 @@ app.get('/info', (_request, response) => {
   );
 });
 
-app.get('/api/persons', (_request, response) => {
+app.get('/api/persons', (_request, response, next) => {
   void (async () => {
-    const persons = await Person.find({});
-    response.json(persons);
+    try {
+      const persons = await Person.find({});
+      response.json(persons);
+    } catch (e) {
+      next(e);
+    }
   })();
 });
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   void (async () => {
-    const person = await Person.findById(request.params.id);
-    response.json(person);
+    try {
+      const person = await Person.findById(request.params.id);
+      response.json(person);
+    } catch (e) {
+      next(e);
+    }
   })();
 });
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
     try {
@@ -67,21 +76,27 @@ app.post('/api/persons', (request, response) => {
       const savedPerson = await person.save();
       response.json(savedPerson);
     } catch (e) {
-      response.status(400).send(e.message);
+      next(e);
     }
   })();
 });
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   void (async () => {
-    const result = await Person.findByIdAndDelete(request.params.id);
-    if (result !== null) {
-      response.status(204).end();
-    } else {
-      response.status(404).end();
+    try {
+      const result = await Person.findByIdAndDelete(request.params.id);
+      if (result !== null) {
+        response.status(204).end();
+      } else {
+        response.status(404).end();
+      }
+    } catch (e) {
+      next(e);
     }
   })();
 });
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
