@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import uniqueValidator from 'mongoose-unique-validator';
 
 void dotenv.config();
 const url = process.env.MONGODB_URI;
@@ -16,8 +17,15 @@ void mongoose.connect(url, {
 });
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    require: true,
+    unique: true,
+  },
+  number: {
+    type: String,
+    require: true,
+  },
 });
 
 // [HACK]消したいor増やしたいプロパティなので、option項目とする
@@ -36,5 +44,7 @@ personSchema.set('toJSON', {
     delete returnedObject.__v;
   },
 });
+
+personSchema.plugin(uniqueValidator);
 
 export const Person = mongoose.model('Person', personSchema);
