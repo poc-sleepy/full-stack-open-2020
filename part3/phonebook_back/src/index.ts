@@ -97,6 +97,10 @@ app.put('/api/persons/:id', (request, response, next) => {
         newPerson,
         { new: true, runValidators: true, context: 'query' }
       );
+      if (updatedPerson === null) {
+        response.status(404).end();
+        return;
+      }
       response.json(updatedPerson);
     } catch (e) {
       next(e);
