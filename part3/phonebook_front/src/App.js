@@ -15,9 +15,15 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    personService.getAll().then((initialPersons) => {
-      setPersons(initialPersons);
-    });
+    personService
+      .getAll()
+      .then((initialPersons) => {
+        setPersons(initialPersons);
+      })
+      .catch((error) => {
+        console.log(error.response.data.error);
+        setErrorMessage(error.response.data.error);
+      });
   }, []);
 
   const personsToShow = usesFilter
@@ -55,10 +61,15 @@ const App = () => {
             setErrorMessage(null);
           })
           .catch((error) => {
-            setErrorMessage(
-              `Information of ${newName} has already been removed from server`
-            );
-            setPersons(persons.filter((person) => person.name !== newName));
+            console.log(error.response.data);
+            if (error.response.staus === 404) {
+              setErrorMessage(
+                `Information of ${newName} has already been removed from server`
+              );
+              setPersons(persons.filter((person) => person.name !== newName));
+            } else {
+              setErrorMessage(error.response.data.error);
+            }
           });
       }
     } else {
@@ -66,16 +77,22 @@ const App = () => {
         name: newName,
         number: newNumber,
       };
-      personService.create(personObject).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNewName('');
-        setNewNumber('');
-        setTimeout(() => {
-          setInfoMessage(null);
-        }, 5000);
-        setInfoMessage(`Added ${returnedPerson.name}`);
-        setErrorMessage(null);
-      });
+      personService
+        .create(personObject)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName('');
+          setNewNumber('');
+          setTimeout(() => {
+            setInfoMessage(null);
+          }, 5000);
+          setInfoMessage(`Added ${returnedPerson.name}`);
+          setErrorMessage(null);
+        })
+        .catch((error) => {
+          console.log(error.response);
+          setErrorMessage(error.response.data.error);
+        });
     }
   };
 
@@ -94,12 +111,18 @@ const App = () => {
 
   const deletePerson = (personToDelete) => {
     if (window.confirm(`Delete ${personToDelete.name}?`)) {
-      personService.destroy(personToDelete.id).then(() => {
-        const newPersons = persons.filter(
-          (person) => person.id !== personToDelete.id
-        );
-        setPersons(newPersons);
-      });
+      personService
+        .destroy(personToDelete.id)
+        .then(() => {
+          const newPersons = persons.filter(
+            (person) => person.id !== personToDelete.id
+          );
+          setPersons(newPersons);
+        })
+        .catch((error) => {
+          console.log(error.response.data.error);
+          setErrorMessage(error.response.data.error);
+        });
     }
   };
 
