@@ -94,7 +94,7 @@ app.put('/api/persons/:id', (request, response, next) => {
       const updatedPerson = await Person.findByIdAndUpdate(
         request.params.id,
         newPerson,
-        { new: true }
+        { new: true, runValidators: true, context: 'query' }
       );
       response.json(updatedPerson);
     } catch (e) {
