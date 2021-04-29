@@ -60,7 +60,7 @@ const App = () => {
             setErrorMessage(null);
           })
           .catch((error) => {
-            if (error.response.staus === 404) {
+            if (error.response.status === 404) {
               setErrorMessage(
                 `Information of ${newName} has already been removed from server`
               );
