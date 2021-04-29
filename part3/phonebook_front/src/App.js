@@ -21,7 +21,6 @@ const App = () => {
         setPersons(initialPersons);
       })
       .catch((error) => {
-        console.log(error.response.data.error);
         setErrorMessage(error.response.data.error);
       });
   }, []);
@@ -61,7 +60,6 @@ const App = () => {
             setErrorMessage(null);
           })
           .catch((error) => {
-            console.log(error.response.data);
             if (error.response.staus === 404) {
               setErrorMessage(
                 `Information of ${newName} has already been removed from server`
@@ -90,7 +88,6 @@ const App = () => {
           setErrorMessage(null);
         })
         .catch((error) => {
-          console.log(error.response);
           setErrorMessage(error.response.data.error);
         });
     }
@@ -120,7 +117,6 @@ const App = () => {
           setPersons(newPersons);
         })
         .catch((error) => {
-          console.log(error.response.data.error);
           setErrorMessage(error.response.data.error);
         });
     }
