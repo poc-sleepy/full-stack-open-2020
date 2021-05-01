@@ -3,17 +3,9 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 
 import { config } from './utils/config';
+import { Blog } from './models/blog';
 
 const app = express();
-
-const blogSchema = new mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number,
-});
-
-const Blog = mongoose.model('Blog', blogSchema);
 
 const mongoUrl = config.MONGODB_URI;
 if (mongoUrl === undefined) {
