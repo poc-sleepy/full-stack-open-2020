@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { Note } from './models/note';
 import { errorHandler, requestLogger, unknownEndpoint } from './middlewares';
 import { toNewNote, toUpdateNote } from './utils';
+import { logger } from './utils/logger';
 
 void dotenv.config();
 const app = express();
@@ -96,5 +97,5 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  logger.info(`Server running on port ${PORT}`);
 });

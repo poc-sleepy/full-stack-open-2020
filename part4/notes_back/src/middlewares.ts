@@ -1,14 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 
+import { logger } from './utils/logger';
+
 export const requestLogger = (
   request: Request,
   _response: Response,
   next: NextFunction
 ) => {
-  console.log('Method:', request.method);
-  console.log('Path:  ', request.path);
-  console.log('Body:  ', request.body);
-  console.log('---');
+  logger.info('Method:', request.method);
+  logger.info('Path:  ', request.path);
+  logger.info('Body:  ', request.body);
+  logger.info('---');
   next();
 };
 
@@ -22,7 +24,7 @@ export const errorHandler = (
   response: Response,
   next: NextFunction
 ) => {
-  console.error(error.message);
+  logger.error(error.message);
 
   if (error.name === 'CastError') {
     response.status(400).send({ error: 'malformatted id' });

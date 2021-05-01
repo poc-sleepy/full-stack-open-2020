@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 
+import { logger } from './utils/logger';
+
 if (process.argv.length < 3) {
-  console.log(
+  logger.info(
     'Please provide the password as an argument: node mongo.js <password>'
   );
   process.exit(1);
@@ -33,13 +35,13 @@ const note = new Note({
 });
 
 void note.save().then((_result) => {
-  console.log('note saved!');
+  logger.info('note saved!');
   void mongoose.connection.close();
 });
 
 void Note.find({}).then((result) => {
   result.forEach((note) => {
-    console.log(note);
+    logger.info(note);
   });
   void mongoose.connection.close();
 });
