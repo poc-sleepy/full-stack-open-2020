@@ -3,7 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 
 import { config } from './utils/config';
-import { Blog } from './models/blog';
+import { controllers } from './controllers/blogs';
 
 const app = express();
 
@@ -21,19 +21,7 @@ void mongoose.connect(mongoUrl, {
 app.use(cors());
 app.use(express.json());
 
-app.get('/api/blogs', (_request, response) => {
-  void Blog.find({}).then((blogs) => {
-    response.json(blogs);
-  });
-});
-
-app.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body);
-
-  void blog.save().then((result) => {
-    response.status(201).json(result);
-  });
-});
+app.use('/api/blogs', controllers.blogsRouter);
 
 const PORT = config.PORT;
 app.listen(PORT, () => {
