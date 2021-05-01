@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { logger } from './utils/logger';
+import { logger } from './logger';
 
-export const requestLogger = (
+const requestLogger = (
   request: Request,
   _response: Response,
   next: NextFunction
@@ -14,11 +14,11 @@ export const requestLogger = (
   next();
 };
 
-export const unknownEndpoint = (_request: Request, response: Response) => {
+const unknownEndpoint = (_request: Request, response: Response) => {
   response.status(404).send({ error: 'unknown endpoint' });
 };
 
-export const errorHandler = (
+const errorHandler = (
   error: Error,
   _request: Request,
   response: Response,
@@ -33,4 +33,10 @@ export const errorHandler = (
   }
 
   next(error);
+};
+
+export const middleware = {
+  requestLogger,
+  unknownEndpoint,
+  errorHandler,
 };

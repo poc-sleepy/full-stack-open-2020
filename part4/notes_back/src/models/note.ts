@@ -1,30 +1,4 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-import { logger } from '../utils/logger';
-
-void dotenv.config();
-const url = process.env.MONGODB_URI;
-
-if (url === undefined) {
-  throw new Error('Environment variable MONGODB_URI is not given.');
-}
-
-logger.info('connecting to', url);
-
-void mongoose
-  .connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  })
-  .then((_result) => {
-    logger.info('connected to MongoDB');
-  })
-  .catch((error) => {
-    logger.info('error connecting to MongoDB:', error.message);
-  });
 
 const noteSchema = new mongoose.Schema({
   content: {
