@@ -27,8 +27,8 @@ const App = () => {
 
   const personsToShow = usesFilter
     ? persons.filter((person) =>
-        person.name.toLowerCase().includes(query.toLowerCase())
-      )
+      person.name.toLowerCase().includes(query.toLowerCase())
+    )
     : persons;
 
   const handleFormSubmit = (event) => {

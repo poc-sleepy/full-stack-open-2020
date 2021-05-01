@@ -1,5 +1,6 @@
 import React from 'react';
 
+// eslint-disable-next-line react/prop-types
 const Notification = ({ message, className, styleAdd }) => {
   const notificationStyle = {
     fontSize: 20,
@@ -21,6 +22,7 @@ const Notification = ({ message, className, styleAdd }) => {
   );
 };
 
+// eslint-disable-next-line react/prop-types
 const InfoNotification = ({ message }) => {
   const style = {
     backgroundColor: '#B2DFDB',
@@ -29,6 +31,7 @@ const InfoNotification = ({ message }) => {
   return <Notification message={message} className='info' styleAdd={style} />;
 };
 
+// eslint-disable-next-line react/prop-types
 const ErrorNotification = ({ message }) => {
   const style = {
     backgroundColor: '#ffebee',
