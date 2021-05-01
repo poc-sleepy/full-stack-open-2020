@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+
+import { config } from './utils/config';
 
 const app = express();
-dotenv.config();
 
 const blogSchema = new mongoose.Schema({
   title: String,
@@ -15,7 +15,7 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema);
 
-const mongoUrl = process.env.MONGODB_URI;
+const mongoUrl = config.MONGODB_URI;
 if (mongoUrl === undefined) {
   throw new Error('Environment variable MONGODB_URI is not given.');
 }
@@ -43,7 +43,7 @@ app.post('/api/blogs', (request, response) => {
   });
 });
 
-const PORT = process.env.PORT;
+const PORT = config.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
