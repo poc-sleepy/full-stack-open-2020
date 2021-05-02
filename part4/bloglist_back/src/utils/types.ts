@@ -8,4 +8,6 @@ type BlogType = {
   likes: number;
 };
 
-export { BlogType };
+type FavoriteBlog = Omit<BlogType, 'url' | '_id' | '__v'>;
+
+export { BlogType, FavoriteBlog };
