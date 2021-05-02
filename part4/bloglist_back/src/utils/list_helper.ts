@@ -1,5 +1,7 @@
+import { BlogType } from './types';
+
 // Todo: blogtypeの定義
-const dummy = (_blogs: any[]): number => {
+const dummy = (_blogs: BlogType[]): number => {
   return 1;
 };
 
