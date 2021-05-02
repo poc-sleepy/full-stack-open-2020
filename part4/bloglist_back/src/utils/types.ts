@@ -15,4 +15,9 @@ type MostBlogsAuthor = {
   blogs: number;
 };
 
-export { BlogType, FavoriteBlog, MostBlogsAuthor };
+type MostLikesAuthor = {
+  author: string;
+  likes: number;
+};
+
+export { BlogType, FavoriteBlog, MostBlogsAuthor, MostLikesAuthor };
