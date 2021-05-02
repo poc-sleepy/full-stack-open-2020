@@ -31,9 +31,6 @@ const favoriteBlog = (blogs: BlogType[]): FavoriteBlog | undefined => {
 
 const mostBlogs = (blogs: BlogType[]): MostBlogsAuthor | undefined => {
   const blogCountByAuthors = _.countBy(blogs.map((blog) => blog.author));
-  if (blogCountByAuthors.length === 0) {
-    return undefined;
-  }
 
   const maxBlogs = Math.max(...Object.values(blogCountByAuthors));
   const returnAuthor = _.findKey(
