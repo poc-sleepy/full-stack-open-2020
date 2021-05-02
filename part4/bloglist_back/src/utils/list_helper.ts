@@ -1,4 +1,6 @@
-import { BlogType, FavoriteBlog } from './types';
+import _ from 'lodash';
+
+import { BlogType, FavoriteBlog, MostBlogsAuthor } from './types';
 
 const dummy = (_blogs: BlogType[]): number => {
   return 1;
@@ -22,8 +24,31 @@ const favoriteBlog = (blogs: BlogType[]): FavoriteBlog | null => {
   };
 };
 
+const mostBlogs = (blogs: BlogType[]): MostBlogsAuthor | null => {
+  const blogCountByAuthors = _.countBy(blogs.map((blog) => blog.author));
+  if (blogCountByAuthors.length === 0) {
+    return null;
+  }
+
+  const maxBlogs = Math.max(...Object.values(blogCountByAuthors));
+  const returnAuthor = _.findKey(
+    blogCountByAuthors,
+    (count) => count === maxBlogs
+  );
+
+  if (returnAuthor === undefined) {
+    return null;
+  }
+
+  return {
+    author: returnAuthor,
+    blogs: blogCountByAuthors[returnAuthor],
+  };
+};
+
 export const listHelper = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
 };
