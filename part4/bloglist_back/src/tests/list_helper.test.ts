@@ -1,5 +1,5 @@
 import { listHelper } from '../utils/list_helper';
-import { BlogType, FavoriteBlog } from '../utils/types';
+import { BlogType, FavoriteBlog, MostBlogsAuthor } from '../utils/types';
 
 const listWithOneBlog: BlogType[] = [
   {
@@ -105,7 +105,7 @@ const listWithSomeBlog2: BlogType[] = [
   {
     _id: '5a422ba71b54a676234d17fb',
     title: 'TDD harms architecture',
-    author: 'Robert C. Martin',
+    author: 'Michael Chan',
     url:
       'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     likes: 0,
@@ -177,6 +177,40 @@ describe('favorite blog', () => {
 
   test('when list has no blog, equals null', () => {
     const result = listHelper.favoriteBlog([]);
+    expect(result).toBe(null);
+  });
+});
+
+describe('most blogs', () => {
+  test('when list has only one blog, equals that author', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog);
+    const expected: MostBlogsAuthor = {
+      author: 'Edsger W. Dijkstra',
+      blogs: 1,
+    };
+    expect(result).toEqual(expected);
+  });
+
+  test('when list has some blog, equals the author which has most blog', () => {
+    const result = listHelper.mostBlogs(listWithSomeBlog);
+    const expected: MostBlogsAuthor = {
+      author: 'Robert C. Martin',
+      blogs: 3,
+    };
+    expect(result).toEqual(expected);
+  });
+
+  test('when list has some blog which some author has blogs, equals earlier index author of them', () => {
+    const result = listHelper.mostBlogs(listWithSomeBlog2);
+    const expected: MostBlogsAuthor = {
+      author: 'Michael Chan',
+      blogs: 2,
+    };
+    expect(result).toEqual(expected);
+  });
+
+  test('when list has no blog, equals null', () => {
+    const result = listHelper.mostBlogs([]);
     expect(result).toBe(null);
   });
 });
