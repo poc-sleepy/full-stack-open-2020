@@ -3,29 +3,15 @@ import supertest from 'supertest';
 import { app } from '../app';
 import { Note } from '../models/note';
 import { NewNote, NoteType } from '../utils/types';
+import { helper } from './test_helper';
 
 const api = supertest(app);
 
-type TestNote = Omit<NoteType, 'id'>;
-
-const initialNotes: TestNote[] = [
-  {
-    content: 'HTML is easy',
-    date: new Date().toISOString(),
-    important: false,
-  },
-  {
-    content: 'Browser can execute only Javascript',
-    date: new Date().toISOString(),
-    important: true,
-  },
-];
-
 beforeEach(async () => {
   void (await Note.deleteMany({}));
-  let noteObject = new Note(initialNotes[0]);
+  let noteObject = new Note(helper.initialNotes[0]);
   void (await noteObject.save());
-  noteObject = new Note(initialNotes[1]);
+  noteObject = new Note(helper.initialNotes[1]);
   void (await noteObject.save());
 });
 
@@ -39,7 +25,7 @@ test('notes are returned as json', async () => {
 test('all notes are returned', async () => {
   const response = await api.get('/api/notes');
 
-  expect(response.body).toHaveLength(initialNotes.length);
+  expect(response.body).toHaveLength(helper.initialNotes.length);
 });
 
 test('a specific note is within the returned notes', async () => {
@@ -63,12 +49,10 @@ test('a valid note can be added', async () => {
     .expect(200)
     .expect('Content-Type', /application\/json/);
 
-  const response = await api.get('/api/notes');
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const notes: NoteType[] = response.body;
-  const contents = notes.map((r) => r.content);
+  const notesAtEnd = await helper.notesInDb();
+  expect(notesAtEnd).toHaveLength(helper.initialNotes.length + 1);
 
-  expect(notes).toHaveLength(initialNotes.length + 1);
+  const contents = notesAtEnd.map((n) => n.content);
   expect(contents).toContain('async/await simplifies making async calls');
 });
 
@@ -78,9 +62,8 @@ test('note without content is not added', async () => {
   };
   await api.post('/api/notes').send(newNote).expect(400);
 
-  const response = await api.get('/api/notes');
-
-  expect(response.body).toHaveLength(initialNotes.length);
+  const notesAtEnd = await helper.notesInDb();
+  expect(notesAtEnd).toHaveLength(helper.initialNotes.length);
 });
 
 afterAll(() => {
