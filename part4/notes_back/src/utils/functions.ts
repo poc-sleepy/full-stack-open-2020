@@ -10,7 +10,9 @@ const isBoolean = (bool: unknown): bool is boolean => {
 
 const parseStringField = (param: unknown, fieldName: string): string => {
   if (!param || !isString(param)) {
-    throw new Error(`Invalid ${fieldName}: ${param}`);
+    const error =  new Error(`Invalid ${fieldName}: ${param}`);
+    error.name = 'InvalidValueError';
+    throw error;
   }
   return param;
 };
@@ -24,7 +26,9 @@ const parseBooleanOptionalField = (
   } else if (isBoolean(param)) {
     return param;
   } else {
-    throw new Error(`Invalid ${fieldName}: ${param}`);
+    const error =  new Error(`Invalid ${fieldName}: ${param}`);
+    error.name = 'InvalidValueError';
+    throw error;
   }
 };
 
