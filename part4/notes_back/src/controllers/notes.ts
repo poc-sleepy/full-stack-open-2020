@@ -13,18 +13,14 @@ notesRouter.get('/', (_request, response) => {
   })();
 });
 
-notesRouter.get('/:id', (request, response, next) => {
+notesRouter.get('/:id', (request, response) => {
   // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
-    try {
-      const note = await Note.findById(request.params.id);
-      if (note !== null) {
-        response.json(note);
-      } else {
-        response.status(404).end();
-      }
-    } catch (e) {
-      next(e);
+    const note = await Note.findById(request.params.id);
+    if (note !== null) {
+      response.json(note);
+    } else {
+      response.status(404).end();
     }
   })();
 });
@@ -32,6 +28,7 @@ notesRouter.get('/:id', (request, response, next) => {
 notesRouter.post('/', (request, response, next) => {
   // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
+    // toNewNoteで例外発生の可能性があるので、try/catchが必要
     try {
       const newNote = toNewNote(request.body);
       const note = new Note({
@@ -49,6 +46,7 @@ notesRouter.post('/', (request, response, next) => {
 
 notesRouter.put('/:id', (request, response, next) => {
   void (async () => {
+    // toNewNoteで例外発生の可能性があるので、try/catchが必要
     try {
       const note = toUpdateNote(request.body);
       const updatedNote = await Note.findByIdAndUpdate(
@@ -63,17 +61,13 @@ notesRouter.put('/:id', (request, response, next) => {
   })();
 });
 
-notesRouter.delete('/:id', (request, response, next) => {
+notesRouter.delete('/:id', (request, response) => {
   void (async () => {
-    try {
-      const result = await Note.findByIdAndRemove(request.params.id);
-      if (result === null) {
-        response.status(404).end();
-      } else {
-        response.status(204).end();
-      }
-    } catch (e) {
-      next(e);
+    const result = await Note.findByIdAndRemove(request.params.id);
+    if (result === null) {
+      response.status(404).end();
+    } else {
+      response.status(204).end();
     }
   })();
 });
