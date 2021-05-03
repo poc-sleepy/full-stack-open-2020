@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-require('express-async-errors');
 
 import { middleware } from './utils/middlewares';
 import { notesRouter } from './controllers/notes';
