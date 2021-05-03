@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "tsc": "tsc",
-    "dev": "ts-node-dev src/index.ts",
+    "dev": "cross-env NODE_ENV=development ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts .",
-    "start": "node build/src/index.js",
+    "start": "cross-env NODE_ENV=production node build/src/index.js",
     "ts-node": "ts-node-dev"
   },
   "author": "",
@@ -22,6 +22,7 @@
     "@types/node": "^14.14.37",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.24.0",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.5",
