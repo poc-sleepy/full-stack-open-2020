@@ -29,7 +29,7 @@ notesRouter.get('/:id', (request, response, next) => {
   })();
 });
 
-notesRouter.post('/', (request, response) => {
+notesRouter.post('/', (request, response, next) => {
   // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
     try {
@@ -42,7 +42,7 @@ notesRouter.post('/', (request, response) => {
       const savedNote = await note.save();
       response.json(savedNote);
     } catch (e) {
-      response.status(400).send(e.message);
+      next(e);
     }
   })();
 });
