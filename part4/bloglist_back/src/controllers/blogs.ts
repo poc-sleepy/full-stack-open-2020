@@ -28,6 +28,32 @@ blogsRouter.post('/', (request, response, next) => {
   })();
 });
 
+blogsRouter.put('/:id', (request, response, next) => {
+  void (async () => {
+    try {
+      if (!request.body.title && !request.body.url) {
+        const error = new Error('Either title or url is required.');
+        error.name = 'ValidationError';
+        throw error;
+      }
+
+      const updatedBlog = await Blog.findByIdAndUpdate(
+        request.params.id,
+        request.body,
+        { new: true }
+      );
+
+      if (updatedBlog === null) {
+        response.status(404).end();
+        return;
+      }
+      response.json(updatedBlog);
+    } catch (e) {
+      next(e);
+    }
+  })();
+});
+
 blogsRouter.delete('/:id', (request, response, next) => {
   void (async () => {
     try {
@@ -37,7 +63,7 @@ blogsRouter.delete('/:id', (request, response, next) => {
         response.status(404).end();
         return;
       }
-      
+
       response.status(204).end();
     } catch (e) {
       next(e);
