@@ -183,21 +183,6 @@ describe('updation of a note', () => {
     expect(blogsAtEnd).toContainEqual({ ...blogToUpdate, ...toBeBlog });
   });
 
-  test('fails without title and url', async () => {
-    const blogsAtStart: BlogType[] = await helper.blogsInDb();
-    const blogToUpdate = blogsAtStart[0];
-
-    const toBeBlog = {
-      author: 'Helsinki Univ.',
-      likes: 5,
-    };
-
-    await api.put(`/api/blogs/${blogToUpdate.id}`).send(toBeBlog).expect(400);
-
-    const blogsAtEnd = await helper.blogsInDb();
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
-  });
-
   test('fails with statuscode 404 if note does not exist', async () => {
     const validNonexistingId = await helper.nonExistingId();
     const toBeBlog = {

@@ -31,12 +31,6 @@ blogsRouter.post('/', (request, response, next) => {
 blogsRouter.put('/:id', (request, response, next) => {
   void (async () => {
     try {
-      if (!request.body.title && !request.body.url) {
-        const error = new Error('Either title or url is required.');
-        error.name = 'ValidationError';
-        throw error;
-      }
-
       const updatedBlog = await Blog.findByIdAndUpdate(
         request.params.id,
         request.body,
