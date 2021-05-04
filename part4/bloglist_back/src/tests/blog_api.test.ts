@@ -80,6 +80,31 @@ describe('addition of a new blog', () => {
       expect(addedBlog).toEqual({ id: addedBlog.id, ...newBlog });
     }
   });
+
+  
+  test('succeeds without likes', async () => {
+    const newBlog = {
+      title: 'fullstack open',
+      author: 'Helsinki Univ.',
+      url: 'https://fullstackopen.com/en/',
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+    const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title);
+    expect(addedBlog).toBeDefined();
+    if (addedBlog !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      expect(addedBlog).toEqual({ id: addedBlog.id, ...newBlog, likes: 0 });
+    }
+  });
 });
 
 afterAll(() => {
