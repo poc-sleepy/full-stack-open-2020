@@ -1,3 +1,5 @@
+import { Blog } from '../models/blog';
+
 export type MongoBlogType = {
   _id: string;
   title: string;
@@ -54,6 +56,12 @@ const initialBlogs: MongoBlogType[] = [
   },
 ];
 
+const blogsInDb = async () => {
+  const blogs = await Blog.find({});
+  return blogs.map((blog) => blog.toJSON());
+};
+
 export const helper = {
   initialBlogs,
+  blogsInDb,
 };
