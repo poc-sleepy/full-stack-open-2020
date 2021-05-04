@@ -28,6 +28,23 @@ blogsRouter.post('/', (request, response, next) => {
   })();
 });
 
+blogsRouter.delete('/:id', (request, response, next) => {
+  void (async () => {
+    try {
+      const result = await Blog.findByIdAndRemove(request.params.id);
+
+      if (result === null) {
+        response.status(404).end();
+        return;
+      }
+      
+      response.status(204).end();
+    } catch (e) {
+      next(e);
+    }
+  })();
+});
+
 export const controllers = {
   blogsRouter,
 };
