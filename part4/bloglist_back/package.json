@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest --verbose",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "tsc": "tsc",
     "dev": "cross-env NODE_ENV=develop ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts .",
