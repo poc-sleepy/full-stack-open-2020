@@ -55,6 +55,33 @@ describe('when there is initially some blogs saved', () => {
   });
 });
 
+describe.only('addition of a new blog', () => {
+  test('succeeds with valid data', async () => {
+    const newBlog = {
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7,
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+    const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title);
+    expect(addedBlog).toBeDefined();
+    if (addedBlog !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      expect(addedBlog).toEqual({ id: addedBlog.id, ...newBlog });
+    }
+  });
+});
+
 afterAll(() => {
   void mongoose.connection.close();
 });
