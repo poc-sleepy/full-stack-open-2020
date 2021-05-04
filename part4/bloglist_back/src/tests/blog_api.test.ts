@@ -55,7 +55,7 @@ describe('when there is initially some blogs saved', () => {
   });
 });
 
-describe.only('addition of a new blog', () => {
+describe('addition of a new blog', () => {
   test('succeeds with valid data', async () => {
     const newBlog = {
       title: 'fullstack open',
@@ -161,6 +161,25 @@ describe.only('addition of a new blog', () => {
 
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+  });
+});
+
+describe('deletion of a note', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToDelete = blogsAtStart[0];
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const notesAtEnd = await helper.blogsInDb();
+    expect(notesAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+
+    expect(notesAtEnd).not.toContainEqual(blogToDelete);
+  });
+
+  test('fails with statuscode 404 if note does not exist', async () => {
+    const validNonexistingId = await helper.nonExistingId();
+    await api.delete(`/api/blogs/${validNonexistingId}`).expect(404);
   });
 });
 

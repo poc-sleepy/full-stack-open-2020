@@ -61,7 +61,17 @@ const blogsInDb = async () => {
   return blogs.map((blog) => blog.toJSON());
 };
 
+const nonExistingId = async () => {
+  const blog = new Blog({ title: 'willremovethissoon' });
+  await blog.save();
+  await blog.remove();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const id: string = blog.toJSON().id;
+  return id;
+};
+
 export const helper = {
   initialBlogs,
   blogsInDb,
+  nonExistingId,
 };
