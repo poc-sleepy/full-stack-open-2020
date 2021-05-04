@@ -55,7 +55,7 @@ describe('when there is initially some blogs saved', () => {
   });
 });
 
-describe('addition of a new blog', () => {
+describe.only('addition of a new blog', () => {
   test('succeeds with valid data', async () => {
     const newBlog = {
       title: 'fullstack open',
@@ -81,7 +81,6 @@ describe('addition of a new blog', () => {
     }
   });
 
-  
   test('succeeds without likes', async () => {
     const newBlog = {
       title: 'fullstack open',
@@ -104,6 +103,64 @@ describe('addition of a new blog', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       expect(addedBlog).toEqual({ id: addedBlog.id, ...newBlog, likes: 0 });
     }
+  });
+
+  test('succeeds without title', async () => {
+    const newBlog = {
+      author: 'Helsinki Univ.',
+      url: 'https://fullstackopen.com/en/',
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+    const addedBlog = blogsAtEnd.find((blog) => blog.url === newBlog.url);
+    expect(addedBlog).toBeDefined();
+    if (addedBlog !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      expect(addedBlog).toEqual({ id: addedBlog.id, ...newBlog, likes: 0 });
+    }
+  });
+
+  test('succeeds without url', async () => {
+    const newBlog = {
+      title: 'fullstack open',
+      author: 'Helsinki Univ.',
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+    const addedBlog = blogsAtEnd.find((blog) => blog.title === newBlog.title);
+    expect(addedBlog).toBeDefined();
+    if (addedBlog !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      expect(addedBlog).toEqual({ id: addedBlog.id, ...newBlog, likes: 0 });
+    }
+  });
+
+  test('fails without title and url', async () => {
+    const newBlog = {
+      author: 'Helsinki Univ.',
+      likes: 5,
+    };
+
+    await api.post('/api/blogs').send(newBlog).expect(400);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
   });
 });
 
