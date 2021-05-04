@@ -12,11 +12,11 @@ blogsRouter.get('/', (_request, response) => {
 });
 
 blogsRouter.post('/', (request, response) => {
-  const blog = new Blog(request.body);
-
-  void blog.save().then((result) => {
+  void (async () => {
+    const blog = new Blog(request.body);
+    const result = await blog.save();
     response.status(201).json(result);
-  });
+  })();
 });
 
 export const controllers = {
