@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 
 import { config } from './utils/config';
 import { controllers } from './controllers/blogs';
+import { middleware } from './utils/middlewares';
 
 const app = express();
 
@@ -20,7 +21,12 @@ void mongoose.connect(mongoUrl, {
 
 app.use(cors());
 app.use(express.json());
+app.use(middleware.requestLogger);
 
 app.use('/api/blogs', controllers.blogsRouter);
 
-export {app};
+app.use(middleware.unknownEndpoint);
+
+app.use(middleware.errorHandler);
+
+export { app };
