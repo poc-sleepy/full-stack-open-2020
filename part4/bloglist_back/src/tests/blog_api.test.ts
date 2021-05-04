@@ -55,7 +55,7 @@ describe('when there is initially some blogs saved', () => {
   });
 });
 
-describe.only('addition of a new blog', () => {
+describe('addition of a new blog', () => {
   test('succeeds with valid data', async () => {
     const newBlog = {
       title: 'React patterns',
