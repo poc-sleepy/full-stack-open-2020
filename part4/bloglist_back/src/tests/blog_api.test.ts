@@ -164,6 +164,57 @@ describe('addition of a new blog', () => {
   });
 });
 
+describe('updation of a note', () => {
+  test('succeeds with valid data', async () => {
+    const blogsAtStart: BlogType[] = await helper.blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+
+    const toBeBlog = {
+      author: 'Helsinki Univ.',
+      url: 'https://fullstackopen.com/en/',
+      likes: 4,
+    };
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(toBeBlog).expect(200);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+
+    expect(blogsAtEnd).toContainEqual({ id: blogToUpdate.id, ...toBeBlog });
+  });
+
+  test('fails without title and url', async () => {
+    const blogsAtStart: BlogType[] = await helper.blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+
+    const toBeBlog = {
+      author: 'Helsinki Univ.',
+      likes: 5,
+    };
+
+    await api.put(`/api/blogs${blogToUpdate.id}`).send(toBeBlog).expect(400);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+  });
+
+  test('fails with statuscode 404 if note does not exist', async () => {
+    const validNonexistingId = await helper.nonExistingId();
+    await api.put(`/api/blogs/${validNonexistingId}`).expect(404);
+  });
+
+  test('fails with statuscode 400 id is invalid', async () => {
+    const invalidId = '5a3d5da59070081a82a3445';
+    const toBeBlog = {
+      author: 'Helsinki Univ.',
+      url: 'https://fullstackopen.com/en/',
+      likes: 4,
+    };
+
+    await api.put(`/api/notes/${invalidId}`).send(toBeBlog).expect(400);
+  });
+});
+
 describe('deletion of a note', () => {
   test('succeeds with status code 204 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb();
@@ -171,10 +222,10 @@ describe('deletion of a note', () => {
 
     await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
 
-    const notesAtEnd = await helper.blogsInDb();
-    expect(notesAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
 
-    expect(notesAtEnd).not.toContainEqual(blogToDelete);
+    expect(blogsAtEnd).not.toContainEqual(blogToDelete);
   });
 
   test('fails with statuscode 404 if note does not exist', async () => {
