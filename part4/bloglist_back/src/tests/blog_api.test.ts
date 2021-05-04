@@ -31,12 +31,11 @@ describe('when there is initially some blogs saved', () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const blogs = response.body;
     const expectedBlog: BlogType = {
-      _id: '5a422a851b54a676234d17f7',
+      id: '5a422a851b54a676234d17f7',
       title: 'React patterns',
       author: 'Michael Chan',
       url: 'https://reactpatterns.com/',
       likes: 7,
-      __v: 0,
     };
     expect(blogs).toContainEqual(expectedBlog);
   });
