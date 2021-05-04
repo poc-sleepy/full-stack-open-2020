@@ -180,7 +180,7 @@ describe('updation of a note', () => {
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
 
-    expect(blogsAtEnd).toContainEqual({ id: blogToUpdate.id, ...toBeBlog });
+    expect(blogsAtEnd).toContainEqual({ ...blogToUpdate, ...toBeBlog });
   });
 
   test('fails without title and url', async () => {
@@ -192,7 +192,7 @@ describe('updation of a note', () => {
       likes: 5,
     };
 
-    await api.put(`/api/blogs${blogToUpdate.id}`).send(toBeBlog).expect(400);
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(toBeBlog).expect(400);
 
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
@@ -200,7 +200,15 @@ describe('updation of a note', () => {
 
   test('fails with statuscode 404 if note does not exist', async () => {
     const validNonexistingId = await helper.nonExistingId();
-    await api.put(`/api/blogs/${validNonexistingId}`).expect(404);
+    const toBeBlog = {
+      author: 'Helsinki Univ.',
+      url: 'https://fullstackopen.com/en/',
+      likes: 4,
+    };
+    await api
+      .put(`/api/blogs/${validNonexistingId}`)
+      .send(toBeBlog)
+      .expect(404);
   });
 
   test('fails with statuscode 400 id is invalid', async () => {
@@ -211,7 +219,7 @@ describe('updation of a note', () => {
       likes: 4,
     };
 
-    await api.put(`/api/notes/${invalidId}`).send(toBeBlog).expect(400);
+    await api.put(`/api/blogs/${invalidId}`).send(toBeBlog).expect(400);
   });
 });
 
