@@ -1,5 +1,12 @@
 import mongoose from 'mongoose';
 
+interface BlogDocument extends mongoose.Document {
+  title: string;
+  author: string;
+  url: string;
+  likes: number;
+}
+
 const blogSchema = new mongoose.Schema({
   title: String,
   author: String,
@@ -24,4 +31,4 @@ blogSchema.set('toJSON', {
   },
 });
 
-export const Blog = mongoose.model('Blog', blogSchema);
+export const Blog = mongoose.model<BlogDocument>('Blog', blogSchema);
