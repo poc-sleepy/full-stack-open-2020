@@ -11,11 +11,20 @@ blogsRouter.get('/', (_request, response) => {
   })();
 });
 
-blogsRouter.post('/', (request, response) => {
+blogsRouter.post('/', (request, response, next) => {
   void (async () => {
-    const blog = new Blog(request.body);
-    const result = await blog.save();
-    response.status(201).json(result);
+    try {
+      if (!request.body.title && !request.body.url) {
+        const error = new Error('Either title or url is required.');
+        error.name = 'ValidationError';
+        throw error;
+      }
+      const blog = new Blog(request.body);
+      const result = await blog.save();
+      response.status(201).json(result);
+    } catch (e) {
+      next(e);
+    }
   })();
 });
 
