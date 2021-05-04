@@ -5,9 +5,10 @@ import { Blog } from '../models/blog';
 const blogsRouter = express.Router();
 
 blogsRouter.get('/', (_request, response) => {
-  void Blog.find({}).then((blogs) => {
+  void (async () => {
+    const blogs = await Blog.find({});
     response.json(blogs);
-  });
+  })();
 });
 
 blogsRouter.post('/', (request, response) => {
