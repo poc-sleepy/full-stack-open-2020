@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import { Note } from '../models/note';
+import { User } from '../models/user';
 import { NoteType } from '../utils/types';
 
 type TestNote = Omit<NoteType, 'id'>;
@@ -31,8 +32,14 @@ const notesInDb = async () => {
   return notes.map((note) => note.toJSON());
 };
 
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users.map((u) => u.toJSON());
+};
+
 export const helper = {
   initialNotes,
   nonExistingId,
   notesInDb,
+  usersInDb,
 };
