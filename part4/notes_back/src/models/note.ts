@@ -17,9 +17,13 @@ const noteSchema = new mongoose.Schema({
     required: true,
   },
   important: Boolean,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
-// [HACK]消したいor増やしたいプロパティなので、option項目とする
+// HACK: 消したいor増やしたいプロパティなので、option項目とする
 type ReturnedObject = {
   _id?: string;
   __v?: string;
