@@ -1,5 +1,13 @@
 import mongoose from 'mongoose';
 
+interface UserDocument extends mongoose.Document {
+  id: string;
+  username: string;
+  name: string;
+  passwordHash: string;
+  notes: string[];
+}
+
 const userSchema = new mongoose.Schema({
   username: String,
   name: String,
@@ -32,4 +40,4 @@ userSchema.set('toJSON', {
   },
 });
 
-export const User = mongoose.model('User', userSchema);
+export const User = mongoose.model<UserDocument>('User', userSchema);
