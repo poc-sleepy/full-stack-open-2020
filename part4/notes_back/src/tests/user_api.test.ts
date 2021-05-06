@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import supertest from 'supertest';
 import bcrypt from 'bcrypt';
 
@@ -63,4 +64,8 @@ describe('when there is initially one user in db', () => {
     const usersAtEnd = await helper.usersInDb();
     expect(usersAtEnd).toHaveLength(usersAtStart.length);
   });
+});
+
+afterAll(() => {
+  void mongoose.connection.close();
 });
