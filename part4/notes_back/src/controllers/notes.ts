@@ -10,7 +10,10 @@ notesRouter.get('/', (_request, response, next) => {
   // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
     try {
-      const notes = await Note.find({});
+      const notes = await Note.find({}).populate('user', {
+        username: 1,
+        name: 1,
+      });
       response.json(notes);
     } catch (e) {
       next(e);
@@ -22,7 +25,10 @@ notesRouter.get('/:id', (request, response, next) => {
   // callbackに直接async関数は入れられないので、async無名関数を使う形を取る
   void (async () => {
     try {
-      const note = await Note.findById(request.params.id);
+      const note = await Note.findById(request.params.id).populate('user', {
+        username: 1,
+        name: 1,
+      });
       if (note !== null) {
         response.json(note);
       } else {

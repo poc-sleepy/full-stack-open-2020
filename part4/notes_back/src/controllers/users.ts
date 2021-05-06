@@ -7,7 +7,10 @@ const usersRouter = express.Router();
 usersRouter.get('/', (_request, response, next) => {
   void (async () => {
     try {
-      const users = await User.find({});
+      const users = await User.find({}).populate('notes', {
+        content: 1,
+        date: 1,
+      });
       response.json(users);
     } catch (e) {
       next(e);
@@ -22,7 +25,6 @@ usersRouter.post('/', (request, response, next) => {
       const savedUser = await newUser.save();
       response.status(201).json(savedUser);
     } catch (e) {
-      console.log('error!!!!!');
       next(e);
     }
   })();
