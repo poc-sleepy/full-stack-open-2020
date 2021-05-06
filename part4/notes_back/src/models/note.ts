@@ -4,6 +4,7 @@ interface NoteDocument extends mongoose.Document {
   content: string;
   date: string;
   important: boolean;
+  _id: string;
 }
 
 const noteSchema = new mongoose.Schema({
