@@ -4,19 +4,27 @@ import { toNewUser } from '../utils/functions';
 
 const usersRouter = express.Router();
 
-usersRouter.get('/', (_request, response) => {
+usersRouter.get('/', (_request, response, next) => {
   void (async () => {
-    const users = await User.find({});
-    response.json(users);
+    try {
+      const users = await User.find({});
+      response.json(users);
+    } catch (e) {
+      next(e);
+    }
   })();
 });
 
-usersRouter.post('/', (request, response) => {
+usersRouter.post('/', (request, response, next) => {
   void (async () => {
-    const newUser = new User(await toNewUser(request.body));
-    const savedUser = await newUser.save();
-
-    response.json(savedUser);
+    try {
+      const newUser = new User(await toNewUser(request.body));
+      const savedUser = await newUser.save();
+      response.status(201).json(savedUser);
+    } catch (e) {
+      console.log('error!!!!!');
+      next(e);
+    }
   })();
 });
 
