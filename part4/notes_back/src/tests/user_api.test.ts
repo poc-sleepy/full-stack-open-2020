@@ -29,7 +29,7 @@ describe('when there is initially one user in db', () => {
     await api
       .post('/api/users')
       .send(newUser)
-      .expect(200)
+      .expect(201)
       .expect('Content-Type', /application\/json/);
 
     const usersAtEnd = await helper.usersInDb();
