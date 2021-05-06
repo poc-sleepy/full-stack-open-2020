@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { Note } from '../models/note';
+import { User } from '../models/user';
 import { toNewNote, toUpdateNote } from '../utils/functions';
 
 const notesRouter = express.Router();
@@ -38,13 +39,27 @@ notesRouter.post('/', (request, response, next) => {
   void (async () => {
     // toNewNoteで例外発生の可能性があるので、try/catchが必要
     try {
+      const user = await User.findById(request.body.userId);
+
+      if (user === null) {
+        const error = new Error(
+          `Invalid userId: ${request.body.userId}, not found the user.`
+        );
+        error.name = 'InvalidValueError';
+        throw error;
+      }
+
       const newNote = toNewNote(request.body);
       const note = new Note({
         content: newNote.content,
         important: newNote.important || false,
         date: new Date(),
+        user: user._id,
       });
       const savedNote = await note.save();
+      user.notes = user.notes.concat(savedNote._id);
+      await user.save();
+
       response.json(savedNote);
     } catch (e) {
       next(e);
