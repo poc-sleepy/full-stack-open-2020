@@ -9,3 +9,18 @@ export type NewNote = {
   content: string;
   important?: boolean;
 };
+
+export type UserType = {
+  id: string;
+  username: string;
+  name: string;
+  passwordHash: string;
+  notes: string[];
+};
+
+export type NewUser = {
+  username: string;
+  name: string;
+  passwordHash: string;
+  notes: string[];
+};

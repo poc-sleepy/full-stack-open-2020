@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 
 import { middleware } from './utils/middlewares';
 import { notesRouter } from './controllers/notes';
+import { usersRouter } from './controllers/users';
 import { logger } from './utils/logger';
 import { config } from './utils/config';
 
@@ -39,6 +40,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/api/notes', notesRouter);
+app.use('/api/users', usersRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
