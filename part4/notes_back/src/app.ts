@@ -7,6 +7,7 @@ import { notesRouter } from './controllers/notes';
 import { usersRouter } from './controllers/users';
 import { logger } from './utils/logger';
 import { config } from './utils/config';
+import { loginRouter } from './controllers/login';
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.get('/', (_request, response) => {
 
 app.use('/api/notes', notesRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/login', loginRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
