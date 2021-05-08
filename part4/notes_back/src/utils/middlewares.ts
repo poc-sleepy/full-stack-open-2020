@@ -35,7 +35,6 @@ const errorHandler = (
   } else if (error.name === 'JsonWebTokenError') {
     response.status(401).json({ error: 'invalid token' });
   }
-  logger.error(error.message);
   next(error);
 };
 
