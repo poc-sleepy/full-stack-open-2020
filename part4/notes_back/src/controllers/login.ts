@@ -32,7 +32,8 @@ loginRouter.post('/', (request, response) => {
       throw new Error('Environment variable SECRET is not given.');
     }
 
-    const token = jwt.sign(userForToken, secret);
+    // token expires in 60 seconds, that is, in one minute
+    const token = jwt.sign(userForToken, secret, { expiresIn: 60 });
 
     response
       .status(200)
