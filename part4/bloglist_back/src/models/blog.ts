@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 interface BlogDocument extends mongoose.Document {
-  id: string;
+  _id: string;
   title: string;
   author: string;
   url: string;

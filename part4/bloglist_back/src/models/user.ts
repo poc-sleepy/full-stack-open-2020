@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 
 interface UserDocument extends mongoose.Document {
-  id: string;
+  _id: string;
   username: string;
   name: string;
   passwordHash: string;
