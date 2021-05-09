@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import { logger } from './logger';
 
 import { NewUser } from './types';
 
@@ -32,6 +31,5 @@ export const toNewUser = async (params: toNewUserParams): Promise<NewUser> => {
 
   const notes: string[] = [];
   const newUser: NewUser = { username, name, passwordHash, notes };
-  logger.info('toNewUser:', newUser);
   return newUser;
 };
