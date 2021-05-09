@@ -19,4 +19,21 @@ type MostLikesAuthor = {
   likes: number;
 };
 
-export { BlogType, FavoriteBlog, MostBlogsAuthor, MostLikesAuthor };
+type UserType = {
+  id: string;
+  username: string;
+  name: string;
+  passwordHash: string;
+  notes: string[];
+};
+
+type NewUser = Omit<UserType, 'id'>;
+
+export {
+  BlogType,
+  FavoriteBlog,
+  MostBlogsAuthor,
+  MostLikesAuthor,
+  UserType,
+  NewUser,
+};

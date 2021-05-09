@@ -3,7 +3,8 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 
 import { config } from './utils/config';
-import { controllers } from './controllers/blogs';
+import { blogsRouter } from './controllers/blogs';
+import { usersRouter } from './controllers/users';
 import { middleware } from './utils/middlewares';
 
 const app = express();
@@ -23,7 +24,8 @@ app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
 
-app.use('/api/blogs', controllers.blogsRouter);
+app.use('/api/blogs', blogsRouter);
+app.use('/api/users', usersRouter);
 
 app.use(middleware.unknownEndpoint);
 

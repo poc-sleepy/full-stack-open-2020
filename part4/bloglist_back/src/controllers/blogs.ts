@@ -65,6 +65,4 @@ blogsRouter.delete('/:id', (request, response, next) => {
   })();
 });
 
-export const controllers = {
-  blogsRouter,
-};
+export { blogsRouter };
