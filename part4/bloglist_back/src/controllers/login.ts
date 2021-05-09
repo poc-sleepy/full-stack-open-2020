@@ -7,7 +7,7 @@ import { config } from '../utils/config';
 const loginRouter = express.Router();
 
 loginRouter.post('/', (request, response) => {
-  async () => {
+  void (async () => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const user = await User.findOne({ username: request.body.username });
     const passwordCorrect =
@@ -32,12 +32,13 @@ loginRouter.post('/', (request, response) => {
       throw new Error('Environment variable SECRET is not given.');
     }
 
-    const token = jwt.sign(userForToken, secret);
+    // token expires in 60*60 seconds, that is, in one hour
+    const token = jwt.sign(userForToken, secret, { expiresIn: 60 * 60 });
 
     response
       .status(200)
       .send({ token, username: user.username, name: user.name });
-  };
+  })();
 });
 
 export { loginRouter };

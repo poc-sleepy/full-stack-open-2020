@@ -30,6 +30,11 @@ type UserType = {
 
 type NewUser = Omit<UserType, 'id'>;
 
+type UserToken = {
+  id: string;
+  username: string;
+};
+
 export {
   BlogType,
   FavoriteBlog,
@@ -37,4 +42,5 @@ export {
   MostLikesAuthor,
   UserType,
   NewUser,
+  UserToken,
 };
