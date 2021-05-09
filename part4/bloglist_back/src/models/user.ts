@@ -33,6 +33,7 @@ type ReturnedObject = {
   _id?: string;
   __v?: string;
   id?: string;
+  passwordHash?: string;
 };
 
 userSchema.set('toJSON', {
@@ -42,6 +43,7 @@ userSchema.set('toJSON', {
     }
     delete returnedObject._id;
     delete returnedObject.__v;
+    delete returnedObject.passwordHash;
   },
 });
 
