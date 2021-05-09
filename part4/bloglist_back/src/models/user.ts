@@ -6,6 +6,7 @@ interface UserDocument extends mongoose.Document {
   username: string;
   name: string;
   passwordHash: string;
+  blogs: string[];
 }
 
 const userSchema = new mongoose.Schema({
@@ -25,7 +26,7 @@ const userSchema = new mongoose.Schema({
   blogs: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Note',
+      ref: 'Blog',
     },
   ],
 });

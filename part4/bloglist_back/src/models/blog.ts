@@ -6,6 +6,7 @@ interface BlogDocument extends mongoose.Document {
   author: string;
   url: string;
   likes: number;
+  createdBy: string;
 }
 
 const blogSchema = new mongoose.Schema({
@@ -15,6 +16,10 @@ const blogSchema = new mongoose.Schema({
   likes: {
     type: Number,
     default: 0,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
 });
 

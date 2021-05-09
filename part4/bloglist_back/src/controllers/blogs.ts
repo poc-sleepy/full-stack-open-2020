@@ -1,12 +1,16 @@
 import express from 'express';
 
 import { Blog } from '../models/blog';
+import { User } from '../models/user';
 
 const blogsRouter = express.Router();
 
 blogsRouter.get('/', (_request, response) => {
   void (async () => {
-    const blogs = await Blog.find({});
+    const blogs = await Blog.find({}).populate('createdBy', {
+      username: 1,
+      name: 1,
+    });
     response.json(blogs);
   })();
 });
@@ -20,8 +24,21 @@ blogsRouter.post('/', (request, response, next) => {
         throw error;
       }
       const blog = new Blog(request.body);
-      const result = await blog.save();
-      response.status(201).json(result);
+      blog.createdBy = '6097cffa013ba926541808df';
+      const user = await User.findById(blog.createdBy);
+      if (user === null) {
+        const error = new Error(
+          `Invalid userId: ${blog.createdBy}, not found the user.`
+        );
+        error.name = 'ValidationError';
+        throw error;
+      }
+
+      const savedBlog = await blog.save();
+      user.blogs = user.blogs.concat(savedBlog._id);
+      await user.save();
+
+      response.status(201).json(savedBlog);
     } catch (e) {
       next(e);
     }

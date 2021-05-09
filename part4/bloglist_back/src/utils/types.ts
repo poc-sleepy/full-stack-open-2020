@@ -5,6 +5,7 @@ type BlogType = {
   author: string;
   url: string;
   likes: number;
+  createdBy: string;
 };
 
 type FavoriteBlog = Omit<BlogType, 'url' | 'id'>;
