@@ -24,7 +24,7 @@ type UserType = {
   username: string;
   name: string;
   passwordHash: string;
-  notes: string[];
+  blogs: string[];
 };
 
 type NewUser = Omit<UserType, 'id'>;

@@ -39,7 +39,7 @@ export const toNewUser = async (params: toNewUserParams): Promise<NewUser> => {
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
-  const notes: string[] = [];
-  const newUser: NewUser = { username, name, passwordHash, notes };
+  const blogs: string[] = [];
+  const newUser: NewUser = { username, name, passwordHash, blogs };
   return newUser;
 };

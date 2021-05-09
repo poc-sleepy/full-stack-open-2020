@@ -26,7 +26,7 @@ describe('when there is initially some users saved', () => {
     expect(response.body).toHaveLength((await helper.getInitialUsers()).length);
   });
 
-  test('a specific blog is within the returned notes', async () => {
+  test('a specific blog is within the returned blogs', async () => {
     const response = await api.get('/api/users');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const users: UserType[] = response.body;
