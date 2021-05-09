@@ -8,7 +8,7 @@ type BlogType = {
   createdBy: string;
 };
 
-type FavoriteBlog = Omit<BlogType, 'url' | 'id'>;
+type FavoriteBlog = Omit<BlogType, 'url' | 'id' | 'createdBy'>;
 
 type MostBlogsAuthor = {
   author: string;
