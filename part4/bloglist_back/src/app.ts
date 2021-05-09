@@ -6,6 +6,7 @@ import { config } from './utils/config';
 import { blogsRouter } from './controllers/blogs';
 import { usersRouter } from './controllers/users';
 import { middleware } from './utils/middlewares';
+import { loginRouter } from './controllers/login';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(middleware.requestLogger);
 
 app.use('/api/blogs', blogsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/login', loginRouter);
 
 app.use(middleware.unknownEndpoint);
 
