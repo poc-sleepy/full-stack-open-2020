@@ -26,7 +26,7 @@ describe('when there is initially some blogs saved', () => {
     expect(response.body).toHaveLength(helper.initialBlogs.length);
   });
 
-  test('a specific blog is within the returned notes', async () => {
+  test('a specific blog is within the returned blogs', async () => {
     const response = await api.get('/api/blogs');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const blogs = response.body;
@@ -164,7 +164,7 @@ describe('addition of a new blog', () => {
   });
 });
 
-describe('updation of a note', () => {
+describe('updation of a blog', () => {
   test('succeeds with valid data', async () => {
     const blogsAtStart: BlogType[] = await helper.blogsInDb();
     const blogToUpdate = blogsAtStart[0];
@@ -183,7 +183,7 @@ describe('updation of a note', () => {
     expect(blogsAtEnd).toContainEqual({ ...blogToUpdate, ...toBeBlog });
   });
 
-  test('fails with statuscode 404 if note does not exist', async () => {
+  test('fails with statuscode 404 if blog does not exist', async () => {
     const validNonexistingId = await helper.nonExistingId();
     const toBeBlog = {
       author: 'Helsinki Univ.',
@@ -208,7 +208,7 @@ describe('updation of a note', () => {
   });
 });
 
-describe('deletion of a note', () => {
+describe('deletion of a blog', () => {
   test('succeeds with status code 204 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToDelete = blogsAtStart[0];
@@ -221,7 +221,7 @@ describe('deletion of a note', () => {
     expect(blogsAtEnd).not.toContainEqual(blogToDelete);
   });
 
-  test('fails with statuscode 404 if note does not exist', async () => {
+  test('fails with statuscode 404 if blog does not exist', async () => {
     const validNonexistingId = await helper.nonExistingId();
     await api.delete(`/api/blogs/${validNonexistingId}`).expect(404);
   });
