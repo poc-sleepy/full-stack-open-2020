@@ -1,4 +1,7 @@
+import bcrypt from 'bcrypt';
+
 import { Blog } from '../models/blog';
+import { User } from '../models/user';
 
 export type MongoBlogType = {
   _id: string;
@@ -70,8 +73,25 @@ const nonExistingId = async () => {
   return id;
 };
 
+const getInitialUsers = async () => {
+  const passwordHash = await bcrypt.hash('sekret', 10);
+  const passwordHash2 = await bcrypt.hash('secret', 10);
+  const initialUsers = [
+    { username: 'root', name: 'Root User', passwordHash },
+    { username: 'admin', name: 'Administrator', passwordHash2 },
+  ];
+  return initialUsers;
+};
+
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users.map((user) => user.toJSON());
+};
+
 export const helper = {
   initialBlogs,
   blogsInDb,
   nonExistingId,
+  getInitialUsers,
+  usersInDb,
 };
