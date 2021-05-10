@@ -1,6 +1,9 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-import { NewUser } from './types';
+import { User } from '../models/user';
+import { config } from './config';
+import { NewUser, UserToken } from './types';
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -42,4 +45,40 @@ export const toNewUser = async (params: toNewUserParams): Promise<NewUser> => {
   const blogs: string[] = [];
   const newUser: NewUser = { username, name, passwordHash, blogs };
   return newUser;
+};
+
+export const getLoginUser = async (token: string | undefined) => {
+  if (config.SECRET === undefined) {
+    throw new Error('Environment variable SECRET is not given.');
+  }
+
+  if (token === undefined) {
+    const noTokenError = new Error('token missing or invalid');
+    noTokenError.name = 'JsonWebTokenError';
+    throw noTokenError;
+  }
+
+  const decodedTokenNever = jwt.verify(token, config.SECRET);
+  if (typeof decodedTokenNever !== 'object') {
+    const notObjectTokenError = new Error('token missing or invalid');
+    notObjectTokenError.name = 'JsonWebTokenError';
+    throw notObjectTokenError;
+  }
+  const decodedToken = decodedTokenNever as UserToken;
+
+  if (decodedToken.id === undefined || decodedToken.id.length === 0) {
+    const noIdTokenError = new Error('token missing or invalid');
+    noIdTokenError.name = 'JsonWebTokenError';
+    throw noIdTokenError;
+  }
+
+  const user = await User.findById(decodedToken.id);
+
+  if (user === null) {
+    const noIdTokenError = new Error('token missing or invalid');
+    noIdTokenError.name = 'JsonWebTokenError';
+    throw noIdTokenError;
+  }
+
+  return user;
 };

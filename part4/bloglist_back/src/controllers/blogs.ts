@@ -1,10 +1,7 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 
 import { Blog } from '../models/blog';
-import { User } from '../models/user';
-import { config } from '../utils/config';
-import { UserToken } from '../utils/types';
+import { getLoginUser } from '../utils/functions';
 
 const blogsRouter = express.Router();
 
@@ -21,25 +18,7 @@ blogsRouter.get('/', (_request, response) => {
 blogsRouter.post('/', (request, response, next) => {
   void (async () => {
     try {
-      if (config.SECRET === undefined) {
-        throw new Error('Environment variable SECRET is not given.');
-      }
-      if (request.token === undefined) {
-        response.status(401).json({ error: 'token missing or invalid' });
-        return;
-      }
-
-      const decodedTokenNever = jwt.verify(request.token, config.SECRET);
-      if (typeof decodedTokenNever !== 'object') {
-        response.status(401).json({ error: 'token missing or invalid' });
-        return;
-      }
-      const decodedToken = decodedTokenNever as UserToken;
-
-      if (decodedToken.id === undefined || decodedToken.id.length === 0) {
-        response.status(401).json({ error: 'token missing or invalid' });
-        return;
-      }
+      const user = await getLoginUser(request.token);
 
       if (!request.body.title && !request.body.url) {
         const error = new Error('Either title or url is required.');
@@ -47,16 +26,7 @@ blogsRouter.post('/', (request, response, next) => {
         throw error;
       }
 
-      const user = await User.findById(decodedToken.id);
-      if (user === null) {
-        const error = new Error(
-          `Invalid userId: ${decodedToken.id}, not found the user.`
-        );
-        error.name = 'ValidationError';
-        throw error;
-      }
-
-      const blog = new Blog({ ...request.body, createdBy: decodedToken.id });
+      const blog = new Blog({ ...request.body, createdBy: user._id });
       const savedBlog = await blog.save();
       user.blogs = user.blogs.concat(savedBlog._id);
       await user.save();
@@ -90,13 +60,21 @@ blogsRouter.put('/:id', (request, response, next) => {
 blogsRouter.delete('/:id', (request, response, next) => {
   void (async () => {
     try {
-      const result = await Blog.findByIdAndRemove(request.params.id);
+      const user = await getLoginUser(request.token);
+      const blog = await Blog.findById(request.params.id);
 
-      if (result === null) {
+      if (blog === null) {
         response.status(404).end();
+        return;
+      } else if (blog.createdBy.toString() !== user._id.toString()) {
+        console.log(typeof blog.createdBy, blog.createdBy);
+        console.log(typeof user._id, user._id);
+
+        response.status(401).end();
         return;
       }
 
+      await blog.delete();
       response.status(204).end();
     } catch (e) {
       next(e);
