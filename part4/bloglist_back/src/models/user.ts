@@ -2,11 +2,11 @@ import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 
 interface UserDocument extends mongoose.Document {
-  _id: string;
+  _id: mongoose.Types.ObjectId;
   username: string;
   name: string;
   passwordHash: string;
-  blogs: string[];
+  blogs: mongoose.Types.ObjectId[];
 }
 
 const userSchema = new mongoose.Schema({
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
 
 // HACK: 消したいor増やしたいプロパティなので、option項目とする
 type ReturnedObject = {
-  _id?: string;
+  _id?: mongoose.Types.ObjectId;
   __v?: string;
   id?: string;
   passwordHash?: string;

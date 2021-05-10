@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
 interface BlogDocument extends mongoose.Document {
-  _id: string;
+  _id: mongoose.Types.ObjectId;
   title: string;
   author: string;
   url: string;
   likes: number;
-  createdBy: string;
+  createdBy: mongoose.Types.ObjectId;
 }
 
 const blogSchema = new mongoose.Schema({
@@ -25,7 +25,7 @@ const blogSchema = new mongoose.Schema({
 
 // [HACK]消したいor増やしたいプロパティなので、option項目とする
 type ReturnedObject = {
-  _id?: string;
+  _id?: mongoose.Types.ObjectId;
   __v?: string;
   id?: string;
 };
