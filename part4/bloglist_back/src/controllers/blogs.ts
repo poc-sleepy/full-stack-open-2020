@@ -18,36 +18,25 @@ blogsRouter.get('/', (_request, response) => {
   })();
 });
 
-const getTokenFrom = (request: express.Request): string | null => {
-  const authorization = request.get('authorization');
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7);
-  }
-  return null;
-};
-
 blogsRouter.post('/', (request, response, next) => {
   void (async () => {
     try {
-      const secret = config.SECRET;
-      if (secret === undefined) {
+      if (config.SECRET === undefined) {
         throw new Error('Environment variable SECRET is not given.');
       }
-
-      const token = getTokenFrom(request);
-      if (token === null) {
+      if (request.token === undefined) {
         response.status(401).json({ error: 'token missing or invalid' });
         return;
       }
 
-      const decodedTokenNever = jwt.verify(token, secret);
+      const decodedTokenNever = jwt.verify(request.token, config.SECRET);
       if (typeof decodedTokenNever !== 'object') {
         response.status(401).json({ error: 'token missing or invalid' });
         return;
       }
       const decodedToken = decodedTokenNever as UserToken;
 
-      if (!token || !decodedToken.id) {
+      if (decodedToken.id === undefined || decodedToken.id.length === 0) {
         response.status(401).json({ error: 'token missing or invalid' });
         return;
       }

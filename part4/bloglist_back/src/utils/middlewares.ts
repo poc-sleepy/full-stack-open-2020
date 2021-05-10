@@ -14,6 +14,19 @@ const requestLogger = (
   next();
 };
 
+const tokenExtractor = (
+  request: Request,
+  _response: Response,
+  next: NextFunction
+) => {
+  const authorization = request.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    request.token = authorization.substring(7);
+  }
+
+  next();
+};
+
 const unknownEndpoint = (_request: Request, response: Response) => {
   response.status(404).send({ error: 'unknown endpoint' });
 };
@@ -43,6 +56,7 @@ const errorHandler = (
 
 export const middleware = {
   requestLogger,
+  tokenExtractor,
   unknownEndpoint,
   errorHandler,
 };
