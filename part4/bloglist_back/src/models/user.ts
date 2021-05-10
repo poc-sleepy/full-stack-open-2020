@@ -1,13 +1,6 @@
 import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
-
-interface UserDocument extends mongoose.Document {
-  _id: mongoose.Types.ObjectId;
-  username: string;
-  name: string;
-  passwordHash: string;
-  blogs: mongoose.Types.ObjectId[];
-}
+import { UserDocument } from '../utils/types';
 
 const userSchema = new mongoose.Schema({
   username: {

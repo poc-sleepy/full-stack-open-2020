@@ -1,13 +1,5 @@
 import mongoose from 'mongoose';
-
-interface BlogDocument extends mongoose.Document {
-  _id: mongoose.Types.ObjectId;
-  title: string;
-  author: string;
-  url: string;
-  likes: number;
-  createdBy: mongoose.Types.ObjectId;
-}
+import { BlogDocument } from '../utils/types';
 
 const blogSchema = new mongoose.Schema({
   title: String,
