@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import { User } from '../models/user';
+import { config } from './config';
 
 import { logger } from './logger';
+import { UserToken } from './types';
 
 const requestLogger = (
   request: Request,
@@ -22,6 +26,58 @@ const tokenExtractor = (
   const authorization = request.get('authorization');
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     request.token = authorization.substring(7);
+  }
+
+  next();
+};
+
+const userExtractor = (
+  request: Request,
+  _response: Response,
+  next: NextFunction
+) => {
+  void (async () => {
+    try {
+      
+      if (config.SECRET === undefined) {
+        throw new Error('Environment variable SECRET is not given.');
+      }
+      if (request.token === undefined) {
+        next();
+        return;
+      }
+      
+      const decodedTokenNever = jwt.verify(request.token, config.SECRET);
+      if (typeof decodedTokenNever !== 'object') {
+        next();
+        return;
+      }
+      const decodedToken = decodedTokenNever as UserToken;
+
+      if (decodedToken.id === undefined || decodedToken.id.length === 0) {
+        next();
+        return;
+      }
+      const user = await User.findById(decodedToken.id);
+      if (user !== null) {
+        request.user = user;
+      }
+      next();
+    } catch (e) {
+      next(e);
+    }
+  })();
+};
+
+const requireLogin = (
+  request: Request,
+  _response: Response,
+  next: NextFunction
+) => {
+  if (request.user === undefined) {
+    const noTokenError = new Error('token missing or invalid');
+    noTokenError.name = 'JsonWebTokenError';
+    throw noTokenError;
   }
 
   next();
@@ -57,6 +113,8 @@ const errorHandler = (
 export const middleware = {
   requestLogger,
   tokenExtractor,
+  requireLogin,
+  userExtractor,
   unknownEndpoint,
   errorHandler,
 };
