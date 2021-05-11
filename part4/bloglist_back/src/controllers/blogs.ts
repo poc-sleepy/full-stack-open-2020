@@ -71,9 +71,6 @@ blogsRouter.delete(
           response.status(404).end();
           return;
         } else if (blog.createdBy.toString() !== user._id.toString()) {
-          console.log(typeof blog.createdBy, blog.createdBy);
-          console.log(typeof user._id, user._id);
-
           response.status(401).end();
           return;
         }
