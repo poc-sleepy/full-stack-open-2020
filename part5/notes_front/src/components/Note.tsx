@@ -1,11 +1,13 @@
 import React from 'react';
 
+import { Note } from '../utils/types';
+
 type Props = {
-  note: any;
-  toggleImportance: (event: React.MouseEvent<HTMLInputElement>) => void;
+  note: Note;
+  toggleImportance: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-const Note = ({ note, toggleImportance }) => {
+const SingleNote: React.FC<Props> = ({ note, toggleImportance }: Props) => {
   const label = note.important ? 'make not important' : 'make important';
 
   return (
@@ -16,4 +18,4 @@ const Note = ({ note, toggleImportance }) => {
   );
 };
 
-export default Note;
+export default SingleNote;

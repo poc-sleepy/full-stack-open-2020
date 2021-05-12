@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import Note from './components/Note';
+import SingleNote from './components/Note';
 import Notification from './components/Notification';
 import Footer from './components/Footer';
 import noteService from './services/notes';
+import { Note } from './utils/types';
 
 const App: React.FC = () => {
-  const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState('');
-  const [showAll, setShowAll] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [newNote, setNewNote] = useState<string>('');
+  const [showAll, setShowAll] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   useEffect(() => {
     void noteService.getAll().then((initialNotes) => {
@@ -19,7 +20,7 @@ const App: React.FC = () => {
     });
   }, []);
 
-  const addNote = (event: React.FormEvent<HTMLFormElement>) => {
+  const addNote = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const noteObject = {
       content: newNote,
@@ -27,29 +28,31 @@ const App: React.FC = () => {
       important: Math.random() > 0.5,
     };
 
-    void noteService.create(noteObject).then((returnedNote) => {
-      setNotes(notes.concat(returnedNote));
-      setNewNote('');
-    });
+    const returnedNote = await noteService.create(noteObject);
+    setNotes(notes.concat(returnedNote));
+    setNewNote('');
   };
 
-  const toggleImportanceOf = (id: string) => {
+  const toggleImportanceOf = async (id: string) => {
     const note = notes.find((n) => n.id === id);
+    if (note === undefined) {
+      setErrorMessage(`Note was not found.`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+      return;
+    }
     const changedNote = { ...note, important: !note.important };
 
-    noteService
-      .update(id, changedNote)
-      .then((returnedNote) => {
-        setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
-      })
-      .catch((error) => {
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        );
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
-      });
+    try {
+      const returnedNote = await noteService.update(id, changedNote);
+      setNotes(notes.map((note) => (note.id !== id ? note : returnedNote)));
+    } catch (e) {
+      setErrorMessage(`Note '${note.content}' was already removed from server`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
   };
 
   const handleNoteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +102,7 @@ const App: React.FC = () => {
       </div>
       <ul>
         {notesToShow.map((note) => (
-          <Note
+          <SingleNote
             key={note.id}
             note={note}
             toggleImportance={() => toggleImportanceOf(note.id)}

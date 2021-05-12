@@ -1,8 +1,12 @@
 import React from 'react';
 
-const Notification = ({ message }: { message: string }) => {
+type Props = {
+  message: string | null;
+};
+
+const Notification: React.FC<Props> = ({ message }) => {
   if (message === null) {
-    return null;
+    return <></>;
   }
 
   return <div className="error">{message}</div>;

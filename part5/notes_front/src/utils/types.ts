@@ -1,9 +1,11 @@
 export type Note = {
-  id: number;
+  id: string;
   content: string;
   date: string;
   important: boolean;
 };
+
+export type NewNote = Omit<Note, 'id'>;
 
 export type User = {
   id: string;
