@@ -14,3 +14,9 @@ export type User = {
   passwordHash: string;
   notes: string[];
 };
+
+export type UserToken = {
+  id: string;
+  username: string;
+  name: string;
+};

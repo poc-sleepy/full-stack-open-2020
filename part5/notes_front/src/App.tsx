@@ -3,7 +3,8 @@ import SingleNote from './components/Note';
 import Notification from './components/Notification';
 import Footer from './components/Footer';
 import noteService from './services/notes';
-import { Note } from './utils/types';
+import loginService from './services/login';
+import { Note, UserToken } from './utils/types';
 
 const App: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -13,6 +14,8 @@ const App: React.FC = () => {
 
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [user, setUser] = useState<UserToken | null>(null);
 
   useEffect(() => {
     void noteService.getAll().then((initialNotes) => {
@@ -62,9 +65,22 @@ const App: React.FC = () => {
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('logging in with', username, password);
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      });
+      setUser(user);
+      setUsername('');
+      setPassword('');
+    } catch (exception) {
+      setErrorMessage('Wrong credentials');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
+    }
   };
 
   return (
