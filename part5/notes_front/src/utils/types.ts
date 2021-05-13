@@ -19,4 +19,5 @@ export type UserToken = {
   id: string;
   username: string;
   name: string;
+  token: string;
 };
