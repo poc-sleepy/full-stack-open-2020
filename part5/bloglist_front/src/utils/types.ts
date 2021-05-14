@@ -7,7 +7,7 @@ export type BlogType = {
   createdBy: string;
 };
 
-export type NewBlogType = Omit<BlogType, 'id'>;
+export type NewBlogType = Omit<BlogType, 'id' | 'likes' | 'createdBy'>;
 
 export type UserType = {
   id: string;

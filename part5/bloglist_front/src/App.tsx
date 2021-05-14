@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+
+import BlogForm from './components/BlogForm';
 import BlogList from './components/BlogList';
 import LoginForm from './components/LoginForm';
 import blogService from './services/blogs';
@@ -10,6 +12,9 @@ const App = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [user, setUser] = useState<UserTokenType | null>(null);
+  const [title, setTitle] = useState<string>('');
+  const [author, setAuthor] = useState<string>('');
+  const [url, setUrl] = useState<string>('');
 
   useEffect(() => {
     void (async () => {
@@ -19,9 +24,10 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const storedUser = window.localStorage.getItem('blogAppLoginUser');
-    if (storedUser !== null) {
-      setUser(JSON.parse(storedUser));
+    const storedUserStr = window.localStorage.getItem('blogAppLoginUser');
+    if (storedUserStr !== null) {
+      setUser(JSON.parse(storedUserStr));
+      blogService.setToken(JSON.parse(storedUserStr).token);
     }
   }, []);
 
@@ -30,6 +36,7 @@ const App = () => {
     try {
       const loggedInUser = await loginService.login({ username, password });
       setUser(loggedInUser);
+      blogService.setToken(loggedInUser.token);
       window.localStorage.setItem(
         'blogAppLoginUser',
         JSON.stringify(loggedInUser)
@@ -42,6 +49,16 @@ const App = () => {
   const logoutHandler = () => {
     setUser(null);
     window.localStorage.removeItem('blogAppLoginUser');
+  };
+
+  const createBlogHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const createdBlog = await blogService.create({ title, author, url });
+      setBlogs(blogs.concat(createdBlog));
+    } catch (e) {
+      console.log('create error');
+    }
   };
 
   const renderLoginForm = () => (
@@ -64,6 +81,18 @@ const App = () => {
         {user?.name} logged in.
         <button onClick={logoutHandler}>logout</button>
       </p>
+
+      <h2>create new</h2>
+      <BlogForm
+        createBlogHandler={createBlogHandler}
+        title={title}
+        setTitle={setTitle}
+        author={author}
+        setAuthor={setAuthor}
+        url={url}
+        setUrl={setUrl}
+      />
+
       <BlogList blogs={blogs} />
     </>
   );
