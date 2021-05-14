@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Alert } from '@material-ui/lab';
 
 import BlogForm from './components/BlogForm';
 import BlogList from './components/BlogList';
@@ -15,11 +16,20 @@ const App = () => {
   const [title, setTitle] = useState<string>('');
   const [author, setAuthor] = useState<string>('');
   const [url, setUrl] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>('');
 
   useEffect(() => {
     void (async () => {
-      const blogs = await blogService.getAll();
-      setBlogs(blogs);
+      try {
+        const blogs = await blogService.getAll();
+        setBlogs(blogs);
+      } catch (e) {
+        setErrorMessage(e.response.data.error);
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 5000);
+      }
     })();
   }, []);
 
@@ -41,14 +51,25 @@ const App = () => {
         'blogAppLoginUser',
         JSON.stringify(loggedInUser)
       );
+      setSuccessMessage(`Successful Login. Hello ${loggedInUser?.name}.`);
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 5000);
     } catch (e) {
-      console.log('login error');
+      setErrorMessage(e.response.data.error);
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 5000);
     }
   };
 
   const logoutHandler = () => {
     setUser(null);
     window.localStorage.removeItem('blogAppLoginUser');
+    setSuccessMessage('Successful Logout.');
+    setTimeout(() => {
+      setSuccessMessage('');
+    }, 5000);
   };
 
   const createBlogHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -56,8 +77,17 @@ const App = () => {
     try {
       const createdBlog = await blogService.create({ title, author, url });
       setBlogs(blogs.concat(createdBlog));
+      setSuccessMessage(
+        `A new blog "${createdBlog.title}" by ${createdBlog.author} added.`
+      );
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 5000);
     } catch (e) {
-      console.log('create error');
+      setErrorMessage(e.response.data.error);
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 5000);
     }
   };
 
@@ -97,7 +127,22 @@ const App = () => {
     </>
   );
 
-  return <div>{user === null ? renderLoginForm() : renderBlogList()}</div>;
+  const renderErrorMessage = () => (
+    <Alert severity="error">{errorMessage}</Alert>
+  );
+
+  const renderSuccessMessage = () => (
+    <Alert severity="success">{successMessage}</Alert>
+  );
+
+  return (
+    <>
+      {errorMessage !== '' && renderErrorMessage()}
+      {successMessage !== '' && renderSuccessMessage()}
+
+      <div>{user === null ? renderLoginForm() : renderBlogList()}</div>
+    </>
+  );
 };
 
 export default App;
