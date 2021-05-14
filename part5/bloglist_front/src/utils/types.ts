@@ -19,7 +19,7 @@ export type UserType = {
 export type NewUserType = Omit<UserType, 'id'>;
 
 export type UserTokenType = {
-  id: string;
   username: string;
+  name: string;
   token: string;
 };
