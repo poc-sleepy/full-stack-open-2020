@@ -4,14 +4,13 @@ import Notification from './components/Notification';
 import Footer from './components/Footer';
 import noteService from './services/notes';
 import loginService from './services/login';
-import { Note, UserToken } from './utils/types';
+import { NewNote, Note, UserToken } from './utils/types';
 import LoginForm from './components/LoginForm';
 import Togglable from './components/Togglable';
 import NoteForm from './components/NoteForm';
 
 const App: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
-  const [newNote, setNewNote] = useState<string>('');
   const [showAll, setShowAll] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -36,17 +35,9 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const addNote = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const noteObject = {
-      content: newNote,
-      date: new Date().toISOString(),
-      important: Math.random() > 0.5,
-    };
-
+  const addNote = async (noteObject: NewNote) => {
     const returnedNote = await noteService.create(noteObject);
     setNotes(notes.concat(returnedNote));
-    setNewNote('');
   };
 
   const toggleImportanceOf = async (id: string) => {
@@ -69,11 +60,6 @@ const App: React.FC = () => {
         setErrorMessage(null);
       }, 5000);
     }
-  };
-
-  const handleNoteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
-    setNewNote(event.target.value);
   };
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
@@ -115,11 +101,7 @@ const App: React.FC = () => {
 
   const noteForm = () => (
     <Togglable buttonLabel="new note">
-      <NoteForm
-        onSubmit={addNote}
-        value={newNote}
-        handleChange={handleNoteChange}
-      />
+      <NoteForm createNote={addNote} />
     </Togglable>
   );
 

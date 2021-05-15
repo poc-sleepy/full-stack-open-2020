@@ -1,18 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { NewNote } from '../utils/types';
 
 type Props = {
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  value: string;
+  createNote: (newNote: NewNote) => void;
 };
 
-const NoteForm: React.FC<Props> = ({ onSubmit, handleChange, value }) => {
+const NoteForm: React.FC<Props> = ({ createNote }) => {
+  const [newNote, setNewNote] = useState<string>('');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewNote(event.target.value);
+  };
+
+  const addNote = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    createNote({
+      content: newNote,
+      date: new Date().toISOString(),
+      important: Math.random() > 0.5,
+    });
+
+    setNewNote('');
+  };
+
   return (
     <div>
       <h2>Create a new note</h2>
 
-      <form onSubmit={onSubmit}>
-        <input value={value} onChange={handleChange} />
+      <form onSubmit={addNote}>
+        <input value={newNote} onChange={handleChange} />
         <button type="submit">save</button>
       </form>
     </div>
