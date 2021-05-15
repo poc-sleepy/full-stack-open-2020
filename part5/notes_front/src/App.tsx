@@ -8,11 +8,13 @@ import { NewNote, Note, UserToken } from './utils/types';
 import LoginForm from './components/LoginForm';
 import Togglable from './components/Togglable';
 import NoteForm from './components/NoteForm';
+import { useRef } from 'react';
 
 const App: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [showAll, setShowAll] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const noteFormRef = useRef({} as { toggleVisibility: () => void });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [user, setUser] = useState<UserToken | null>(null);
@@ -34,6 +36,7 @@ const App: React.FC = () => {
   }, []);
 
   const addNote = async (noteObject: NewNote) => {
+    noteFormRef.current.toggleVisibility();
     const returnedNote = await noteService.create(noteObject);
     setNotes(notes.concat(returnedNote));
   };
@@ -87,7 +90,7 @@ const App: React.FC = () => {
   };
 
   const noteForm = () => (
-    <Togglable buttonLabel="new note">
+    <Togglable buttonLabel="new note" ref={noteFormRef}>
       <NoteForm createNote={addNote} />
     </Togglable>
   );
