@@ -14,8 +14,6 @@ const App: React.FC = () => {
   const [showAll, setShowAll] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [user, setUser] = useState<UserToken | null>(null);
 
@@ -64,19 +62,14 @@ const App: React.FC = () => {
 
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
+  type PropsHandleLogin = { username: string; password: string };
 
+  const handleLogin = async ({ username, password }: PropsHandleLogin) => {
+    try {
+      const user = await loginService.login({ username, password });
       window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user));
       noteService.setToken(user.token);
       setUser(user);
-      setUsername('');
-      setPassword('');
     } catch (exception) {
       setErrorMessage('Wrong credentials');
       setTimeout(() => {
@@ -88,13 +81,7 @@ const App: React.FC = () => {
   const loginForm = () => {
     return (
       <Togglable buttonLabel="login">
-        <LoginForm
-          username={username}
-          password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-          handleSubmit={handleLogin}
-        />
+        <LoginForm login={handleLogin} />
       </Togglable>
     );
   };
