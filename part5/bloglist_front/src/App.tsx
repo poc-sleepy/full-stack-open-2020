@@ -6,15 +6,12 @@ import BlogList from './components/BlogList';
 import LoginForm from './components/LoginForm';
 import blogService from './services/blogs';
 import loginService from './services/login';
-import { BlogType, UserTokenType } from './utils/types';
+import { BlogType, NewBlogType, UserTokenType } from './utils/types';
 import Togglable from './components/Togglable';
 
 const App = () => {
   const [blogs, setBlogs] = useState<BlogType[]>([]);
   const [user, setUser] = useState<UserTokenType | null>(null);
-  const [title, setTitle] = useState<string>('');
-  const [author, setAuthor] = useState<string>('');
-  const [url, setUrl] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
   const blogFormRef = useRef({} as { toggleVisibility: () => void });
@@ -76,12 +73,10 @@ const App = () => {
     }, 5000);
   };
 
-  const createBlogHandler = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const createBlogHandler = async (newBlog: NewBlogType) => {
     try {
-      const createdBlog = await blogService.create({ title, author, url });
+      const createdBlog = await blogService.create(newBlog);
       setBlogs(blogs.concat(createdBlog));
-
       blogFormRef.current.toggleVisibility();
       setSuccessMessage(
         `A new blog "${createdBlog.title}" by ${createdBlog.author} added.`
@@ -113,15 +108,7 @@ const App = () => {
       </p>
 
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm
-          createBlogHandler={createBlogHandler}
-          title={title}
-          setTitle={setTitle}
-          author={author}
-          setAuthor={setAuthor}
-          url={url}
-          setUrl={setUrl}
-        />
+        <BlogForm createBlogHandler={createBlogHandler} />
       </Togglable>
       <h2>create new</h2>
 
