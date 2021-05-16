@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Alert } from '@material-ui/lab';
 
 import BlogForm from './components/BlogForm';
@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import { BlogType, UserTokenType } from './utils/types';
+import Togglable from './components/Togglable';
 
 const App = () => {
   const [blogs, setBlogs] = useState<BlogType[]>([]);
@@ -18,6 +19,7 @@ const App = () => {
   const [url, setUrl] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
+  const blogFormRef = useRef({} as { toggleVisibility: () => void });
 
   useEffect(() => {
     void (async () => {
@@ -77,6 +79,8 @@ const App = () => {
     try {
       const createdBlog = await blogService.create({ title, author, url });
       setBlogs(blogs.concat(createdBlog));
+
+      blogFormRef.current.toggleVisibility();
       setSuccessMessage(
         `A new blog "${createdBlog.title}" by ${createdBlog.author} added.`
       );
@@ -92,7 +96,7 @@ const App = () => {
   };
 
   const renderLoginForm = () => (
-    <>
+    <Togglable buttonLabel="login">
       <h2>log in to application</h2>
       <LoginForm
         loginHandler={loginHandler}
@@ -101,7 +105,7 @@ const App = () => {
         password={password}
         setPassword={setPassword}
       />
-    </>
+    </Togglable>
   );
 
   const renderBlogList = () => (
@@ -112,16 +116,18 @@ const App = () => {
         <button onClick={logoutHandler}>logout</button>
       </p>
 
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+        <BlogForm
+          createBlogHandler={createBlogHandler}
+          title={title}
+          setTitle={setTitle}
+          author={author}
+          setAuthor={setAuthor}
+          url={url}
+          setUrl={setUrl}
+        />
+      </Togglable>
       <h2>create new</h2>
-      <BlogForm
-        createBlogHandler={createBlogHandler}
-        title={title}
-        setTitle={setTitle}
-        author={author}
-        setAuthor={setAuthor}
-        url={url}
-        setUrl={setUrl}
-      />
 
       <BlogList blogs={blogs} />
     </>
