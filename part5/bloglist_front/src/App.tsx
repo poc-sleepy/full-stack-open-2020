@@ -11,8 +11,6 @@ import Togglable from './components/Togglable';
 
 const App = () => {
   const [blogs, setBlogs] = useState<BlogType[]>([]);
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [user, setUser] = useState<UserTokenType | null>(null);
   const [title, setTitle] = useState<string>('');
   const [author, setAuthor] = useState<string>('');
@@ -43,10 +41,14 @@ const App = () => {
     }
   }, []);
 
-  const loginHandler = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  type PropsLoginHandler = {
+    username: string;
+    password: string;
+  };
+
+  const loginHandler = async (user: PropsLoginHandler) => {
     try {
-      const loggedInUser = await loginService.login({ username, password });
+      const loggedInUser = await loginService.login(user);
       setUser(loggedInUser);
       blogService.setToken(loggedInUser.token);
       window.localStorage.setItem(
@@ -98,13 +100,7 @@ const App = () => {
   const renderLoginForm = () => (
     <Togglable buttonLabel="login">
       <h2>log in to application</h2>
-      <LoginForm
-        loginHandler={loginHandler}
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
-      />
+      <LoginForm loginHandler={loginHandler} />
     </Togglable>
   );
 
