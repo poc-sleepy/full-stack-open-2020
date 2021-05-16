@@ -42,7 +42,8 @@
     ]
   },
   "devDependencies": {
-    "@types/axios": "^0.14.0"
+    "@types/axios": "^0.14.0",
+    "eslint-plugin-jest": "^24.3.6"
   },
   "proxy": "http://localhost:3001"
 }
