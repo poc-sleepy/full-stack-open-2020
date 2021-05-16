@@ -39,4 +39,6 @@ const Togglable = React.forwardRef<Handler, React.PropsWithChildren<Props>>(
   }
 );
 
+Togglable.displayName = 'Togglable';
+
 export default Togglable;
