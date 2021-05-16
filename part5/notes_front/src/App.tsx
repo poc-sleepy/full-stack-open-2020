@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SingleNote from './components/Note';
 import Notification from './components/Notification';
 import Footer from './components/Footer';
@@ -8,7 +8,6 @@ import { NewNote, Note, UserToken } from './utils/types';
 import LoginForm from './components/LoginForm';
 import Togglable from './components/Togglable';
 import NoteForm from './components/NoteForm';
-import { useRef } from 'react';
 
 const App: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
