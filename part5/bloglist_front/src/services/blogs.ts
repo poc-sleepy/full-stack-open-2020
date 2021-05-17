@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { BlogType, NewBlogType } from '../utils/types';
+import { BlogType, NewBlogType, UpdatingBlogType } from '../utils/types';
 const baseUrl = '/api/blogs';
 
 let token: string | null = null;
@@ -22,7 +22,7 @@ const create = async (params: NewBlogType) => {
   return response.data;
 };
 
-const update = async (params: BlogType) => {
+const update = async (params: UpdatingBlogType) => {
   const response = await axios.put<BlogType>(`${baseUrl}/${params.id}`, params);
   return response.data;
 };

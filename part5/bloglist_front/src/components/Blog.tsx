@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Box, Card, CardContent } from '@material-ui/core';
 
-import { BlogType } from '../utils/types';
+import { BlogType, UpdatingBlogType } from '../utils/types';
 
 type Props = {
   blog: BlogType;
-  likesBlogHandler: (blog: BlogType) => void;
+  likesBlogHandler: (blog: UpdatingBlogType) => void;
 };
 
 const Blog: React.FC<Props> = (props: Props) => {
@@ -15,6 +15,7 @@ const Blog: React.FC<Props> = (props: Props) => {
     const toUpdateBlog = {
       ...props.blog,
       likes: props.blog.likes + 1,
+      createdBy: props.blog.createdBy.id,
     };
     props.likesBlogHandler(toUpdateBlog);
   };

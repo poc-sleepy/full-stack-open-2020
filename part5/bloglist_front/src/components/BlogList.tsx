@@ -1,10 +1,10 @@
 import React from 'react';
-import { BlogType } from '../utils/types';
+import { BlogType, UpdatingBlogType } from '../utils/types';
 import Blog from './Blog';
 
 type Props = {
   blogs: BlogType[];
-  likesBlogHandler: (blog: BlogType) => void;
+  likesBlogHandler: (blog: UpdatingBlogType) => void;
 };
 
 const BlogList: React.FC<Props> = (props: Props) => (

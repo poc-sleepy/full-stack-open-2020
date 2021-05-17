@@ -6,7 +6,12 @@ import BlogList from './components/BlogList';
 import LoginForm from './components/LoginForm';
 import blogService from './services/blogs';
 import loginService from './services/login';
-import { BlogType, NewBlogType, UserTokenType } from './utils/types';
+import {
+  BlogType,
+  NewBlogType,
+  UpdatingBlogType,
+  UserTokenType,
+} from './utils/types';
 import Togglable from './components/Togglable';
 
 const App = () => {
@@ -92,7 +97,7 @@ const App = () => {
     }
   };
 
-  const likesBlogHandler = async (targetBlog: BlogType) => {
+  const likesBlogHandler = async (targetBlog: UpdatingBlogType) => {
     try {
       const updatedBlog = await blogService.update(targetBlog);
       setBlogs(
