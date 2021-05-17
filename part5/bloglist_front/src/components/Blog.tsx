@@ -22,7 +22,11 @@ const Blog: React.FC<Props> = (props: Props) => {
   };
 
   const removeBlogHandler = (): void => {
-    props.removeBlogHandler(props.blog);
+    if (
+      window.confirm(`Remove blog ${props.blog.title} by ${props.blog.author}`)
+    ) {
+      props.removeBlogHandler(props.blog);
+    }
   };
 
   return (
