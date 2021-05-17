@@ -22,4 +22,9 @@ const create = async (params: NewBlogType) => {
   return response.data;
 };
 
-export default { setToken, getAll, create };
+const update = async (params: BlogType) => {
+  const response = await axios.put<BlogType>(`${baseUrl}/${params.id}`, params);
+  return response.data;
+};
+
+export default { setToken, getAll, create, update };

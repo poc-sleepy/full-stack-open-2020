@@ -92,6 +92,27 @@ const App = () => {
     }
   };
 
+  const likesBlogHandler = async (targetBlog: BlogType) => {
+    try {
+      const updatedBlog = await blogService.update(targetBlog);
+      setBlogs(
+        blogs.map((blog) => (blog.id !== targetBlog.id ? blog : updatedBlog))
+      );
+      blogFormRef.current.toggleVisibility();
+      setSuccessMessage(
+        `"${updatedBlog.title}" by ${updatedBlog.author} is liked.`
+      );
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 5000);
+    } catch (e) {
+      setErrorMessage(e.response.data.error);
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 5000);
+    }
+  };
+
   const renderLoginForm = () => (
     <Togglable buttonLabel="login">
       <h2>log in to application</h2>
@@ -112,7 +133,7 @@ const App = () => {
       </Togglable>
       <h2>create new</h2>
 
-      <BlogList blogs={blogs} />
+      <BlogList blogs={blogs} likesBlogHandler={likesBlogHandler} />
     </>
   );
 

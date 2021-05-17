@@ -5,16 +5,25 @@ import { BlogType } from '../utils/types';
 
 type Props = {
   blog: BlogType;
+  likesBlogHandler: (blog: BlogType) => void;
 };
 
-const Blog: React.FC<Props> = ({ blog }: Props) => {
+const Blog: React.FC<Props> = (props: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const likesBlogHandler = (): void => {
+    const toUpdateBlog = {
+      ...props.blog,
+      likes: props.blog.likes + 1,
+    };
+    props.likesBlogHandler(toUpdateBlog);
+  };
 
   return (
     <Box m={2}>
       <Card>
         <CardContent>
-          {blog.title} {blog.author}
+          {props.blog.title} {props.blog.author}
           <button
             onClick={() => {
               setIsOpen(!isOpen);
@@ -23,12 +32,12 @@ const Blog: React.FC<Props> = ({ blog }: Props) => {
             {isOpen ? 'hide' : 'view'}
           </button>
           <div style={{ display: isOpen ? '' : 'none' }}>
-            <p>{blog.url}</p>
+            <p>{props.blog.url}</p>
             <p>
-              likes: {blog.likes}
-              <button>like</button>
+              likes: {props.blog.likes}
+              <button onClick={likesBlogHandler}>like</button>
             </p>
-            <p>{blog.createdBy.name}</p>
+            <p>{props.blog.createdBy.name}</p>
           </div>
         </CardContent>
       </Card>
