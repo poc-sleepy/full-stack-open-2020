@@ -2,9 +2,10 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:react/recommended"
   ],
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint"],
   "env": {
     "browser": true,
     "es6": true,
@@ -21,10 +22,21 @@
       "error",
       { "argsIgnorePattern": "^_" }
     ],
-    "no-case-declarations": "off"
+    "no-case-declarations": "off",
+    "react/prop-types": "off"
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
