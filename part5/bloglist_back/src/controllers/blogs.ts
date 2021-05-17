@@ -45,7 +45,10 @@ blogsRouter.put('/:id', (request, response, next) => {
         request.params.id,
         request.body,
         { new: true }
-      );
+      ).populate('createdBy', {
+        username: 1,
+        name: 1,
+      });
 
       if (updatedBlog === null) {
         response.status(404).end();
