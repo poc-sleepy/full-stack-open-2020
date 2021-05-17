@@ -4,7 +4,7 @@ export type BlogType = {
   author: string;
   url: string;
   likes: number;
-  createdBy: string;
+  createdBy: Omit<UserType, 'blogs'>
 };
 
 export type NewBlogType = Omit<BlogType, 'id' | 'likes' | 'createdBy'>;
