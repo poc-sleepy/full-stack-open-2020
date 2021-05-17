@@ -6,6 +6,7 @@ import { BlogType, UpdatingBlogType } from '../utils/types';
 type Props = {
   blog: BlogType;
   likesBlogHandler: (blog: UpdatingBlogType) => void;
+  removeBlogHandler: (blog: BlogType) => void;
 };
 
 const Blog: React.FC<Props> = (props: Props) => {
@@ -18,6 +19,10 @@ const Blog: React.FC<Props> = (props: Props) => {
       createdBy: props.blog.createdBy.id,
     };
     props.likesBlogHandler(toUpdateBlog);
+  };
+
+  const removeBlogHandler = (): void => {
+    props.removeBlogHandler(props.blog);
   };
 
   return (
@@ -39,6 +44,7 @@ const Blog: React.FC<Props> = (props: Props) => {
               <button onClick={likesBlogHandler}>like</button>
             </p>
             <p>{props.blog.createdBy.name}</p>
+            <button onClick={removeBlogHandler}>remove</button>
           </div>
         </CardContent>
       </Card>

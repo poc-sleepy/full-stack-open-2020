@@ -5,6 +5,7 @@ import Blog from './Blog';
 type Props = {
   blogs: BlogType[];
   likesBlogHandler: (blog: UpdatingBlogType) => void;
+  removeBlogHandler: (blog: BlogType) => void;
 };
 
 const BlogList: React.FC<Props> = (props: Props) => (
@@ -14,6 +15,7 @@ const BlogList: React.FC<Props> = (props: Props) => (
         key={blog.id}
         blog={blog}
         likesBlogHandler={props.likesBlogHandler}
+        removeBlogHandler={props.removeBlogHandler}
       />
     ))}
   </>

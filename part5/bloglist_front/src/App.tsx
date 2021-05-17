@@ -121,6 +121,28 @@ const App = () => {
     }
   };
 
+  const removeBlogHandler = async (removingBlog: BlogType) => {
+    try {
+      await blogService.remove(removingBlog.id);
+      setBlogs(
+        blogs
+          .filter((blog) => blog.id !== removingBlog.id)
+          .sort((a, b) => b.likes - a.likes)
+      );
+      setSuccessMessage(
+        `"${removingBlog.title}" by ${removingBlog.author} is deleted.`
+      );
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 5000);
+    } catch (e) {
+      setErrorMessage(e.message);
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 5000);
+    }
+  };
+
   const renderLoginForm = () => (
     <Togglable buttonLabel="login">
       <h2>log in to application</h2>
@@ -141,7 +163,11 @@ const App = () => {
       </Togglable>
       <h2>create new</h2>
 
-      <BlogList blogs={blogs} likesBlogHandler={likesBlogHandler} />
+      <BlogList
+        blogs={blogs}
+        likesBlogHandler={likesBlogHandler}
+        removeBlogHandler={removeBlogHandler}
+      />
     </>
   );
 
