@@ -25,6 +25,7 @@ const App = () => {
     void (async () => {
       try {
         const blogs = await blogService.getAll();
+        blogs.sort((a, b) => b.likes - a.likes);
         setBlogs(blogs);
       } catch (e) {
         setErrorMessage(e.response.data.error);
@@ -81,7 +82,7 @@ const App = () => {
   const createBlogHandler = async (newBlog: NewBlogType) => {
     try {
       const createdBlog = await blogService.create(newBlog);
-      setBlogs(blogs.concat(createdBlog));
+      setBlogs(blogs.concat(createdBlog).sort((a, b) => b.likes - a.likes));
       blogFormRef.current.toggleVisibility();
       setSuccessMessage(
         `A new blog "${createdBlog.title}" by ${createdBlog.author} added.`
@@ -101,7 +102,9 @@ const App = () => {
     try {
       const updatedBlog = await blogService.update(targetBlog);
       setBlogs(
-        blogs.map((blog) => (blog.id !== targetBlog.id ? blog : updatedBlog))
+        blogs
+          .map((blog) => (blog.id !== targetBlog.id ? blog : updatedBlog))
+          .sort((a, b) => b.likes - a.likes)
       );
       blogFormRef.current.toggleVisibility();
       setSuccessMessage(
