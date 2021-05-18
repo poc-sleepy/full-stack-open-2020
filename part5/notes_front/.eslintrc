@@ -5,11 +5,12 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:react/recommended"
   ],
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint", "jest"],
   "env": {
     "browser": true,
     "es6": true,
-    "node": true
+    "node": true,
+    "jest/globals": true
   },
   "rules": {
     "@typescript-eslint/semi": ["error"],
