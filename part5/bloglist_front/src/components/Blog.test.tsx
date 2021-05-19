@@ -61,3 +61,11 @@ test('detail is shown after clicking the button', () => {
   expect(urlWrapper).not.toHaveStyle({ display: 'none' });
   expect(likesWrapper).not.toHaveStyle({ display: 'none' });
 });
+
+test('likes button calls likesBlogHandler', () => {
+  const button = component.getByText('like');
+  fireEvent.click(button);
+  fireEvent.click(button);
+
+  expect(mockHandler.mock.calls).toHaveLength(2);
+});
