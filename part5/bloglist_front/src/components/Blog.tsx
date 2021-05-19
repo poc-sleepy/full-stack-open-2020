@@ -30,7 +30,7 @@ const Blog: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <Box m={2}>
+    <Box m={2} className="blogCard">
       <Card>
         <CardContent>
           {props.blog.title} {props.blog.author}
