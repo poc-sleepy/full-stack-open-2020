@@ -23,6 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "testci": "cross-env CI=true npm test",
     "eject": "react-scripts eject",
     "lint": "eslint ."
   },
@@ -46,6 +47,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "cross-env": "^7.0.3",
     "eslint-plugin-jest": "^24.3.6"
   },
   "proxy": "http://localhost:3003"
