@@ -23,7 +23,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "testci": "cross-env CI=true npm test",
-    "testci_coverage": "cross-env CI=true npm test -- --coverage"
+    "testci_coverage": "cross-env CI=true npm test -- --coverage",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": [
@@ -47,6 +48,8 @@
     "@types/axios": "^0.14.0",
     "@types/jest": "^26.0.23",
     "cross-env": "^7.0.3",
+    "cypress": "^7.3.0",
+    "eslint-plugin-cypress": "^2.11.3",
     "eslint-plugin-jest": "^24.3.6"
   },
   "proxy": "http://localhost:3001"
