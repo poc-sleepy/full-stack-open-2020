@@ -11,7 +11,7 @@ import NoteForm from './components/NoteForm';
 
 const App: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
-  const [showAll, setShowAll] = useState<boolean>(false);
+  const [showAll, setShowAll] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const noteFormRef = useRef({} as { toggleVisibility: () => void });
 
