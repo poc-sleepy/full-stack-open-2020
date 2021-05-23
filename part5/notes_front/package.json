@@ -24,7 +24,8 @@
     "lint": "eslint .",
     "testci": "cross-env CI=true npm test",
     "testci_coverage": "cross-env CI=true npm test -- --coverage",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "eslintConfig": {
     "extends": [
