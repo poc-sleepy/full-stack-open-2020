@@ -12,7 +12,7 @@ const SingleNote: React.FC<Props> = ({ note, toggleImportance }: Props) => {
 
   return (
     <li className="note">
-      {note.content}
+      <span>{note.content}</span>
       <button onClick={toggleImportance}>{label}</button>
     </li>
   );
