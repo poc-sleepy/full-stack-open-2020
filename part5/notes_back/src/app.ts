@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import { middleware } from './utils/middlewares';
 import { notesRouter } from './controllers/notes';
 import { usersRouter } from './controllers/users';
+import { testingRouter } from './controllers/testing';
 import { logger } from './utils/logger';
 import { config } from './utils/config';
 import { loginRouter } from './controllers/login';
@@ -43,6 +44,10 @@ app.get('/', (_request, response) => {
 app.use('/api/notes', notesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
+
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing', testingRouter);
+}
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
