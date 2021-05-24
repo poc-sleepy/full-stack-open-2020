@@ -1,0 +1,24 @@
+{
+  "name": "bloglist_e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "lint": "eslint .",
+    "open": "cypress open"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "cypress": "^7.3.0",
+    "eslint": "^7.27.0",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "eslint-plugin-cypress": "^2.11.3",
+    "eslint-plugin-jest": "^24.3.6"
+  }
+}
