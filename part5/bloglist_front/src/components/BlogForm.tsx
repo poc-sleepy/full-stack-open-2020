@@ -21,6 +21,7 @@ const BlogForm: React.FC<Props> = (props: Props) => {
         title:{' '}
         <input
           type="text"
+          id="title"
           name="title"
           value={title}
           onChange={({ target }) => {
@@ -32,6 +33,7 @@ const BlogForm: React.FC<Props> = (props: Props) => {
         author:{' '}
         <input
           type="text"
+          id="author"
           name="author"
           value={author}
           onChange={({ target }) => {
@@ -43,6 +45,7 @@ const BlogForm: React.FC<Props> = (props: Props) => {
         url:{' '}
         <input
           type="text"
+          id="url"
           name="url"
           value={url}
           onChange={({ target }) => {
