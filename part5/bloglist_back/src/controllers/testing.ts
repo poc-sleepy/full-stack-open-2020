@@ -10,7 +10,7 @@ testingRouter.post('/reset', (_request, response, next) => {
     try {
       await User.deleteMany({});
       await Blog.deleteMany({});
-      response.status(204);
+      response.status(204).end();
     } catch (e) {
       next(e);
     }
