@@ -19,6 +19,7 @@ const LoginForm: React.FC<Props> = (props) => {
         username:
         <input
           type="text"
+          id="username"
           name="username"
           value={username}
           onChange={({ target }) => {
@@ -30,6 +31,7 @@ const LoginForm: React.FC<Props> = (props) => {
         password:
         <input
           type="password"
+          id="password"
           name="password"
           value={password}
           onChange={({ target }) => {
@@ -37,7 +39,7 @@ const LoginForm: React.FC<Props> = (props) => {
           }}
         />
       </div>
-      <button type="submit" value="login">
+      <button type="submit" id="login_button" value="login">
         login
       </button>
     </form>
