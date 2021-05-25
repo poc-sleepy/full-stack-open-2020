@@ -11,7 +11,7 @@
     "start": "cross-env NODE_ENV=production node build/src/index.js",
     "build": "tsc",
     "ts-node": "ts-node-dev",
-    "start:test": "cross-env NODE_ENV=test node index.js"
+    "start:test": "cross-env NODE_ENV=test ts-node-dev --files src/index.ts"
   },
   "author": "",
   "license": "ISC",
