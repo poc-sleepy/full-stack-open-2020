@@ -1,3 +1,13 @@
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    interface Chainable {
+      login(credentials: Credentials): void;
+      createNote(newNote: NewNote): void;
+    }
+  }
+}
+
 type Credentials = {
   username: string;
   password: string;
@@ -19,14 +29,17 @@ type NewNote = {
 };
 
 Cypress.Commands.add('createNote', ({ content, important }: NewNote) => {
+  const userData = localStorage.getItem('loggedNoteappUser');
+  if (userData === null) {
+    return;
+  }
+
   cy.request({
     url: 'http://localhost:3001/api/notes',
     method: 'POST',
     body: { content, important },
     headers: {
-      Authorization: `bearer ${
-        JSON.parse(localStorage.getItem('loggedNoteappUser')).token
-      }`,
+      Authorization: `bearer ${JSON.parse(userData).token}`,
     },
   });
 
