@@ -43,15 +43,47 @@ describe('Blog app', function () {
       });
     });
 
-    it.only('A blog can be created', async function () {
-      // cy.get('.toggle_button').contains('new blog')が早すぎて失敗するので1秒待つ
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    it('A blog can be created', function () {
+      // 後続の実行が早すぎて失敗するので1秒待つ
+      void (async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      })();
       cy.get('.toggle_button').contains('new blog').click();
       cy.get('#title').type('CypressによるE2Eテスト');
       cy.get('#author').type('Erai Hito');
       cy.get('#url').type('https://www.example.com/');
       cy.contains('create').click();
       cy.contains('CypressによるE2Eテスト Erai Hito');
+    });
+
+    describe('Some notes posted', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'first Blog',
+          author: 'Erai Hito',
+          url: 'https://www.example.com/1/',
+          likes: 4,
+        });
+        cy.createBlog({
+          title: 'second Blog',
+          author: 'Sugoi Hito',
+          url: 'https://www.example.com/2/',
+        });
+        cy.createBlog({
+          title: 'third Blog',
+          author: 'Erai Hito',
+          url: 'https://www.example.com/3/',
+          likes: 9,
+        });
+      });
+
+      it.only('likes can be incremented', function () {
+        cy.contains('second Blog').as('blog');
+        cy.get('@blog').find('.open_button').click();
+        cy.get('@blog').contains('likes: 0');
+        cy.get('@blog').find('.like_button').click();
+        cy.get('@blog').contains('likes: 1');
+      });
     });
   });
 });
