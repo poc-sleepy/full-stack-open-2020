@@ -35,6 +35,7 @@ const Blog: React.FC<Props> = (props: Props) => {
         <CardContent>
           {props.blog.title} {props.blog.author}
           <button
+            className="open_button"
             onClick={() => {
               setIsOpen(!isOpen);
             }}
@@ -45,10 +46,14 @@ const Blog: React.FC<Props> = (props: Props) => {
             <p>{props.blog.url}</p>
             <p>
               likes: {props.blog.likes}
-              <button onClick={likesBlogHandler}>like</button>
+              <button className="like_button" onClick={likesBlogHandler}>
+                like
+              </button>
             </p>
             <p>{props.blog.createdBy.name}</p>
-            <button onClick={removeBlogHandler}>remove</button>
+            <button className="remove_button" onClick={removeBlogHandler}>
+              remove
+            </button>
           </div>
         </CardContent>
       </Card>
