@@ -64,9 +64,9 @@ const App = () => {
       }, 5000);
     } catch (e) {
       setErrorMessage(e.response.data.error);
-      // setTimeout(() => {
-      //   setErrorMessage('');
-      // }, 5000);
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 5000);
     }
   };
 
@@ -172,11 +172,15 @@ const App = () => {
   );
 
   const renderErrorMessage = () => (
-    <Alert id="error_alert" severity="error">{errorMessage}</Alert>
+    <Alert id="error_alert" severity="error">
+      {errorMessage}
+    </Alert>
   );
 
   const renderSuccessMessage = () => (
-    <Alert id="success_alert" severity="success">{successMessage}</Alert>
+    <Alert id="success_alert" severity="success">
+      {successMessage}
+    </Alert>
   );
 
   return (
