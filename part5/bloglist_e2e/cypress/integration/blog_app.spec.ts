@@ -2,11 +2,7 @@ describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset');
     const user = { username: 'poc', name: 'Poc Sleepy', password: 'password' };
-    cy.request('POST', 'http://localhost:3003/api/users', user).then(
-      (result) => {
-        console.log(result.body);
-      }
-    );
+    cy.request('POST', 'http://localhost:3003/api/users', user);
     cy.visit('http://localhost:3000');
   });
 
@@ -77,12 +73,39 @@ describe('Blog app', function () {
         });
       });
 
-      it.only('likes can be incremented', function () {
+      it('likes can be incremented', function () {
         cy.contains('second Blog').as('blog');
         cy.get('@blog').find('.open_button').click();
         cy.get('@blog').contains('likes: 0');
         cy.get('@blog').find('.like_button').click();
         cy.get('@blog').contains('likes: 1');
+      });
+
+      it('user can remove own blogs', function () {
+        cy.contains('second Blog').as('blog');
+        cy.get('@blog').find('.open_button').click();
+        cy.get('@blog').find('.remove_button').click();
+        cy.should('not.contain', 'second Blog Sugoi Hito');
+      });
+
+      it('Not owner can not remove blogs', function () {
+        const notOwner = {
+          username: 'kakuni',
+          name: 'Butano Kakuni',
+          password: 'password',
+        };
+        cy.request('POST', 'http://localhost:3003/api/users', notOwner);
+        cy.login(notOwner);
+
+        cy.contains('second Blog').as('blog');
+        cy.get('@blog').find('.open_button').click();
+        cy.get('@blog').find('.remove_button').click();
+
+        cy.get('#error_alert').should(
+          'contain',
+          'Request failed with status code 401'
+        );
+        cy.contains('second Blog');
       });
     });
   });
