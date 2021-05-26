@@ -73,6 +73,14 @@ describe('Blog app', function () {
         });
       });
 
+      it.only('blogs are sorted by likes desc', function () {
+        cy.get('.blogCard').then(function (blogCards) {
+          cy.wrap(blogCards[0]).contains('third Blog');
+          cy.wrap(blogCards[1]).contains('first Blog');
+          cy.wrap(blogCards[2]).contains('second Blog');
+        });
+      });
+
       it('likes can be incremented', function () {
         cy.contains('second Blog').as('blog');
         cy.get('@blog').find('.open_button').click();
