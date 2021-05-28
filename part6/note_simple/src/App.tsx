@@ -1,23 +1,7 @@
 import React from 'react';
 import { createStore } from 'redux';
 
-type Note = {
-  id: string;
-  content: string;
-  date: string;
-  important: boolean;
-};
-
-const noteReducer = (
-  state: Note[] = [],
-  action: { type: string; data: any }
-) => {
-  if (action.type === 'NEW_NOTE') {
-    return state.concat(action.data);
-  }
-
-  return state;
-};
+import { noteReducer } from './reducers/noteReducer';
 
 const store = createStore(noteReducer);
 
@@ -35,6 +19,13 @@ store.dispatch({
   data: {
     content: 'state changes are made with actions',
     important: false,
+    id: 2,
+  },
+});
+
+store.dispatch({
+  type: 'TOGGLE_IMPORTANCE',
+  data: {
     id: 2,
   },
 });

@@ -43,6 +43,8 @@
     ]
   },
   "devDependencies": {
-    "@types/redux": "^3.6.0"
+    "@types/deep-freeze": "^0.1.2",
+    "@types/redux": "^3.6.0",
+    "deep-freeze": "0.0.1"
   }
 }
