@@ -28,4 +28,24 @@ const noteReducer = (
   }
 };
 
+const generateId = () => Math.floor(Math.random() * 1000000);
+
+export const createNote = (content: string) => {
+  return {
+    type: 'NEW_NOTE',
+    data: {
+      content,
+      important: false,
+      id: generateId(),
+    },
+  };
+};
+
+export const toggleImportanceOf = (id: number) => {
+  return {
+    type: 'TOGGLE_IMPORTANCE',
+    data: { id },
+  };
+};
+
 export { noteReducer };
