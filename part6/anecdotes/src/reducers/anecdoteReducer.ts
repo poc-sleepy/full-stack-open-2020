@@ -1,5 +1,37 @@
 import { Anecdote } from '../types';
 
+export const reducer = (
+  state = initialState,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  action: { type: string; data: any }
+) => {
+  console.log('state now: ', state);
+  console.log('action', action);
+
+  switch (action.type) {
+    case 'CREATE':
+      return state.concat(action.data);
+      
+    case 'VOTE':
+      const toVote = state.find((anecdote) => anecdote.id === action.data.id);
+      if (toVote === undefined) {
+        return state;
+      }
+      const voted: Anecdote = {
+        ...toVote,
+        votes: toVote.votes + 1,
+      };
+      return state.map((anecdote) =>
+        anecdote.id === action.data.id ? voted : anecdote
+      );
+
+    default:
+      break;
+  }
+
+  return state;
+};
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -21,12 +53,18 @@ const asObject = (anecdote: string): Anecdote => {
 
 const initialState = anecdotesAtStart.map(asObject);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const reducer = (state = initialState, action: any) => {
-  console.log('state now: ', state);
-  console.log('action', action);
-
-  return state;
+export const createAnocdote = (content: string) => {
+  return {
+    type: 'CREATE',
+    data: asObject(content),
+  };
 };
 
-export default reducer;
+export const voteOf = (id: string) => {
+  return {
+    type: 'VOTE',
+    data: {
+      id,
+    },
+  };
+};

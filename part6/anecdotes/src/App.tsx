@@ -1,16 +1,21 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-// import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { createAnocdote, voteOf } from './reducers/anecdoteReducer';
 import { Anecdote } from './types';
 
 const App = () => {
   // HACK: should not cast but validate
   const anecdotes = useSelector((state) => state) as Anecdote[];
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+
+  const addAnocdote = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    dispatch(createAnocdote(event.currentTarget.content.value));
+  };
 
   const vote = (id: string) => {
-    console.log('vote', id);
+    dispatch(voteOf(id));
   };
 
   return (
@@ -26,11 +31,11 @@ const App = () => {
         </div>
       ))}
       <h2>create new</h2>
-      <form>
+      <form onSubmit={addAnocdote}>
         <div>
-          <input />
+          <input type="text" name="content" />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
       </form>
     </div>
   );
