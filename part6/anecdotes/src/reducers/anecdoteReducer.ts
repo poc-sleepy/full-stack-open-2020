@@ -11,7 +11,7 @@ export const reducer = (
   switch (action.type) {
     case 'CREATE':
       return state.concat(action.data);
-      
+
     case 'VOTE':
       const toVote = state.find((anecdote) => anecdote.id === action.data.id);
       if (toVote === undefined) {
@@ -21,9 +21,11 @@ export const reducer = (
         ...toVote,
         votes: toVote.votes + 1,
       };
-      return state.map((anecdote) =>
+      const newState = state.map((anecdote) =>
         anecdote.id === action.data.id ? voted : anecdote
       );
+      // HACK: Voteの数を0以外にする箇所が増えたら、そこでもソートする必要あり
+      return newState.sort((a, b) => b.votes - a.votes);
 
     default:
       break;
