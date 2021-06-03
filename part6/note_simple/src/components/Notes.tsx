@@ -18,10 +18,21 @@ const SingleNote = ({ note, handleClick }: PropsNote) => {
   );
 };
 
+type RootState = {
+  notes: Note[];
+  filter: string;
+};
+
 const Notes = () => {
   const dispatch = useDispatch();
-  // HACK: 本当はキャストではなくバリデーションすべき
-  const notes = useSelector((status) => status) as Note[];
+  const notes = useSelector((state: RootState) => {
+    if (state.filter === 'ALL') {
+      return state.notes;
+    }
+    return state.filter === 'IMPORTANT'
+      ? state.notes.filter((note) => note.important)
+      : state.notes.filter((note) => !note.important);
+  });
 
   return (
     <ul>
