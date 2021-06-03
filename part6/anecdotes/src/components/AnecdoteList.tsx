@@ -22,9 +22,12 @@ const SingleAnecdote = (props: Props) => {
   );
 };
 
+type RootState = {
+  anecdotes: Anecdote[];
+};
+
 const AnecdoteList = () => {
-  // HACK: should not cast but validate
-  const anecdotes = useSelector((state) => state) as Anecdote[];
+  const anecdotes = useSelector((state: RootState) => state.anecdotes);
   const dispatch = useDispatch();
 
   const vote = (id: string) => {
