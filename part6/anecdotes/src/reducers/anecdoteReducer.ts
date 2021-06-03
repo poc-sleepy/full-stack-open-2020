@@ -26,9 +26,6 @@ export const anecdoteReducer = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   action: { type: string; data: any }
 ) => {
-  console.log('state now: ', state);
-  console.log('action', action);
-
   switch (action.type) {
     case 'CREATE':
       return state.concat(action.data);

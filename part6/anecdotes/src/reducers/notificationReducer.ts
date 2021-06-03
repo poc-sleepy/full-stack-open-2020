@@ -1,5 +1,5 @@
 export const notificationReducer = (
-  state = 'initial Notification.',
+  state = '',
   action: { type: string; message: string }
 ) => {
   console.log('state now: ', state);
@@ -8,7 +8,7 @@ export const notificationReducer = (
   switch (action.type) {
     case 'SET':
       return action.message;
-    case 'UNSET':
+    case 'CLEAR':
       return '';
     default:
       break;
@@ -20,6 +20,6 @@ export const setNotification = (content: string) => {
   return { type: 'SET', message: content };
 };
 
-export const unsetNotification = () => {
-  return { type: 'UNSET' };
+export const clearNotification = () => {
+  return { type: 'CLEAR' };
 };
