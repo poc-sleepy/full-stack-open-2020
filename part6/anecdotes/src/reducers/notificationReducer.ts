@@ -2,13 +2,10 @@ export const notificationReducer = (
   state = '',
   action: { type: string; message: string }
 ) => {
-  console.log('state now: ', state);
-  console.log('action', action);
-
   switch (action.type) {
-    case 'SET':
+    case 'SET_NOTIFICATION':
       return action.message;
-    case 'CLEAR':
+    case 'CLEAR_NOTIFICATION':
       return '';
     default:
       break;
@@ -17,9 +14,9 @@ export const notificationReducer = (
 };
 
 export const setNotification = (content: string) => {
-  return { type: 'SET', message: content };
+  return { type: 'SET_NOTIFICATION', message: content };
 };
 
 export const clearNotification = () => {
-  return { type: 'CLEAR' };
+  return { type: 'CLEAR_NOTIFICATION' };
 };

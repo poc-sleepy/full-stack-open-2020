@@ -1,8 +1,13 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+
+import { setFilter } from '../reducers/filterReducer';
 
 const Filter = () => {
+  const dispatch = useDispatch();
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.currentTarget.value);
+    dispatch(setFilter(event.currentTarget.value));
   };
   const style = {
     marginBottom: 10,

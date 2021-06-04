@@ -28,16 +28,21 @@ const SingleAnecdote = (props: Props) => {
 
 type RootState = {
   anecdotes: Anecdote[];
+  filter: string;
 };
 
 const AnecdoteList = () => {
-  const anecdotes = useSelector((state: RootState) => state.anecdotes);
+  const filter = useSelector((state: RootState) => state.filter);
+  const anecdotes = useSelector((state: RootState) =>
+    state.anecdotes.filter((anecdote) => anecdote.content.includes(filter))
+  );
   const dispatch = useDispatch();
 
   const vote = (id: string) => {
     const anecdote = anecdotes.find((anecdote) => anecdote.id === id);
-    
+
     dispatch(voteOf(id));
+    //HACK: 本当はフロント側になかったときのハンドリングが必要
     dispatch(setNotification(`Voted: ${anecdote?.content}`));
     setTimeout(() => {
       dispatch(clearNotification());
