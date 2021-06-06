@@ -23,7 +23,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "server": "json-server -p3001 --watch db.json"
   },
   "eslintConfig": {
     "extends": [
@@ -48,6 +49,7 @@
     "@types/react-redux": "^7.1.16",
     "@types/redux": "^3.6.0",
     "deep-freeze": "0.0.1",
+    "json-server": "^0.16.3",
     "redux-devtools-extension": "^2.13.9"
   }
 }
