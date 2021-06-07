@@ -9,4 +9,13 @@ const getAll = async () => {
   return response.data;
 };
 
-export const noteService = { getAll };
+const create = async (content: string) => {
+  const newNote = {
+    content,
+    important: false,
+  };
+  const response = await axios.post<Note>(baseUrl, newNote);
+  return response.data;
+};
+
+export const noteService = { getAll, create };

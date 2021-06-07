@@ -32,8 +32,6 @@ const noteReducer = (
   }
 };
 
-const generateId = () => Math.floor(Math.random() * 1000000);
-
 export const initializeNotes = (notes: Note[]) => {
   return {
     type: 'INIT_NOTES',
@@ -41,14 +39,10 @@ export const initializeNotes = (notes: Note[]) => {
   };
 };
 
-export const createNote = (content: string) => {
+export const createNote = (data: Note) => {
   return {
     type: 'NEW_NOTE',
-    data: {
-      content,
-      important: false,
-      id: generateId(),
-    },
+    data,
   };
 };
 
