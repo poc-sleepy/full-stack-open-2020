@@ -5,8 +5,9 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { noteReducer } from './reducers/noteReducer';
+import { noteReducer, initializeNotes } from './reducers/noteReducer';
 import { filterReducer } from './reducers/filterReducer';
+import { noteService } from './services/notes';
 
 const reducer = combineReducers({
   notes: noteReducer,
@@ -14,6 +15,10 @@ const reducer = combineReducers({
 });
 
 const store = createStore(reducer, composeWithDevTools());
+
+void noteService
+  .getAll()
+  .then((notes) => store.dispatch(initializeNotes(notes)));
 
 ReactDOM.render(
   <React.StrictMode>

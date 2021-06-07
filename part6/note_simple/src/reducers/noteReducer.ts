@@ -6,6 +6,10 @@ const noteReducer = (
   action: { type: string; data: any }
 ) => {
   switch (action.type) {
+    case 'INIT_NOTES':
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return action.data;
+
     case 'NEW_NOTE':
       return state.concat(action.data);
 
@@ -29,6 +33,13 @@ const noteReducer = (
 };
 
 const generateId = () => Math.floor(Math.random() * 1000000);
+
+export const initializeNotes = (notes: Note[]) => {
+  return {
+    type: 'INIT_NOTES',
+    data: notes,
+  };
+};
 
 export const createNote = (content: string) => {
   return {
