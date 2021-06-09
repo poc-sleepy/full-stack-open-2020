@@ -6,14 +6,19 @@ import {
   setNotification,
   clearNotification,
 } from '../reducers/notificationReducer';
+import { anecdoteService } from '../services/anecdotes';
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch();
 
-  const addAnocdote = (event: React.FormEvent<HTMLFormElement>) => {
+  const addAnocdote = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(createAnecdote(event.currentTarget.content.value));
-    dispatch(setNotification(`Created: ${event.currentTarget.content.value}`));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const content: string = event.currentTarget.content.value;
+    event.currentTarget.content.value = '';
+    const anecdote = await anecdoteService.create(content);
+    dispatch(createAnecdote(anecdote));
+    dispatch(setNotification(`Created: ${anecdote.content}`));
     setTimeout(() => {
       dispatch(clearNotification());
     }, 5000);

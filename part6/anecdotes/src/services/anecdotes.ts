@@ -9,4 +9,10 @@ const getAll = async () => {
   return response.data;
 };
 
-export const anecdoteService = { getAll };
+const create = async (content: string) => {
+  const anecdote = { content, votes: 0 };
+  const response = await axios.post<Anecdote>(baseUrl, anecdote);
+  return response.data;
+};
+
+export const anecdoteService = { getAll, create };

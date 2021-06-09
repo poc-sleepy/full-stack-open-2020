@@ -1,12 +1,5 @@
 import { Anecdote } from '../types';
 
-const asObject = (anecdote: string) => {
-  return {
-    content: anecdote,
-    votes: 0,
-  };
-};
-
 export const anecdoteReducer = (
   state: Anecdote[] = [],
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,10 +42,10 @@ export const initializeAnecdotes = (data: Anecdote[]) => {
   };
 };
 
-export const createAnecdote = (content: string) => {
+export const createAnecdote = (data: Anecdote) => {
   return {
     type: 'CREATE',
-    data: asObject(content),
+    data,
   };
 };
 
