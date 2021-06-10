@@ -53,10 +53,15 @@ export const initializeAnecdotes = (): ThunkAction<
   };
 };
 
-export const createAnecdote = (data: Anecdote) => {
-  return {
-    type: 'CREATE',
-    data,
+export const createAnecdote = (
+  content: string
+): ThunkAction<void, Anecdote[], unknown, AnyAction> => {
+  return async (dispatch) => {
+    const anecdote = await anecdoteService.create(content);
+    dispatch({
+      type: 'CREATE',
+      data: anecdote,
+    });
   };
 };
 
