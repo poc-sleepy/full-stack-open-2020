@@ -38,12 +38,9 @@ const AnecdoteList = () => {
   );
   const dispatch = useDispatch();
 
-  const vote = (id: string) => {
-    const anecdote = anecdotes.find((anecdote) => anecdote.id === id);
-
-    dispatch(voteOf(id));
-    //HACK: 本当はフロント側になかったときのハンドリングが必要
-    dispatch(setNotification(`Voted: ${anecdote?.content}`));
+  const vote = (anecdote: Anecdote) => {
+    dispatch(voteOf(anecdote.id, anecdote));
+    dispatch(setNotification(`Voted: ${anecdote.content}`));
     setTimeout(() => {
       dispatch(clearNotification());
     }, 5000);
@@ -55,7 +52,7 @@ const AnecdoteList = () => {
         <SingleAnecdote
           key={anecdote.id}
           anecdote={anecdote}
-          onClick={() => vote(anecdote.id)}
+          onClick={() => vote(anecdote)}
         />
       ))}
     </>

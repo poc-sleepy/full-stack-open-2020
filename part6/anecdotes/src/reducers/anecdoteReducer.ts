@@ -10,21 +10,16 @@ export const anecdoteReducer = (
 ) => {
   switch (action.type) {
     case 'INITIALIZE':
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return action.data;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const initialState: Anecdote[] = action.data;
+      return initialState.sort((a, b) => b.votes - a.votes);
 
     case 'CREATE':
       return state.concat(action.data);
 
     case 'VOTE':
-      const toVote = state.find((anecdote) => anecdote.id === action.data.id);
-      if (toVote === undefined) {
-        return state;
-      }
-      const voted: Anecdote = {
-        ...toVote,
-        votes: toVote.votes + 1,
-      };
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const voted: Anecdote = action.data;
       const newState = state.map((anecdote) =>
         anecdote.id === action.data.id ? voted : anecdote
       );
@@ -65,11 +60,19 @@ export const createAnecdote = (
   };
 };
 
-export const voteOf = (id: string) => {
-  return {
-    type: 'VOTE',
-    data: {
-      id,
-    },
+export const voteOf = (
+  id: string,
+  anecdote: Anecdote
+): ThunkAction<void, Anecdote[], unknown, AnyAction> => {
+  return async (dispatch) => {
+    const votedAnecdote = await anecdoteService.update(id, {
+      ...anecdote,
+      votes: anecdote.votes + 1,
+    });
+
+    dispatch({
+      type: 'VOTE',
+      data: votedAnecdote,
+    });
   };
 };
