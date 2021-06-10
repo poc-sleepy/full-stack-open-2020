@@ -1,3 +1,6 @@
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { anecdoteService } from '../services/anecdotes';
 import { Anecdote } from '../types';
 
 export const anecdoteReducer = (
@@ -35,10 +38,18 @@ export const anecdoteReducer = (
   return state;
 };
 
-export const initializeAnecdotes = (data: Anecdote[]) => {
-  return {
-    type: 'INITIALIZE',
-    data,
+export const initializeAnecdotes = (): ThunkAction<
+  void,
+  Anecdote[],
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch) => {
+    const anecdotes = await anecdoteService.getAll();
+    dispatch({
+      type: 'INITIALIZE',
+      data: anecdotes,
+    });
   };
 };
 
