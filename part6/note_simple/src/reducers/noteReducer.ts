@@ -1,4 +1,5 @@
-import { Dispatch } from 'redux';
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 import { noteService } from '../services/notes';
 import { Note } from '../types';
 
@@ -34,8 +35,13 @@ const noteReducer = (
   }
 };
 
-export const initializeNotes = () => {
-  return async (dispatch: Dispatch) => {
+export const initializeNotes = (): ThunkAction<
+  void,
+  Note[],
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch) => {
     const notes = await noteService.getAll();
     dispatch({
       type: 'INIT_NOTES',
@@ -44,10 +50,15 @@ export const initializeNotes = () => {
   };
 };
 
-export const createNote = (data: Note) => {
-  return {
-    type: 'NEW_NOTE',
-    data,
+export const createNote = (
+  content: string
+): ThunkAction<void, Note[], unknown, AnyAction> => {
+  return async (dispatch) => {
+    const createdNote = await noteService.create(content);
+    dispatch({
+      type: 'NEW_NOTE',
+      data: createdNote,
+    });
   };
 };
 
