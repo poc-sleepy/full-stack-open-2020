@@ -2,10 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { voteOf } from '../reducers/anecdoteReducer';
-import {
-  setNotification,
-  clearNotification,
-} from '../reducers/notificationReducer';
+import { setNotification } from '../reducers/notificationReducer';
 import { Anecdote } from '../types';
 
 type Props = {
@@ -40,10 +37,7 @@ const AnecdoteList = () => {
 
   const vote = (anecdote: Anecdote) => {
     dispatch(voteOf(anecdote.id, anecdote));
-    dispatch(setNotification(`Voted: ${anecdote.content}`));
-    setTimeout(() => {
-      dispatch(clearNotification());
-    }, 5000);
+    dispatch(setNotification(`Voted: ${anecdote.content}`, 5));
   };
 
   return (

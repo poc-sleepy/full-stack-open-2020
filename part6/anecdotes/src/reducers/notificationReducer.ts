@@ -1,3 +1,6 @@
+import { AnyAction } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+
 export const notificationReducer = (
   state = '',
   action: { type: string; message: string }
@@ -13,8 +16,16 @@ export const notificationReducer = (
   return state;
 };
 
-export const setNotification = (content: string) => {
-  return { type: 'SET_NOTIFICATION', message: content };
+export const setNotification = (
+  content: string,
+  second: number
+): ThunkAction<void, string, unknown, AnyAction> => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_NOTIFICATION', message: content });
+    setTimeout(() => {
+      dispatch(clearNotification());
+    }, second * 1000);
+  };
 };
 
 export const clearNotification = () => {
