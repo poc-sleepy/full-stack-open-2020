@@ -1,3 +1,5 @@
+import { Dispatch } from 'redux';
+import { noteService } from '../services/notes';
 import { Note } from '../types';
 
 const noteReducer = (
@@ -32,10 +34,13 @@ const noteReducer = (
   }
 };
 
-export const initializeNotes = (notes: Note[]) => {
-  return {
-    type: 'INIT_NOTES',
-    data: notes,
+export const initializeNotes = () => {
+  return async (dispatch: Dispatch) => {
+    const notes = await noteService.getAll();
+    dispatch({
+      type: 'INIT_NOTES',
+      data: notes,
+    });
   };
 };
 
