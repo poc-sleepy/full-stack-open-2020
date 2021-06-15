@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { NewNote } from './components/NewNotes';
-import { Notes } from './components/Notes';
+import { ConnectedNotes } from './components/Notes';
 import { VisibilityFilter } from './components/VisibilityFilter';
 import { initializeNotes } from './reducers/noteReducer';
 
@@ -17,7 +17,7 @@ const App = () => {
     <div>
       <NewNote />
       <VisibilityFilter />
-      <Notes />
+      <ConnectedNotes />
     </div>
   );
 };

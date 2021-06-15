@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, ConnectedProps, useDispatch } from 'react-redux';
 
 import { Note } from '../types';
 import { toggleImportanceOf } from '../reducers/noteReducer';
@@ -18,25 +18,11 @@ const SingleNote = ({ note, handleClick }: PropsNote) => {
   );
 };
 
-type RootState = {
-  notes: Note[];
-  filter: string;
-};
-
-const Notes = () => {
+const Notes = (props: PropsFromRedux) => {
   const dispatch = useDispatch();
-  const notes = useSelector((state: RootState) => {
-    if (state.filter === 'ALL') {
-      return state.notes;
-    }
-    return state.filter === 'IMPORTANT'
-      ? state.notes.filter((note) => note.important)
-      : state.notes.filter((note) => !note.important);
-  });
-
   return (
     <ul>
-      {notes.map((note) => (
+      {props.notes.map((note) => (
         <SingleNote
           key={note.id}
           note={note}
@@ -47,4 +33,24 @@ const Notes = () => {
   );
 };
 
-export { Notes };
+type RootState = {
+  notes: Note[];
+  filter: string;
+};
+
+const mapStateToProps = (state: RootState) => {
+  if (state.filter === 'ALL') {
+    return { notes: state.notes };
+  }
+  return {
+    notes:
+      state.filter === 'IMPORTANT'
+        ? state.notes.filter((note) => note.important)
+        : state.notes.filter((note) => !note.important),
+  };
+};
+
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export const ConnectedNotes = connector(Notes);
