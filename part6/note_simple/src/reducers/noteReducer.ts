@@ -63,6 +63,7 @@ export const createNote = (
 };
 
 export const toggleImportanceOf = (id: number) => {
+  // TODO: バックエンドへの反映処理が未実装
   return {
     type: 'TOGGLE_IMPORTANCE',
     data: { id },
