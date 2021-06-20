@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { AnecdoteForm } from './components/AnecdoteForm';
 import { AnecdoteList } from './components/AnecdoteList';
-import { Filter } from './components/Filter';
+import { ConnectedFilter } from './components/Filter';
 import { ConnectedNotification } from './components/Notification';
 import { initializeAnecdotes } from './reducers/anecdoteReducer';
 
@@ -16,7 +16,7 @@ const App = () => {
   return (
     <div>
       <ConnectedNotification />
-      <Filter />
+      <ConnectedFilter />
       <h2>Anecdotes</h2>
       <AnecdoteList />
       <h2>create new</h2>
