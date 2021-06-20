@@ -1,19 +1,17 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { createAnecdote } from '../reducers/anecdoteReducer';
 import { setNotification } from '../reducers/notificationReducer';
 
-const AnecdoteForm = () => {
-  const dispatch = useDispatch();
-
+const AnecdoteForm = (props: PropsFromRedux) => {
   const addAnocdote = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const content: string = event.currentTarget.content.value;
     event.currentTarget.content.value = '';
-    dispatch(createAnecdote(content));
-    dispatch(setNotification(`Created: ${content}`, 5));
+    props.createAnecdote(content);
+    props.setNotification(`Created: ${content}`, 5);
   };
 
   return (
@@ -26,4 +24,12 @@ const AnecdoteForm = () => {
   );
 };
 
-export { AnecdoteForm };
+const mapStateToDispatch = {
+  createAnecdote,
+  setNotification,
+};
+
+const connector = connect(null, mapStateToDispatch);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export const ConnectedAnecdoteForm = connector(AnecdoteForm);

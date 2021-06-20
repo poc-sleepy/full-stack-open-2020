@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { AnecdoteForm } from './components/AnecdoteForm';
+import { ConnectedAnecdoteForm } from './components/AnecdoteForm';
 import { AnecdoteList } from './components/AnecdoteList';
 import { ConnectedFilter } from './components/Filter';
 import { ConnectedNotification } from './components/Notification';
@@ -20,7 +20,7 @@ const App = () => {
       <h2>Anecdotes</h2>
       <AnecdoteList />
       <h2>create new</h2>
-      <AnecdoteForm />
+      <ConnectedAnecdoteForm />
     </div>
   );
 };
