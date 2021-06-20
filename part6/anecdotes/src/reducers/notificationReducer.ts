@@ -1,15 +1,26 @@
 import { AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
+type RootState = {
+  notification: State;
+};
+
+type State = {
+  message: string;
+  timeoutId?: number;
+};
+
 export const notificationReducer = (
-  state = '',
-  action: { type: string; message: string }
+  state: State = {
+    message: '',
+  },
+  action: { type: string; data: State }
 ) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
-      return action.message;
+      return action.data;
     case 'CLEAR_NOTIFICATION':
-      return '';
+      return { message: '' };
     default:
       break;
   }
@@ -17,14 +28,24 @@ export const notificationReducer = (
 };
 
 export const setNotification = (
-  content: string,
+  message: string,
   second: number
-): ThunkAction<void, string, unknown, AnyAction> => {
-  return (dispatch) => {
-    dispatch({ type: 'SET_NOTIFICATION', message: content });
-    setTimeout(() => {
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return (dispatch, getState) => {
+    //HACK: getState().notificationでreducerの独立性が崩壊している
+    const currentTimeoutId = getState().notification.timeoutId;
+    clearTimeout(currentTimeoutId);
+
+    const timeoutId = setTimeout(() => {
       dispatch(clearNotification());
     }, second * 1000);
+
+    console.log(currentTimeoutId, timeoutId);
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      data: { message, timeoutId },
+    });
   };
 };
 

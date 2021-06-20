@@ -2,11 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 type RootState = {
-  notification: string;
+  notification: {
+    message: string;
+    timeoutId?: number;
+  };
 };
 
 const Notification = (props: RootState) => {
-  const notification = props.notification;
+  const notification = props.notification.message;
 
   const style = {
     border: 'solid',
