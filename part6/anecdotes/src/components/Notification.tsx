@@ -1,12 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
 type RootState = {
   notification: string;
 };
 
-const Notification = () => {
-  const notification = useSelector((state: RootState) => state.notification);
+const Notification = (props: RootState) => {
+  const notification = props.notification;
 
   const style = {
     border: 'solid',
@@ -21,4 +21,8 @@ const Notification = () => {
   }
 };
 
-export { Notification };
+const mapStateToProps = (state: RootState) => {
+  return state;
+};
+
+export const ConnectedNotification = connect(mapStateToProps)(Notification);
