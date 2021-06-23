@@ -5,13 +5,25 @@ import {
   Switch,
   Route,
   Link,
-  useParams,
+  useHistory,
+  Redirect,
+  useRouteMatch,
 } from 'react-router-dom';
 
 const Home = () => (
   <div>
-    {' '}
-    <h2>TKTL notes app</h2>{' '}
+    <h2>TKTL notes app</h2>
+    <p>
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      Lorem Ipsum has been the industry&apos;s standard dummy text ever since
+      the 1500s, when an unknown printer took a galley of type and scrambled it
+      to make a type specimen book. It has survived not only five centuries, but
+      also the leap into electronic typesetting, remaining essentially
+      unchanged. It was popularised in the 1960s with the release of Letraset
+      sheets containing Lorem Ipsum passages, and more recently with desktop
+      publishing software like Aldus PageMaker including versions of Lorem
+      Ipsum.
+    </p>
   </div>
 );
 
@@ -22,14 +34,16 @@ type NoteType = {
   user: string;
 };
 
+type PropNote = {
+  note: NoteType | null | undefined;
+};
+
 type PropNotes = {
   notes: NoteType[];
 };
 
-const Note = ({ notes }: PropNotes) => {
-  const id = useParams<{ id: string }>().id;
-  const note = notes.find((n) => n.id === Number(id));
-  if (note === undefined) return <></>;
+const Note = ({ note }: PropNote) => {
+  if (note === null || note === undefined) return <></>;
   return (
     <div>
       <h2>{note.content}</h2>
@@ -56,10 +70,39 @@ const Notes = ({ notes }: PropNotes) => (
 
 const Users = () => (
   <div>
-    {' '}
-    <h2>Users</h2>{' '}
+    <h2>TKTL notes app</h2>
+    <ul>
+      <li>Matti Luukkainen</li>
+      <li>Juha Tauriainen</li>
+      <li>Arto Hellas</li>
+    </ul>
   </div>
 );
+
+const Login = (props: { onLogin: (user: string) => void }) => {
+  const history = useHistory();
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    props.onLogin('mluukkai');
+    history.push('/');
+  };
+
+  return (
+    <div>
+      <h2>login</h2>
+      <form onSubmit={onSubmit}>
+        <div>
+          username: <input />
+        </div>
+        <div>
+          password: <input type="password" />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </div>
+  );
+};
 
 const App = () => {
   const [notes] = useState<NoteType[]>([
@@ -82,43 +125,69 @@ const App = () => {
       user: 'Arto Hellas',
     },
   ]);
+  const [user, setUser] = useState<string>('');
+  const login = (user: string) => {
+    setUser(user);
+  };
 
   const padding = {
     padding: 5,
   };
 
-  return (
-    <Router>
-      <div>
-        <div>
-          <Link style={padding} to="/">
-            home
-          </Link>
-          <Link style={padding} to="/notes">
-            notes
-          </Link>
-          <Link style={padding} to="/users">
-            users
-          </Link>
-        </div>
+  const match = useRouteMatch<{ id: string }>('/notes/:id');
+  const note = match
+    ? notes.find((note) => note.id === Number(match.params.id))
+    : null;
 
-        <Switch>
-          <Route path="/notes/:id">
-            <Note notes={notes} />
-          </Route>
-          <Route path="/notes">
-            <Notes notes={notes} />
-          </Route>
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+  return (
+    <div>
+      <div>
+        <Link style={padding} to="/">
+          home
+        </Link>
+        <Link style={padding} to="/notes">
+          notes
+        </Link>
+        <Link style={padding} to="/users">
+          users
+        </Link>
+        {user ? (
+          <em>{user} logged in</em>
+        ) : (
+          <Link style={padding} to="/login">
+            login
+          </Link>
+        )}
       </div>
-    </Router>
+
+      <Switch>
+        <Route path="/notes/:id">
+          <Note note={note} />
+        </Route>
+        <Route path="/notes">
+          <Notes notes={notes} />
+        </Route>
+        <Route path="/users">
+          {user ? <Users /> : <Redirect to="/login" />}
+        </Route>
+        <Route path="/login">
+          <Login onLogin={login} />
+        </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+      <div>
+        <br />
+        <em>Note app, Department of Computer Science 2021</em>
+      </div>
+    </div>
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <Router>
+    <App />
+  </Router>,
+  document.getElementById('root')
+);
