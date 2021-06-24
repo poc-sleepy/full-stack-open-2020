@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { NewAnecdoteType } from '../types';
 
@@ -11,6 +12,8 @@ export const CreateNew = (props: PropCreateNew) => {
   const [author, setAuthor] = useState('');
   const [info, setInfo] = useState('');
 
+  const history = useHistory();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     props.addNew({
@@ -19,6 +22,7 @@ export const CreateNew = (props: PropCreateNew) => {
       info,
       votes: 0,
     });
+    history.push('/');
   };
 
   return (
