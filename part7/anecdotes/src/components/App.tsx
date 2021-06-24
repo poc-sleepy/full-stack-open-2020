@@ -8,6 +8,7 @@ import { Footer } from './Footer';
 import { Menu } from './Menu';
 
 import { AnecdoteType, NewAnecdoteType } from '../types';
+import { Notification } from './Notification';
 
 export const App = () => {
   const [anecdotes, setAnecdotes] = useState<AnecdoteType[]>([
@@ -32,8 +33,7 @@ export const App = () => {
     ? anecdotes.find((anecdote) => anecdote.id === match.params.id)
     : null;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [notification, setNotification] = useState('');
+  const [notification, setNotification] = useState<string>('');
 
   const addNew = (newAnecdote: NewAnecdoteType) => {
     const anecdote = {
@@ -41,6 +41,10 @@ export const App = () => {
       id: (Math.random() * 10000).toFixed(0),
     };
     setAnecdotes(anecdotes.concat(anecdote));
+    setNotification(`Created: ${anecdote.content}`);
+    setTimeout(() => {
+      setNotification('');
+    }, 10 * 1000);
   };
 
   const anecdoteById = (id: string) => anecdotes.find((a) => a.id === id);
@@ -62,6 +66,7 @@ export const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification notification={notification} />
       <Switch>
         <Route path="/anecdotes/:id">
           <AnecdoteSingle anecdote={anecdote} />
