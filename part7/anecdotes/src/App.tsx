@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import { AnecdoteType, NewAnecdoteType } from './types';
 
@@ -22,6 +22,26 @@ const Menu = () => {
   );
 };
 
+type PropsAnecdoteSingle = {
+  anecdote: AnecdoteType | null | undefined;
+};
+
+const AnecdoteSingle = ({ anecdote }: PropsAnecdoteSingle) => {
+  if (anecdote === null || anecdote === undefined) return <></>;
+
+  return (
+    <div>
+      <h2>
+        {anecdote.content} by {anecdote.author}
+      </h2>
+      <p>has {anecdote.votes} votes</p>
+      <p>
+        for more info see <a href={anecdote.info}>{anecdote.info}</a>
+      </p>
+    </div>
+  );
+};
+
 type PropsAnecdoteList = {
   anecdotes: AnecdoteType[];
 };
@@ -31,7 +51,9 @@ const AnecdoteList = ({ anecdotes }: PropsAnecdoteList) => (
     <h2>Anecdotes</h2>
     <ul>
       {anecdotes.map((anecdote) => (
-        <li key={anecdote.id}>{anecdote.content}</li>
+        <li key={anecdote.id}>
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>
       ))}
     </ul>
   </div>
@@ -144,6 +166,11 @@ const App = () => {
     },
   ]);
 
+  const match = useRouteMatch<{ id: string }>('/anecdotes/:id');
+  const anecdote = match
+    ? anecdotes.find((anecdote) => anecdote.id === match.params.id)
+    : null;
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [notification, setNotification] = useState('');
 
@@ -171,24 +198,25 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <div>
-        <h1>Software anecdotes</h1>
-        <Menu />
-        <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/create">
-            <CreateNew addNew={addNew} />
-          </Route>
-          <Route path="/">
-            <AnecdoteList anecdotes={anecdotes} />
-          </Route>
-        </Switch>
-        <Footer />
-      </div>
-    </Router>
+    <div>
+      <h1>Software anecdotes</h1>
+      <Menu />
+      <Switch>
+        <Route path="/anecdotes/:id">
+          <AnecdoteSingle anecdote={anecdote} />
+        </Route>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/create">
+          <CreateNew addNew={addNew} />
+        </Route>
+        <Route path="/">
+          <AnecdoteList anecdotes={anecdotes} />
+        </Route>
+      </Switch>
+      <Footer />
+    </div>
   );
 };
 
