@@ -9,9 +9,9 @@ type PropCreateNew = {
 };
 
 export const CreateNew = (props: PropCreateNew) => {
-  const content = useField('text');
-  const author = useField('text');
-  const info = useField('text');
+  const [content, handleContent] = useField('text');
+  const [author, handleAuthor] = useField('text');
+  const [info, handleInfo] = useField('text');
 
   const history = useHistory();
 
@@ -24,6 +24,13 @@ export const CreateNew = (props: PropCreateNew) => {
       votes: 0,
     });
     history.push('/');
+  };
+
+  const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    handleContent.clear();
+    handleAuthor.clear();
+    handleInfo.clear();
   };
 
   return (
@@ -43,6 +50,7 @@ export const CreateNew = (props: PropCreateNew) => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   );
