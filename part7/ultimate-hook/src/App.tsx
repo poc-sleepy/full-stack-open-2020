@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useField = (type) => {
+import { NoteType, PersonType } from './types';
+
+const useField = (type: string) => {
   const [value, setValue] = useState('');
 
-  const onChange = (event) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
 
@@ -15,7 +17,7 @@ const useField = (type) => {
   };
 };
 
-const useResource = (baseUrl) => {
+const useResource = (baseUrl: string) => {
   const [resources, setResources] = useState([]);
 
   // ...
@@ -39,12 +41,12 @@ const App = () => {
   const [notes, noteService] = useResource('http://localhost:3005/notes');
   const [persons, personService] = useResource('http://localhost:3005/persons');
 
-  const handleNoteSubmit = (event) => {
+  const handleNoteSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     noteService.create({ content: content.value });
   };
 
-  const handlePersonSubmit = (event) => {
+  const handlePersonSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     personService.create({ name: name.value, number: number.value });
   };
