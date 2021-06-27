@@ -1,54 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
 
 import { NoteType, PersonType } from './types';
-
-const useField = (type: string) => {
-  const [value, setValue] = useState('');
-
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
-  };
-
-  return {
-    type,
-    value,
-    onChange,
-  };
-};
-
-const useResource = (baseUrl: string) => {
-  const [resources, setResources] = useState([]);
-
-  // ...
-
-  const create = (resource) => {
-    // ...
-  };
-
-  const service = {
-    create,
-  };
-
-  return [resources, service];
-};
+import { useField, useResource } from './hooks';
 
 const App = () => {
   const content = useField('text');
   const name = useField('text');
   const number = useField('text');
 
-  const [notes, noteService] = useResource('http://localhost:3005/notes');
-  const [persons, personService] = useResource('http://localhost:3005/persons');
+  const [notes, noteService] = useResource<NoteType>(
+    'http://localhost:3005/notes'
+  );
+  const [persons, personService] = useResource<PersonType>(
+    'http://localhost:3005/persons'
+  );
+
+  useEffect(() => {
+    void noteService.getAll();
+    void personService.getAll();
+  }, []);
 
   const handleNoteSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    noteService.create({ content: content.value });
+    void noteService.create({ content: content.value });
   };
 
   const handlePersonSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    personService.create({ name: name.value, number: number.value });
+    void personService.create({ name: name.value, number: number.value });
   };
 
   return (
