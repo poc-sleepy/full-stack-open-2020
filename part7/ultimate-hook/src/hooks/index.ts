@@ -15,10 +15,10 @@ export const useField = (type: string) => {
   };
 };
 
-export const useResource = <T extends { id: number }>(
+export const useResource = <ResourceType extends { id: number }>(
   baseUrl: string
-): [T[], typeof service] => {
-  const [resources, setResources] = useState<T[]>([]);
+): [ResourceType[], typeof service] => {
+  const [resources, setResources] = useState<ResourceType[]>([]);
 
   let token = '';
 
@@ -27,20 +27,23 @@ export const useResource = <T extends { id: number }>(
   };
 
   const getAll = async () => {
-    const response = await axios.get<T[]>(baseUrl);
+    const response = await axios.get<ResourceType[]>(baseUrl);
     setResources(response.data);
   };
 
-  const create = async (resource: Omit<T, 'id'>) => {
+  const create = async (resource: Omit<ResourceType, 'id'>) => {
     const config = {
       headers: { Authorization: token },
     };
-    const response = await axios.post<T>(baseUrl, resource, config);
+    const response = await axios.post<ResourceType>(baseUrl, resource, config);
     setResources(resources.concat(response.data));
   };
 
-  const update = async (id: number, resource: T) => {
-    const response = await axios.put<T>(`${baseUrl} /${id}`, resource);
+  const update = async (id: number, resource: ResourceType) => {
+    const response = await axios.put<ResourceType>(
+      `${baseUrl} /${id}`,
+      resource
+    );
     const newResources = resources.map((resource) => {
       return resource.id === id ? response.data : resource;
     });
