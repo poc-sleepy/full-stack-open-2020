@@ -1,14 +1,3 @@
-import {
-  Button,
-  Container,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  TextField,
-} from '@material-ui/core';
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -20,6 +9,18 @@ import {
   Redirect,
   useRouteMatch,
 } from 'react-router-dom';
+import {
+  Button,
+  Container,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  TextField,
+} from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 const Home = () => (
   <div>
@@ -148,8 +149,14 @@ const App = () => {
     },
   ]);
   const [user, setUser] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
   const login = (user: string) => {
     setUser(user);
+    setMessage(`welcome ${user}`);
+    setTimeout(() => {
+      setMessage('');
+    }, 10000);
   };
 
   const padding = {
@@ -163,6 +170,8 @@ const App = () => {
 
   return (
     <Container>
+      <div>{message && <Alert severity="success">{message}</Alert>}</div>
+
       <div>
         <Link style={padding} to="/">
           home
