@@ -10,6 +10,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import {
+  AppBar,
   Button,
   Container,
   Paper,
@@ -19,6 +20,7 @@ import {
   TableContainer,
   TableRow,
   TextField,
+  Toolbar,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
@@ -159,10 +161,6 @@ const App = () => {
     }, 10000);
   };
 
-  const padding = {
-    padding: 5,
-  };
-
   const match = useRouteMatch<{ id: string }>('/notes/:id');
   const note = match
     ? notes.find((note) => note.id === Number(match.params.id))
@@ -172,24 +170,26 @@ const App = () => {
     <Container>
       <div>{message && <Alert severity="success">{message}</Alert>}</div>
 
-      <div>
-        <Link style={padding} to="/">
-          home
-        </Link>
-        <Link style={padding} to="/notes">
-          notes
-        </Link>
-        <Link style={padding} to="/users">
-          users
-        </Link>
-        {user ? (
-          <em>{user} logged in</em>
-        ) : (
-          <Link style={padding} to="/login">
-            login
-          </Link>
-        )}
-      </div>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/">
+            home
+          </Button>
+          <Button color="inherit" component={Link} to="/notes">
+            notes
+          </Button>
+          <Button color="inherit" component={Link} to="/users">
+            users
+          </Button>
+          {user ? (
+            <em>{user} logged in</em>
+          ) : (
+            <Button color="inherit" component={Link} to="/login">
+              login
+            </Button>
+          )}
+        </Toolbar>
+      </AppBar>
 
       <Switch>
         <Route path="/notes/:id">
