@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer, UserInputError } from 'apollo-server';
 import fs from 'fs';
 import { v1 as uuid } from 'uuid';
 
@@ -46,6 +46,12 @@ const resolvers: Resolvers = {
   },
   Mutation: {
     addPerson: (_root, args) => {
+      if (persons.find((p) => p.name === args.name)) {
+        throw new UserInputError('Name must be unique', {
+          invalidArgs: args.name,
+        });
+      }
+
       const person = {
         ...args,
         id: uuid(),
