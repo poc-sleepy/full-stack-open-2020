@@ -19,6 +19,19 @@ export type Address = {
   city: Scalars['String'];
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  addPerson?: Maybe<Person>;
+};
+
+
+export type MutationAddPersonArgs = {
+  name: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
+  street: Scalars['String'];
+  city: Scalars['String'];
+};
+
 export type Person = {
   __typename?: 'Person';
   name: Scalars['String'];
@@ -124,6 +137,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Address: ResolverTypeWrapper<Address>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Person: ResolverTypeWrapper<Person>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Query: ResolverTypeWrapper<{}>;
@@ -135,6 +149,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Address: Address;
   String: Scalars['String'];
+  Mutation: {};
   Person: Person;
   ID: Scalars['ID'];
   Query: {};
@@ -146,6 +161,10 @@ export type AddressResolvers<ContextType = any, ParentType extends ResolversPare
   street?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addPerson?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<MutationAddPersonArgs, 'name' | 'street' | 'city'>>;
 };
 
 export type PersonResolvers<ContextType = any, ParentType extends ResolversParentTypes['Person'] = ResolversParentTypes['Person']> = {
@@ -164,6 +183,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type Resolvers<ContextType = any> = {
   Address?: AddressResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Person?: PersonResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };

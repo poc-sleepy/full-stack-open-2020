@@ -1,9 +1,10 @@
 import { ApolloServer } from 'apollo-server';
 import fs from 'fs';
+import { v1 as uuid } from 'uuid';
 
 import { Resolvers, Person } from './generated/graphql';
 
-const persons: Person[] = [
+let persons: Person[] = [
   {
     name: 'Arto Hellas',
     phone: '040-123543',
@@ -41,6 +42,22 @@ const resolvers: Resolvers = {
     findPerson: (_root, args) => {
       const person = persons.find((p) => p.name === args.name);
       return person === undefined ? null : person;
+    },
+  },
+  Mutation: {
+    addPerson: (_root, args) => {
+      const person = {
+        ...args,
+        id: uuid(),
+        name: args.name,
+        phone: args.phone,
+        address: {
+          street: args.street,
+          city: args.city,
+        },
+      };
+      persons = persons.concat(person);
+      return person;
     },
   },
 };
