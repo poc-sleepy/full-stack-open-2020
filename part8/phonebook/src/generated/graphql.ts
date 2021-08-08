@@ -22,6 +22,7 @@ export type Address = {
 export type Mutation = {
   __typename?: 'Mutation';
   addPerson?: Maybe<Person>;
+  editNumber?: Maybe<Person>;
 };
 
 
@@ -30,6 +31,12 @@ export type MutationAddPersonArgs = {
   phone?: Maybe<Scalars['String']>;
   street: Scalars['String'];
   city: Scalars['String'];
+};
+
+
+export type MutationEditNumberArgs = {
+  name: Scalars['String'];
+  phone: Scalars['String'];
 };
 
 export type Person = {
@@ -176,6 +183,7 @@ export type AddressResolvers<ContextType = any, ParentType extends ResolversPare
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addPerson?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<MutationAddPersonArgs, 'name' | 'street' | 'city'>>;
+  editNumber?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<MutationEditNumberArgs, 'name' | 'phone'>>;
 };
 
 export type PersonResolvers<ContextType = any, ParentType extends ResolversParentTypes['Person'] = ResolversParentTypes['Person']> = {
