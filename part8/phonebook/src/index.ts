@@ -38,7 +38,14 @@ const typeDefs = fs.readFileSync('./schema.graphql', { encoding: 'utf8' });
 const resolvers: Resolvers = {
   Query: {
     personCount: () => persons.length,
-    allPersons: () => persons,
+    allPersons: (_root, args) => {
+      if (!args.phone) {
+        return persons;
+      }
+      const byPhone = (person: Person) =>
+        args.phone === 'YES' ? person.phone : !person.phone;
+      return persons.filter(byPhone);
+    },
     findPerson: (_root, args) => {
       const person = persons.find((p) => p.name === args.name);
       return person === undefined ? null : person;

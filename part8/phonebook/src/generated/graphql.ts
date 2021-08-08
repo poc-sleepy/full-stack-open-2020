@@ -48,9 +48,19 @@ export type Query = {
 };
 
 
+export type QueryAllPersonsArgs = {
+  phone?: Maybe<YesNo>;
+};
+
+
 export type QueryFindPersonArgs = {
   name: Scalars['String'];
 };
+
+export enum YesNo {
+  Yes = 'YES',
+  No = 'NO'
+}
 
 
 
@@ -142,6 +152,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Query: ResolverTypeWrapper<{}>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  YesNo: YesNo;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
@@ -177,7 +188,7 @@ export type PersonResolvers<ContextType = any, ParentType extends ResolversParen
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   personCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  allPersons?: Resolver<Array<ResolversTypes['Person']>, ParentType, ContextType>;
+  allPersons?: Resolver<Array<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<QueryAllPersonsArgs, never>>;
   findPerson?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType, RequireFields<QueryFindPersonArgs, 'name'>>;
 };
 
