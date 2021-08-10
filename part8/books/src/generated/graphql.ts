@@ -37,6 +37,19 @@ export type Book = {
   genres: Array<Scalars['String']>;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  addBook?: Maybe<Book>;
+};
+
+
+export type MutationAddBookArgs = {
+  title: Scalars['String'];
+  author: Scalars['String'];
+  published: Scalars['Int'];
+  genres: Array<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   bookCount: Scalars['Int'];
@@ -126,6 +139,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   AuthorWithBookCount: ResolverTypeWrapper<AuthorWithBookCount>;
   Book: ResolverTypeWrapper<Book>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
@@ -138,6 +152,7 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'];
   AuthorWithBookCount: AuthorWithBookCount;
   Book: Book;
+  Mutation: {};
   Query: {};
   Boolean: Scalars['Boolean'];
 };
@@ -166,6 +181,10 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationAddBookArgs, 'title' | 'author' | 'published' | 'genres'>>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   bookCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   authorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -177,6 +196,7 @@ export type Resolvers<ContextType = any> = {
   Author?: AuthorResolvers<ContextType>;
   AuthorWithBookCount?: AuthorWithBookCountResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 

@@ -1,6 +1,6 @@
 import { Author, Book } from './generated/graphql';
 
-export const authors: Author[] = [
+export const initAuthors: Author[] = [
   {
     name: 'Robert Martin',
     id: 'afa51ab0-344d-11e9-a414-719c6709cf3e',
@@ -32,7 +32,7 @@ export const authors: Author[] = [
  * However, for simplicity, we will store the author's name in connection with the book
  */
 
-export const books: Book[] = [
+export const initBooks: Book[] = [
   {
     title: 'Clean Code',
     published: 2008,

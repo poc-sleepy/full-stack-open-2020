@@ -1,7 +1,12 @@
 import { ApolloServer } from 'apollo-server';
 import fs from 'fs';
+import { v1 as uuid } from 'uuid';
+
 import { AuthorWithBookCount, Resolvers } from './generated/graphql';
-import { authors, books } from './data';
+import { initAuthors, initBooks } from './data';
+
+let authors = initAuthors;
+let books = initBooks;
 
 const typeDefs = fs.readFileSync('./schema.graphql', { encoding: 'utf8' });
 
@@ -34,6 +39,27 @@ const resolvers: Resolvers = {
         ).length;
         return { ...author, bookCount } as AuthorWithBookCount;
       });
+    },
+  },
+  Mutation: {
+    addBook: (_root, args) => {
+      const book = {
+        ...args,
+        id: uuid(),
+      };
+      books = books.concat(book);
+
+      if (
+        authors.filter((author) => author.name === args.author).length === 0
+      ) {
+        const author = {
+          id: uuid(),
+          name: args.author,
+        };
+        authors = authors.concat(author);
+      }
+
+      return book;
     },
   },
 };
