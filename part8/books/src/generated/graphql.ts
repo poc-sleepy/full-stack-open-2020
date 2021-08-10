@@ -3,6 +3,7 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -42,6 +43,12 @@ export type Query = {
   authorCount: Scalars['Int'];
   allBooks: Array<Maybe<Book>>;
   allAuthors: Array<Maybe<AuthorWithBookCount>>;
+};
+
+
+export type QueryAllBooksArgs = {
+  author?: Maybe<Scalars['String']>;
+  genre?: Maybe<Scalars['String']>;
 };
 
 
@@ -162,7 +169,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   bookCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   authorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  allBooks?: Resolver<Array<Maybe<ResolversTypes['Book']>>, ParentType, ContextType>;
+  allBooks?: Resolver<Array<Maybe<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryAllBooksArgs, never>>;
   allAuthors?: Resolver<Array<Maybe<ResolversTypes['AuthorWithBookCount']>>, ParentType, ContextType>;
 };
 

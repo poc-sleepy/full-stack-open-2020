@@ -1,6 +1,11 @@
 import { ApolloServer } from 'apollo-server';
 import fs from 'fs';
-import { Author, Book } from './generated/graphql';
+import {
+  Author,
+  AuthorWithBookCount,
+  Book,
+  Resolvers,
+} from './generated/graphql';
 
 const authors: Author[] = [
   {
@@ -88,7 +93,7 @@ const books: Book[] = [
 
 const typeDefs = fs.readFileSync('./schema.graphql', { encoding: 'utf8' });
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
     bookCount: () => {
       return books.length;
@@ -96,15 +101,26 @@ const resolvers = {
     authorCount: () => {
       return authors.length;
     },
-    allBooks: () => {
-      return books;
+    allBooks: (_root, args) => {
+      let rtnbooks = books;
+
+      if (args.author !== undefined && args.author !== null) {
+        const author = args.author;
+        rtnbooks = books.filter((book) => book.author === author);
+      }
+      if (args.genre !== undefined && args.genre !== null) {
+        // NOTE: genreをstring型にfixさせないとinclude()で怒られる
+        const genre = args.genre;
+        rtnbooks = rtnbooks.filter((book) => book.genres.includes(genre));
+      }
+      return rtnbooks;
     },
     allAuthors: () => {
       return authors.map((author) => {
         const bookCount = books.filter(
           (book) => book.author === author.name
         ).length;
-        return { ...author, bookCount };
+        return { ...author, bookCount } as AuthorWithBookCount;
       });
     },
   },
