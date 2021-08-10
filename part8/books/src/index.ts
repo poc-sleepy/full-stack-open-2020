@@ -61,6 +61,22 @@ const resolvers: Resolvers = {
 
       return book;
     },
+    editAuthor: (_root, args) => {
+      const targetAuthor = authors.find((author) => author.name === args.name);
+      if (targetAuthor === undefined) return null;
+
+      const updatedAuthor = targetAuthor;
+
+      // NOTE: nullでのborn更新を許容するため、スキーマ上では!をつけない
+      if (args.setBornTo !== undefined) {
+        updatedAuthor.born = args.setBornTo;
+      }
+
+      authors = authors.map((author) =>
+        author.id === updatedAuthor.id ? updatedAuthor : author
+      );
+      return updatedAuthor;
+    },
   },
 };
 

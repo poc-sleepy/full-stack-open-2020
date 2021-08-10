@@ -25,3 +25,13 @@ type Query {
   allBooks(author: String, genre: String): [Book]!
   allAuthors: [AuthorWithBookCount]!
 }
+
+type Mutation {
+  addBook(
+    title: String!
+    author: String!
+    published: Int!
+    genres: [String!]!
+  ): Book
+  editAuthor(name: String!, setBornTo: Int): Author
+}

@@ -40,6 +40,7 @@ export type Book = {
 export type Mutation = {
   __typename?: 'Mutation';
   addBook?: Maybe<Book>;
+  editAuthor?: Maybe<Author>;
 };
 
 
@@ -48,6 +49,12 @@ export type MutationAddBookArgs = {
   author: Scalars['String'];
   published: Scalars['Int'];
   genres: Array<Scalars['String']>;
+};
+
+
+export type MutationEditAuthorArgs = {
+  name: Scalars['String'];
+  setBornTo?: Maybe<Scalars['Int']>;
 };
 
 export type Query = {
@@ -183,6 +190,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationAddBookArgs, 'title' | 'author' | 'published' | 'genres'>>;
+  editAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationEditAuthorArgs, 'name'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
