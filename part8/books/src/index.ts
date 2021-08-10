@@ -96,6 +96,17 @@ const resolvers = {
     authorCount: () => {
       return authors.length;
     },
+    allBooks: () => {
+      return books;
+    },
+    allAuthors: () => {
+      return authors.map((author) => {
+        const bookCount = books.filter(
+          (book) => book.author === author.name
+        ).length;
+        return { ...author, bookCount };
+      });
+    },
   },
 };
 

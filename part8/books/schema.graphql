@@ -4,6 +4,13 @@ type Author {
   born: Int
 }
 
+type AuthorWithBookCount {
+  id: ID!
+  name: String!
+  born: Int
+  bookCount: Int!
+}
+
 type Book {
   id: ID!
   title: String!
@@ -15,4 +22,6 @@ type Book {
 type Query {
   bookCount: Int!
   authorCount: Int!
+  allBooks: [Book]!
+  allAuthors: [AuthorWithBookCount]!
 }

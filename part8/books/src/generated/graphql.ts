@@ -19,6 +19,14 @@ export type Author = {
   born?: Maybe<Scalars['Int']>;
 };
 
+export type AuthorWithBookCount = {
+  __typename?: 'AuthorWithBookCount';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  born?: Maybe<Scalars['Int']>;
+  bookCount: Scalars['Int'];
+};
+
 export type Book = {
   __typename?: 'Book';
   id: Scalars['ID'];
@@ -32,6 +40,8 @@ export type Query = {
   __typename?: 'Query';
   bookCount: Scalars['Int'];
   authorCount: Scalars['Int'];
+  allBooks: Array<Maybe<Book>>;
+  allAuthors: Array<Maybe<AuthorWithBookCount>>;
 };
 
 
@@ -107,6 +117,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  AuthorWithBookCount: ResolverTypeWrapper<AuthorWithBookCount>;
   Book: ResolverTypeWrapper<Book>;
   Query: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -118,6 +129,7 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   String: Scalars['String'];
   Int: Scalars['Int'];
+  AuthorWithBookCount: AuthorWithBookCount;
   Book: Book;
   Query: {};
   Boolean: Scalars['Boolean'];
@@ -127,6 +139,14 @@ export type AuthorResolvers<ContextType = any, ParentType extends ResolversParen
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   born?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AuthorWithBookCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthorWithBookCount'] = ResolversParentTypes['AuthorWithBookCount']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  born?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  bookCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -142,10 +162,13 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   bookCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   authorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  allBooks?: Resolver<Array<Maybe<ResolversTypes['Book']>>, ParentType, ContextType>;
+  allAuthors?: Resolver<Array<Maybe<ResolversTypes['AuthorWithBookCount']>>, ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Author?: AuthorResolvers<ContextType>;
+  AuthorWithBookCount?: AuthorWithBookCountResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
