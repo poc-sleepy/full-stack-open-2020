@@ -4,6 +4,7 @@ import {
   Person,
   useFindPersonByNameLazyQuery,
 } from './generated/graphql';
+import { PersonForm } from './PersonForm';
 
 type PersonsParams = { persons: GetAllPersonsQuery['allPersons'] };
 
@@ -45,6 +46,7 @@ const Persons = ({ persons }: PersonsParams) => {
           <button onClick={() => showPerson(p.name)}>show address</button>
         </div>
       ))}
+      <PersonForm />
     </div>
   );
 };

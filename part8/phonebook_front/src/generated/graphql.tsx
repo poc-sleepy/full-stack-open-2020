@@ -82,6 +82,24 @@ export type GetAllPersonsQuery = {
   }>;
 };
 
+export type CreatePersonMutationVariables = Exact<{
+  name: Scalars['String'];
+  street: Scalars['String'];
+  city: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
+}>;
+
+export type CreatePersonMutation = {
+  __typename?: 'Mutation';
+  addPerson?: Maybe<{
+    __typename?: 'Person';
+    name: string;
+    phone?: Maybe<string>;
+    id: string;
+    address: { __typename?: 'Address'; street: string; city: string };
+  }>;
+};
+
 export type FindPersonByNameQueryVariables = Exact<{
   nameToSearch: Scalars['String'];
 }>;
@@ -155,6 +173,70 @@ export type GetAllPersonsLazyQueryHookResult = ReturnType<
 export type GetAllPersonsQueryResult = Apollo.QueryResult<
   GetAllPersonsQuery,
   GetAllPersonsQueryVariables
+>;
+export const CreatePersonDocument = gql`
+  mutation createPerson(
+    $name: String!
+    $street: String!
+    $city: String!
+    $phone: String
+  ) {
+    addPerson(name: $name, street: $street, city: $city, phone: $phone) {
+      name
+      phone
+      id
+      address {
+        street
+        city
+      }
+    }
+  }
+`;
+export type CreatePersonMutationFn = Apollo.MutationFunction<
+  CreatePersonMutation,
+  CreatePersonMutationVariables
+>;
+
+/**
+ * __useCreatePersonMutation__
+ *
+ * To run a mutation, you first call `useCreatePersonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePersonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPersonMutation, { data, loading, error }] = useCreatePersonMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      street: // value for 'street'
+ *      city: // value for 'city'
+ *      phone: // value for 'phone'
+ *   },
+ * });
+ */
+export function useCreatePersonMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreatePersonMutation,
+    CreatePersonMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreatePersonMutation,
+    CreatePersonMutationVariables
+  >(CreatePersonDocument, options);
+}
+export type CreatePersonMutationHookResult = ReturnType<
+  typeof useCreatePersonMutation
+>;
+export type CreatePersonMutationResult =
+  Apollo.MutationResult<CreatePersonMutation>;
+export type CreatePersonMutationOptions = Apollo.BaseMutationOptions<
+  CreatePersonMutation,
+  CreatePersonMutationVariables
 >;
 export const FindPersonByNameDocument = gql`
   query findPersonByName($nameToSearch: String!) {
