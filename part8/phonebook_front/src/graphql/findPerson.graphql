@@ -1,0 +1,11 @@
+query findPersonByName($nameToSearch: String!) {
+  findPerson(name: $nameToSearch) {
+    name
+    phone
+    id
+    address {
+      street
+      city
+    }
+  }
+}

@@ -1,26 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { gql, useLazyQuery } from '@apollo/client';
+import {
+  GetAllPersonsQuery,
+  Person,
+  useFindPersonByNameLazyQuery,
+} from './generated/graphql';
 
-import { queryResultData, Person } from './types';
-
-type PersonsParams = { persons: Person[] };
-
-const FIND_PERSON = gql`
-  query findPersonByName($nameToSearch: String!) {
-    findPerson(name: $nameToSearch) {
-      name
-      phone
-      id
-      address {
-        street
-        city
-      }
-    }
-  }
-`;
+type PersonsParams = { persons: GetAllPersonsQuery['allPersons'] };
 
 const Persons = ({ persons }: PersonsParams) => {
-  const [getPerson, result] = useLazyQuery<queryResultData>(FIND_PERSON);
+  const [getPerson, result] = useFindPersonByNameLazyQuery();
   const [person, setPerson] = useState<Person | null>(null);
 
   const showPerson = (name: string) => {
@@ -29,7 +17,9 @@ const Persons = ({ persons }: PersonsParams) => {
 
   useEffect(() => {
     if (result.data) {
-      setPerson(result.data.findPerson);
+      setPerson(
+        result.data.findPerson === undefined ? null : result.data.findPerson
+      );
     }
   }, [result]);
 
