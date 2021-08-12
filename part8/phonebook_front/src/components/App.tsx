@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Persons } from './Persons';
-import { useGetAllPersonsQuery } from './generated/graphql';
+import { useGetAllPersonsQuery } from '../generated/graphql';
 
 export const App = () => {
   const result = useGetAllPersonsQuery();

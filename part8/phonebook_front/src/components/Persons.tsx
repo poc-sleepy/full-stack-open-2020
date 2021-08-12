@@ -3,7 +3,7 @@ import {
   GetAllPersonsQuery,
   Person,
   useFindPersonByNameLazyQuery,
-} from './generated/graphql';
+} from '../generated/graphql';
 import { PersonForm } from './PersonForm';
 
 type PersonsParams = { persons: GetAllPersonsQuery['allPersons'] };

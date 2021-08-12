@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useCreatePersonMutation } from './generated/graphql';
+import { useCreatePersonMutation } from '../generated/graphql';
 
 const PersonForm = () => {
   const [name, setName] = useState('');
