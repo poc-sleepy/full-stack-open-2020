@@ -10,6 +10,7 @@ export type Person = {
   id: string;
 };
 
-export type allPersonData = {
+export type queryResultData = {
   allPersons: Person[];
+  findPerson: Person | null;
 };
