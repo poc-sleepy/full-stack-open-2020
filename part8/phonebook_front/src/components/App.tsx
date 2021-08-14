@@ -4,7 +4,9 @@ import { Persons } from './Persons';
 import { useGetAllPersonsQuery } from '../generated/graphql';
 
 export const App = () => {
-  const result = useGetAllPersonsQuery();
+  const result = useGetAllPersonsQuery({
+    pollInterval: 2000,
+  });
 
   if (result.loading) {
     return <div>loading...</div>;
