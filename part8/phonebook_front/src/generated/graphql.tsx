@@ -302,12 +302,3 @@ export type FindPersonByNameQueryResult = Apollo.QueryResult<
   FindPersonByNameQuery,
   FindPersonByNameQueryVariables
 >;
-export const namedOperations = {
-  Query: {
-    getAllPersons: 'getAllPersons',
-    findPersonByName: 'findPersonByName',
-  },
-  Mutation: {
-    createPerson: 'createPerson',
-  },
-};

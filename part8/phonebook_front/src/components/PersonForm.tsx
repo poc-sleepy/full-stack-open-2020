@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { namedOperations, useCreatePersonMutation } from '../generated/graphql';
+import {
+  GetAllPersonsDocument,
+  useCreatePersonMutation,
+} from '../generated/graphql';
 
 export const PersonForm = () => {
   const [name, setName] = useState('');
@@ -8,7 +11,7 @@ export const PersonForm = () => {
   const [city, setCity] = useState('');
 
   const [createPerson] = useCreatePersonMutation({
-    refetchQueries: [namedOperations.Query.getAllPersons],
+    refetchQueries: [GetAllPersonsDocument],
   });
 
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
