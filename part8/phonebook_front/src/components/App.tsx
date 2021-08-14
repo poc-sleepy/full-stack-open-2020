@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Persons } from './Persons';
 import { useGetAllPersonsQuery } from '../generated/graphql';
+import { PersonForm } from './PersonForm';
 
 export const App = () => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const result = useGetAllPersonsQuery();
 
   if (result.loading) {
@@ -14,5 +17,29 @@ export const App = () => {
     return <div>No person.</div>;
   }
 
-  return <Persons persons={result.data.allPersons} />;
+  const notify = (message: string) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 10000);
+  };
+
+  return (
+    <div>
+      <Notify errorMessage={errorMessage} />
+      <Persons persons={result.data.allPersons} />
+      <PersonForm setError={notify} />
+    </div>
+  );
+};
+
+type NotifyParams = {
+  errorMessage: string | null;
+};
+
+const Notify = ({ errorMessage }: NotifyParams) => {
+  if (!errorMessage) {
+    return null;
+  }
+  return <div style={{ color: 'red' }}>{errorMessage}</div>;
 };

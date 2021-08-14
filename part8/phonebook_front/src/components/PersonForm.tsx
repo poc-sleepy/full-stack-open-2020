@@ -4,7 +4,11 @@ import {
   useCreatePersonMutation,
 } from '../generated/graphql';
 
-export const PersonForm = () => {
+type PersonFormParams = {
+  setError: (message: string) => void;
+};
+
+export const PersonForm = ({ setError }: PersonFormParams) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [street, setStreet] = useState('');
@@ -12,6 +16,9 @@ export const PersonForm = () => {
 
   const [createPerson] = useCreatePersonMutation({
     refetchQueries: [GetAllPersonsDocument],
+    onError: (error) => {
+      setError(error.graphQLErrors[0].message);
+    },
   });
 
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
