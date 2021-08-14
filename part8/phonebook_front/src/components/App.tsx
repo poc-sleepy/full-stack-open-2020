@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Persons } from './Persons';
 import { useGetAllPersonsQuery } from '../generated/graphql';
 import { PersonForm } from './PersonForm';
+import { PhoneForm } from './PhoneForm';
 
 export const App = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -28,6 +29,7 @@ export const App = () => {
     <div>
       <Notify errorMessage={errorMessage} />
       <Persons persons={result.data.allPersons} />
+      <PhoneForm setError={notify} />
       <PersonForm setError={notify} />
     </div>
   );

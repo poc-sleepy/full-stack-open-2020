@@ -1,0 +1,11 @@
+mutation editNumber($name: String!, $phone: String!) {
+  editNumber(name: $name, phone: $phone) {
+    name
+    phone
+    address {
+      street
+      city
+    }
+    id
+  }
+}

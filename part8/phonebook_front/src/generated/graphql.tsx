@@ -100,6 +100,22 @@ export type CreatePersonMutation = {
   }>;
 };
 
+export type EditNumberMutationVariables = Exact<{
+  name: Scalars['String'];
+  phone: Scalars['String'];
+}>;
+
+export type EditNumberMutation = {
+  __typename?: 'Mutation';
+  editNumber?: Maybe<{
+    __typename?: 'Person';
+    name: string;
+    phone?: Maybe<string>;
+    id: string;
+    address: { __typename?: 'Address'; street: string; city: string };
+  }>;
+};
+
 export type FindPersonByNameQueryVariables = Exact<{
   nameToSearch: Scalars['String'];
 }>;
@@ -237,6 +253,63 @@ export type CreatePersonMutationResult =
 export type CreatePersonMutationOptions = Apollo.BaseMutationOptions<
   CreatePersonMutation,
   CreatePersonMutationVariables
+>;
+export const EditNumberDocument = gql`
+  mutation editNumber($name: String!, $phone: String!) {
+    editNumber(name: $name, phone: $phone) {
+      name
+      phone
+      address {
+        street
+        city
+      }
+      id
+    }
+  }
+`;
+export type EditNumberMutationFn = Apollo.MutationFunction<
+  EditNumberMutation,
+  EditNumberMutationVariables
+>;
+
+/**
+ * __useEditNumberMutation__
+ *
+ * To run a mutation, you first call `useEditNumberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditNumberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editNumberMutation, { data, loading, error }] = useEditNumberMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      phone: // value for 'phone'
+ *   },
+ * });
+ */
+export function useEditNumberMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    EditNumberMutation,
+    EditNumberMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<EditNumberMutation, EditNumberMutationVariables>(
+    EditNumberDocument,
+    options
+  );
+}
+export type EditNumberMutationHookResult = ReturnType<
+  typeof useEditNumberMutation
+>;
+export type EditNumberMutationResult =
+  Apollo.MutationResult<EditNumberMutation>;
+export type EditNumberMutationOptions = Apollo.BaseMutationOptions<
+  EditNumberMutation,
+  EditNumberMutationVariables
 >;
 export const FindPersonByNameDocument = gql`
   query findPersonByName($nameToSearch: String!) {

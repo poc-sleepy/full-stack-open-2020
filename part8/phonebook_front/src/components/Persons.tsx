@@ -7,7 +7,7 @@ import {
 
 type PersonsParams = { persons: GetAllPersonsQuery['allPersons'] };
 
-const Persons = ({ persons }: PersonsParams) => {
+export const Persons = ({ persons }: PersonsParams) => {
   const [getPerson, result] = useFindPersonByNameLazyQuery();
   const [person, setPerson] = useState<Person | null>(null);
 
@@ -48,5 +48,3 @@ const Persons = ({ persons }: PersonsParams) => {
     </div>
   );
 };
-
-export { Persons };
