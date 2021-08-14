@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { useCreatePersonMutation } from '../generated/graphql';
+import { namedOperations, useCreatePersonMutation } from '../generated/graphql';
 
-const PersonForm = () => {
+export const PersonForm = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
 
-  const [createPerson] = useCreatePersonMutation();
+  const [createPerson] = useCreatePersonMutation({
+    refetchQueries: [namedOperations.Query.getAllPersons],
+  });
 
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -57,5 +59,3 @@ const PersonForm = () => {
     </div>
   );
 };
-
-export { PersonForm };
