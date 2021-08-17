@@ -9,11 +9,11 @@ type AuthorsProps = {
 };
 
 const Authors = (props: AuthorsProps) => {
-  const result = useGetAllAuthorsQuery();
-
   if (!props.show) {
     return null;
   }
+
+  const result = useGetAllAuthorsQuery();
 
   if (result.loading) {
     return <div>loading...</div>;

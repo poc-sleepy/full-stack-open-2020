@@ -1,5 +1,5 @@
 import React from 'react';
-import { Book } from '../generated/graphql';
+import { GetAllBooksQuery, useGetAllBooksQuery } from '../generated/graphql';
 
 type BooksProps = {
   show: boolean;
@@ -10,7 +10,17 @@ const Books = (props: BooksProps) => {
     return null;
   }
 
-  const books: Book[] = [];
+  const result = useGetAllBooksQuery();
+
+  if (result.loading) {
+    return <div>loading...</div>;
+  }
+
+  if (result.data === undefined) {
+    return <div>No books.</div>;
+  }
+
+  const books: GetAllBooksQuery['allBooks'] = result.data.allBooks;
 
   return (
     <div>
