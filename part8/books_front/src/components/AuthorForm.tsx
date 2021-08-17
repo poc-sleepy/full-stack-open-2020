@@ -1,8 +1,15 @@
 import React from 'react';
 import { useState } from 'react';
-import { useUpdateAuthorMutation } from '../generated/graphql';
+import {
+  GetAllAuthorsQuery,
+  useUpdateAuthorMutation,
+} from '../generated/graphql';
 
-export const AuthorForm = () => {
+type AuthorFormProps = {
+  authors: GetAllAuthorsQuery['allAuthors'];
+};
+
+export const AuthorForm = (props: AuthorFormProps) => {
   const [name, setName] = useState('');
   const [born, setBorn] = useState('');
   const [updateAuthor] = useUpdateAuthorMutation({
@@ -13,7 +20,7 @@ export const AuthorForm = () => {
     event.preventDefault();
 
     void updateAuthor({
-      variables: { name, setBornTo: Number(born) },
+      variables: { name: String(name), setBornTo: Number(born) },
     });
     setName('');
     setBorn('');
@@ -25,11 +32,18 @@ export const AuthorForm = () => {
       <form onSubmit={submit}>
         <div>
           name
-          <input
-            type="text"
+          <select
             value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          >
+            {props.authors.map((author) => (
+              <option key={author.name} value={author.name}>
+                {author.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           born
