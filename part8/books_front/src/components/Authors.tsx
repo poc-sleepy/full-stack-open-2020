@@ -3,6 +3,7 @@ import {
   GetAllAuthorsQuery,
   useGetAllAuthorsQuery,
 } from '../generated/graphql';
+import { AuthorForm } from './AuthorForm';
 
 type AuthorsProps = {
   show: boolean;
@@ -44,6 +45,8 @@ const Authors = (props: AuthorsProps) => {
           ))}
         </tbody>
       </table>
+
+      <AuthorForm />
     </div>
   );
 };

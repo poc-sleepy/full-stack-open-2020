@@ -117,6 +117,21 @@ export type GetAllBooksQuery = {
   }>;
 };
 
+export type UpdateAuthorMutationVariables = Exact<{
+  name: Scalars['String'];
+  setBornTo: Scalars['Int'];
+}>;
+
+export type UpdateAuthorMutation = {
+  __typename?: 'Mutation';
+  editAuthor?: Maybe<{
+    __typename?: 'Author';
+    id: string;
+    name: string;
+    born?: Maybe<number>;
+  }>;
+};
+
 export const CreateBookDocument = gql`
   mutation createBook(
     $title: String!
@@ -300,4 +315,57 @@ export type GetAllBooksLazyQueryHookResult = ReturnType<
 export type GetAllBooksQueryResult = Apollo.QueryResult<
   GetAllBooksQuery,
   GetAllBooksQueryVariables
+>;
+export const UpdateAuthorDocument = gql`
+  mutation updateAuthor($name: String!, $setBornTo: Int!) {
+    editAuthor(name: $name, setBornTo: $setBornTo) {
+      id
+      name
+      born
+    }
+  }
+`;
+export type UpdateAuthorMutationFn = Apollo.MutationFunction<
+  UpdateAuthorMutation,
+  UpdateAuthorMutationVariables
+>;
+
+/**
+ * __useUpdateAuthorMutation__
+ *
+ * To run a mutation, you first call `useUpdateAuthorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAuthorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAuthorMutation, { data, loading, error }] = useUpdateAuthorMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      setBornTo: // value for 'setBornTo'
+ *   },
+ * });
+ */
+export function useUpdateAuthorMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateAuthorMutation,
+    UpdateAuthorMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateAuthorMutation,
+    UpdateAuthorMutationVariables
+  >(UpdateAuthorDocument, options);
+}
+export type UpdateAuthorMutationHookResult = ReturnType<
+  typeof useUpdateAuthorMutation
+>;
+export type UpdateAuthorMutationResult =
+  Apollo.MutationResult<UpdateAuthorMutation>;
+export type UpdateAuthorMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAuthorMutation,
+  UpdateAuthorMutationVariables
 >;
