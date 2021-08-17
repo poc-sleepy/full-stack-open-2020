@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useCreateBookMutation } from '../generated/graphql';
 
 type NewBookProps = {
   show: boolean;
@@ -11,6 +12,10 @@ const NewBook = (props: NewBookProps) => {
   const [genre, setGenre] = useState<string>('');
   const [genres, setGenres] = useState<string[]>([]);
 
+  const [createBook] = useCreateBookMutation({
+    refetchQueries: ['getAllAuthors', 'getAllBooks'],
+  });
+
   if (!props.show) {
     return null;
   }
@@ -19,6 +24,9 @@ const NewBook = (props: NewBookProps) => {
     event.preventDefault();
 
     console.log('add book...');
+    void createBook({
+      variables: { title, author, published: Number(published), genres },
+    });
 
     setTitle('');
     setPublished('');
