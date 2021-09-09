@@ -21,6 +21,9 @@ const styles = StyleSheet.create({
   colorPrimary: {
     color: theme.colors.primary,
   },
+  colorInverse: {
+    color: theme.colors.inverse,
+  },
   fontSizeSubheading: {
     fontSize: theme.fontSizes.subheading,
   },
@@ -30,7 +33,7 @@ const styles = StyleSheet.create({
 });
 
 interface TextProps {
-  color?: 'textSecondary' | 'primary';
+  color?: 'textSecondary' | 'primary' | 'inverse';
   fontSize?: 'subheading';
   fontWeight?: 'bold';
   style?: StyleProp<TextStyle>;
@@ -48,6 +51,7 @@ export const Text = ({
     styles.text,
     color === 'textSecondary' && styles.colorTextSecondary,
     color === 'primary' && styles.colorPrimary,
+    color === 'inverse' && styles.colorInverse,
     fontSize === 'subheading' && styles.fontSizeSubheading,
     fontWeight === 'bold' && styles.fontWeightBold,
     style,
