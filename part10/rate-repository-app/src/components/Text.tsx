@@ -37,7 +37,7 @@ interface TextProps {
   fontSize?: 'subheading';
   fontWeight?: 'bold';
   style?: StyleProp<TextStyle>;
-  children: string;
+  children: any;
 }
 
 export const Text = ({

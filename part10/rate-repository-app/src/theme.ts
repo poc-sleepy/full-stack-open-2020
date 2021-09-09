@@ -1,9 +1,12 @@
+const primary = '#0366d6';
+const white = '#FFFFFF';
+
 export const theme = {
   colors: {
     textPrimary: '#24292e',
     textSecondary: '#586069',
-    primary: '#0366d6',
-    inverse: '#FFFFFF',
+    primary,
+    inverse: white,
   },
   fontSizes: {
     body: 14,
@@ -19,6 +22,7 @@ export const theme = {
   backgroundColors: {
     lightGray: '#e1e4e8',
     darkGray: '#24292e',
-    white: '#FFFFFF',
+    white,
+    primary,
   },
 };
