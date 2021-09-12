@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 
 import { Text } from './Text';
@@ -36,8 +36,10 @@ export const AppBar = () => {
 
   return (
     <View style={styles.container}>
-      <AppBarTab to="/">Repositories</AppBarTab>
-      <AppBarTab to="/signin">Sign In</AppBarTab>
+      <ScrollView horizontal>
+        <AppBarTab to="/">Repositories</AppBarTab>
+        <AppBarTab to="/signin">Sign In</AppBarTab>
+      </ScrollView>
     </View>
   );
 };
