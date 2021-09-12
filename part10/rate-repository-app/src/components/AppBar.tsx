@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 
 import { Text } from './Text';
 import { theme } from '../theme';
+import { Link } from 'react-router-native';
 
-const AppBarTab = (props: { children: string }) => {
+const AppBarTab = (props: { children: string; to: string }) => {
   const styles = StyleSheet.create({
     container: {
       marginRight: 20,
@@ -14,11 +15,11 @@ const AppBarTab = (props: { children: string }) => {
   });
 
   return (
-    <Pressable style={styles.container}>
+    <Link style={styles.container} to={props.to}>
       <Text color="inverse" fontSize="subheading" fontWeight="bold">
         {props.children}
       </Text>
-    </Pressable>
+    </Link>
   );
 };
 
@@ -35,8 +36,8 @@ export const AppBar = () => {
 
   return (
     <View style={styles.container}>
-      <AppBarTab>Repositories</AppBarTab>
-      <AppBarTab>About</AppBarTab>
+      <AppBarTab to="/">Repositories</AppBarTab>
+      <AppBarTab to="/signin">Sign In</AppBarTab>
     </View>
   );
 };
