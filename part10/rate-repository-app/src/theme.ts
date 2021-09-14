@@ -1,5 +1,6 @@
 const primary = '#0366d6';
 const white = '#FFFFFF';
+const red = '#D73A4A';
 
 export const theme = {
   colors: {
@@ -7,6 +8,7 @@ export const theme = {
     textSecondary: '#586069',
     primary,
     inverse: white,
+    error: red,
   },
   fontSizes: {
     body: 14,
@@ -24,5 +26,8 @@ export const theme = {
     darkGray: '#24292e',
     white,
     primary,
+  },
+  borderColor: {
+    error: red,
   },
 };
