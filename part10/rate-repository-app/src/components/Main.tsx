@@ -3,7 +3,7 @@ import Constants from 'expo-constants';
 import { StyleSheet, View } from 'react-native';
 import { Route, Switch, Redirect } from 'react-router-native';
 
-import RepositoryList from './RepositoryList';
+import { RepositoryList } from './RepositoryList';
 
 import { AppBar } from './AppBar';
 import { theme } from '../theme';
