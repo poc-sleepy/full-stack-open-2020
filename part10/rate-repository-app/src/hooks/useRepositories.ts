@@ -1,24 +1,11 @@
-import { useState, useEffect } from 'react';
-import { ServerResponse } from '../types';
+import { useGetRepositoriesQuery } from '../generated/graphql';
 
 export const useRepositories = () => {
-  const [repositories, setRepositories] = useState<ServerResponse>();
-  const [loading, setLoading] = useState(false);
+  const { data, loading } = useGetRepositoriesQuery({
+    fetchPolicy: 'cache-and-network',
+  });
 
-  const fetchRepositories = async () => {
-    setLoading(true);
+  console.log(data);
 
-    // Replace the IP address part with your own IP address!
-    const response = await fetch('http://192.168.11.7:5000/api/repositories');
-    const json = await response.json();
-
-    setLoading(false);
-    setRepositories(json);
-  };
-
-  useEffect(() => {
-    fetchRepositories();
-  }, []);
-
-  return { repositories, loading, refetch: fetchRepositories };
+  return { repositories: data?.repositories, loading };
 };

@@ -15,7 +15,7 @@ export const RepositoryList = () => {
 
   // Get the nodes from the edges array
   const repositoryNodes = repositories
-    ? repositories.edges.map((edge) => edge.node)
+    ? repositories.edges.map((edge) => edge.node as Repository)
     : [];
 
   const ItemSeparator = () => <View style={styles.separator} />;
