@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Image, ScrollView } from 'react-native';
 import { Text } from './Text';
 import { theme } from '../theme';
-import { Repository } from './types';
+import { Repository } from '../types';
 import { Badge } from './Badge';
 
 type RepositoryPropertyProps = {

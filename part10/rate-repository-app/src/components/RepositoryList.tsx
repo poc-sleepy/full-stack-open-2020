@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
 import { RepositoryItem } from './RepositoryItem';
-import { Repository } from './types';
+import { Repository } from '../types';
 import { useRepositories } from '../hooks/useRepositories';
 
 const styles = StyleSheet.create({

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ServerResponse } from '../components/types';
+import { ServerResponse } from '../types';
 
 export const useRepositories = () => {
   const [repositories, setRepositories] = useState<ServerResponse>();
