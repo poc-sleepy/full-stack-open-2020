@@ -25,3 +25,10 @@ query getRepositories {
     }
   }
 }
+
+query getAuthorizedUser {
+  authorizedUser {
+    id
+    username
+  }
+}

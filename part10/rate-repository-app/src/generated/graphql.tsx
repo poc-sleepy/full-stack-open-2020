@@ -262,6 +262,13 @@ export type GetRepositoriesQuery = {
   };
 };
 
+export type GetAuthorizedUserQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAuthorizedUserQuery = {
+  __typename?: 'Query';
+  authorizedUser?: Maybe<{ __typename?: 'User'; id: string; username: string }>;
+};
+
 export const SignInDocument = gql`
   mutation SignIn($username: String!, $password: String!) {
     authorize(credentials: { username: $username, password: $password }) {
@@ -388,4 +395,62 @@ export type GetRepositoriesLazyQueryHookResult = ReturnType<
 export type GetRepositoriesQueryResult = Apollo.QueryResult<
   GetRepositoriesQuery,
   GetRepositoriesQueryVariables
+>;
+export const GetAuthorizedUserDocument = gql`
+  query getAuthorizedUser {
+    authorizedUser {
+      id
+      username
+    }
+  }
+`;
+
+/**
+ * __useGetAuthorizedUserQuery__
+ *
+ * To run a query within a React component, call `useGetAuthorizedUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAuthorizedUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAuthorizedUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAuthorizedUserQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetAuthorizedUserQuery,
+    GetAuthorizedUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetAuthorizedUserQuery,
+    GetAuthorizedUserQueryVariables
+  >(GetAuthorizedUserDocument, options);
+}
+export function useGetAuthorizedUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAuthorizedUserQuery,
+    GetAuthorizedUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAuthorizedUserQuery,
+    GetAuthorizedUserQueryVariables
+  >(GetAuthorizedUserDocument, options);
+}
+export type GetAuthorizedUserQueryHookResult = ReturnType<
+  typeof useGetAuthorizedUserQuery
+>;
+export type GetAuthorizedUserLazyQueryHookResult = ReturnType<
+  typeof useGetAuthorizedUserLazyQuery
+>;
+export type GetAuthorizedUserQueryResult = Apollo.QueryResult<
+  GetAuthorizedUserQuery,
+  GetAuthorizedUserQueryVariables
 >;
