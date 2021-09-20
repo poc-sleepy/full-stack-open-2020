@@ -10,21 +10,13 @@ export class AuthStorage {
   }
 
   async getAccessToken() {
-    const rawToken = await AsyncStorage.getItem(
-      `${this.namespace}:${tokenKey}`
-    );
-
-    return rawToken ? JSON.parse(rawToken) : [];
+    const token = await AsyncStorage.getItem(`${this.namespace}:${tokenKey}`);
+    return token ? token : [];
   }
 
-  async setAccessToken(accessToken: any) {
-    const token = accessToken.authorize.accessToken;
-
+  async setAccessToken(token: string) {
     if (token) {
-      await AsyncStorage.setItem(
-        `${this.namespace}:${tokenKey}`,
-        accessToken.authorize.accessToken
-      );
+      await AsyncStorage.setItem(`${this.namespace}:${tokenKey}`, token);
       console.log(`Set Accsess Token: ${token}`);
     } else {
       console.log('No Accsess Token.');

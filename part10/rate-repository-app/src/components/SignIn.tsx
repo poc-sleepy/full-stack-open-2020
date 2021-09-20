@@ -1,9 +1,9 @@
 import { Formik } from 'formik';
 import React from 'react';
 import { Button, View } from 'react-native';
+import { useHistory } from 'react-router-native';
 import * as yup from 'yup';
 import { useSignIn } from '../hooks/useSignIn';
-import { AuthStorage } from '../utils/authStorage';
 import { FormikTextInput } from './FormikTextInput';
 
 const initialValues = {
@@ -27,6 +27,7 @@ const SignInForm: React.FC<SignInForm> = ({ onSubmit }) => {
 
 export const SignIn = () => {
   const [signIn] = useSignIn();
+  const history = useHistory();
 
   type onSubmitProps = {
     username: string;
@@ -34,15 +35,11 @@ export const SignIn = () => {
   };
 
   const onSubmit = async (values: onSubmitProps) => {
-    const authToken = new AuthStorage();
-
-    console.log(values);
-    const { data } = await signIn({
+    await signIn({
       username: values.username,
       password: values.password,
     });
-    console.log(data);
-    authToken.setAccessToken(data);
+    history.push('/');
   };
 
   const validationSchema = yup.object().shape({
