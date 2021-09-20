@@ -5,6 +5,7 @@ import Constants from 'expo-constants';
 import { Text } from './Text';
 import { theme } from '../theme';
 import { Link } from 'react-router-native';
+import { useGetAuthorizedUserQuery } from '../generated/graphql';
 
 const AppBarTab = (props: { children: string; to: string }) => {
   const styles = StyleSheet.create({
@@ -24,6 +25,12 @@ const AppBarTab = (props: { children: string; to: string }) => {
 };
 
 export const AppBar = () => {
+  const { data } = useGetAuthorizedUserQuery({
+    fetchPolicy: 'cache-and-network',
+  });
+  const user = data?.authorizedUser;
+  console.log(user);
+
   const styles = StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -38,7 +45,9 @@ export const AppBar = () => {
     <View style={styles.container}>
       <ScrollView horizontal>
         <AppBarTab to="/">Repositories</AppBarTab>
-        <AppBarTab to="/signin">Sign In</AppBarTab>
+        {!user && <AppBarTab to="/signin">Sign In</AppBarTab>}
+        {user && <AppBarTab to="/signout">Sign Out</AppBarTab>}
+        {user && <Text color="inverse">Logged In as {user?.username}</Text>}
       </ScrollView>
     </View>
   );

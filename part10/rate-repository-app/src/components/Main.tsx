@@ -8,6 +8,7 @@ import { RepositoryList } from './RepositoryList';
 import { AppBar } from './AppBar';
 import { theme } from '../theme';
 import { SignIn } from './SignIn';
+import { SignOut } from './SignOut';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,6 +26,9 @@ export const Main = () => {
       <Switch>
         <Route path="/signin" exact>
           <SignIn />
+        </Route>
+        <Route path="/signout" exact>
+          <SignOut />
         </Route>
         <Route path="/" exact>
           <RepositoryList />
