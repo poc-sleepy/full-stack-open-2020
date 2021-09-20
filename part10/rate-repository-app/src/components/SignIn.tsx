@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, View } from 'react-native';
 import * as yup from 'yup';
 import { useSignIn } from '../hooks/useSignIn';
+import { AuthStorage } from '../utils/authStorage';
 import { FormikTextInput } from './FormikTextInput';
 
 const initialValues = {
@@ -33,12 +34,15 @@ export const SignIn = () => {
   };
 
   const onSubmit = async (values: onSubmitProps) => {
+    const authToken = new AuthStorage();
+
     console.log(values);
     const { data } = await signIn({
       username: values.username,
       password: values.password,
     });
     console.log(data);
+    authToken.setAccessToken(data);
   };
 
   const validationSchema = yup.object().shape({
