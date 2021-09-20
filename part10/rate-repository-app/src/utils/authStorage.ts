@@ -24,6 +24,6 @@ export class AuthStorage {
   }
 
   async removeAccessToken() {
-    await AsyncStorage.removeItem(`${this.namespace}:products`);
+    await AsyncStorage.removeItem(`${this.namespace}:${tokenKey}`);
   }
 }
