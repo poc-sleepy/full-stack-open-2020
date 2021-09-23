@@ -15,27 +15,26 @@ type RepositoryListContainerProps = {
   repositories: GetRepositoriesQuery['repositories'] | undefined;
 };
 
-export const RepositoryListContainer = ({
-  repositories,
-}: RepositoryListContainerProps) => {
-  const repositoryNodes = repositories
-    ? repositories.edges.map((edge) => edge.node as Repository)
-    : [];
+export const RepositoryListContainer: React.FC<RepositoryListContainerProps> =
+  ({ repositories }) => {
+    const repositoryNodes = repositories
+      ? repositories.edges.map((edge) => edge.node as Repository)
+      : [];
 
-  const ItemSeparator = () => <View style={styles.separator} />;
-  const renderItem = ({ item }: { item: Repository }) => (
-    <RepositoryItem repository={item} />
-  );
+    const ItemSeparator = () => <View style={styles.separator} />;
+    const renderItem = ({ item }: { item: Repository }) => (
+      <RepositoryItem repository={item} />
+    );
 
-  return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-    />
-  );
-};
+    return (
+      <FlatList
+        data={repositoryNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
+    );
+  };
 
 export const RepositoryList = () => {
   const { repositories } = useRepositories();

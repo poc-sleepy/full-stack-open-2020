@@ -38,6 +38,7 @@ interface TextProps {
   fontWeight?: 'bold';
   style?: StyleProp<TextStyle>;
   children: any;
+  testID?: string;
 }
 
 export const Text = ({

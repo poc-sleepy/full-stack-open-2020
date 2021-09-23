@@ -72,7 +72,7 @@ export const RepositoryItem = ({ repository }: { repository: Repository }) => {
           />
         </View>
         <ScrollView style={style.cardTopRight}>
-          <Text fontSize="subheading" fontWeight="bold">
+          <Text testID="repositoryName" fontSize="subheading" fontWeight="bold">
             {repository.fullName}
           </Text>
           <Text color="textSecondary">{repository.description}</Text>
