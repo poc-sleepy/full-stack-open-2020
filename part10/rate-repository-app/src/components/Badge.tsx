@@ -2,7 +2,12 @@ import React from 'react';
 import { Text } from './Text';
 import { theme } from '../theme';
 
-export const Badge = (props: { children: any }) => {
+type BadgeProps = {
+  children: any;
+  testID?: string;
+};
+
+export const Badge: React.FC<BadgeProps> = (props) => {
   const style = {
     outerBadge: {
       marginTop: 10,
@@ -17,7 +22,7 @@ export const Badge = (props: { children: any }) => {
   };
 
   return (
-    <Text style={style.outerBadge}>
+    <Text testID={props.testID} style={style.outerBadge}>
       <Text style={style.innerBadge}>{props.children}</Text>
     </Text>
   );

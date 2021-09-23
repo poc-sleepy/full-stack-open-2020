@@ -62,11 +62,42 @@ describe('RepositoryList', () => {
 
       debug();
 
-      expect(getAllByTestId('repositoryName')[0]).toHaveTextContent(
+      // Repository [0]
+      expect(getAllByTestId('repositoryFullName')[0]).toHaveTextContent(
         'jaredpalmer/formik'
       );
-      expect(getAllByTestId('repositoryName')[1]).toHaveTextContent(
+      expect(getAllByTestId('repositoryDescription')[0]).toHaveTextContent(
+        'Build forms in React, without the tears'
+      );
+      expect(getAllByTestId('repositoryLanguage')[0]).toHaveTextContent(
+        'TypeScript'
+      );
+      expect(getAllByTestId('repositoryStargazers')[0]).toHaveTextContent(
+        '21.8 k'
+      );
+      expect(getAllByTestId('repositoryForks')[0]).toHaveTextContent('1.6 k');
+      expect(getAllByTestId('repositoryReviews')[0]).toHaveTextContent('3');
+      expect(getAllByTestId('repositoryRatingAverage')[0]).toHaveTextContent(
+        '88'
+      );
+
+      // Repository [1]
+      expect(getAllByTestId('repositoryFullName')[1]).toHaveTextContent(
         'async-library/react-async'
+      );
+      expect(getAllByTestId('repositoryDescription')[1]).toHaveTextContent(
+        'Flexible promise-based React data loader'
+      );
+      expect(getAllByTestId('repositoryLanguage')[1]).toHaveTextContent(
+        'JavaScript'
+      );
+      expect(getAllByTestId('repositoryStargazers')[1]).toHaveTextContent(
+        '1.7 k'
+      );
+      expect(getAllByTestId('repositoryForks')[1]).toHaveTextContent('69');
+      expect(getAllByTestId('repositoryReviews')[1]).toHaveTextContent('3');
+      expect(getAllByTestId('repositoryRatingAverage')[1]).toHaveTextContent(
+        '72'
       );
     });
   });

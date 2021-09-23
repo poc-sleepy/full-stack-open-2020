@@ -8,9 +8,14 @@ import { Badge } from '../Badge';
 type RepositoryPropertyProps = {
   label: string;
   value: number;
+  testID?: string;
 };
 
-const RepositoryProperty = ({ label, value }: RepositoryPropertyProps) => {
+const RepositoryProperty = ({
+  label,
+  value,
+  testID,
+}: RepositoryPropertyProps) => {
   const roundNum = (num: number) => {
     return num >= 1000 ? `${Math.floor(num / 100) / 10} k` : String(num);
   };
@@ -26,7 +31,7 @@ const RepositoryProperty = ({ label, value }: RepositoryPropertyProps) => {
 
   return (
     <View style={style.propertyContainer}>
-      <Text fontWeight="bold" style={style.propertyText}>
+      <Text testID={testID} fontWeight="bold" style={style.propertyText}>
         {roundNum(value)}
       </Text>
       <Text color="textSecondary" style={style.propertyText}>
@@ -72,18 +77,40 @@ export const RepositoryItem = ({ repository }: { repository: Repository }) => {
           />
         </View>
         <ScrollView style={style.cardTopRight}>
-          <Text testID="repositoryName" fontSize="subheading" fontWeight="bold">
+          <Text
+            testID="repositoryFullName"
+            fontSize="subheading"
+            fontWeight="bold"
+          >
             {repository.fullName}
           </Text>
-          <Text color="textSecondary">{repository.description}</Text>
-          <Badge>{repository.language}</Badge>
+          <Text testID="repositoryDescription" color="textSecondary">
+            {repository.description}
+          </Text>
+          <Badge testID="repositoryLanguage">{repository.language}</Badge>
         </ScrollView>
       </View>
       <View style={style.cardBottom}>
-        <RepositoryProperty label="Stars" value={repository.stargazersCount} />
-        <RepositoryProperty label="Forks" value={repository.forksCount} />
-        <RepositoryProperty label="Reviews" value={repository.reviewCount} />
-        <RepositoryProperty label="Rating" value={repository.ratingAverage} />
+        <RepositoryProperty
+          testID="repositoryStargazers"
+          label="Stars"
+          value={repository.stargazersCount}
+        />
+        <RepositoryProperty
+          testID="repositoryForks"
+          label="Forks"
+          value={repository.forksCount}
+        />
+        <RepositoryProperty
+          testID="repositoryReviews"
+          label="Reviews"
+          value={repository.reviewCount}
+        />
+        <RepositoryProperty
+          testID="repositoryRatingAverage"
+          label="Rating"
+          value={repository.ratingAverage}
+        />
       </View>
     </View>
   );
