@@ -3,6 +3,7 @@ import { FlatList, View, StyleSheet } from 'react-native';
 import { RepositoryItem } from './RepositoryItem';
 import { Repository } from '../../types';
 import { useRepositories } from '../../hooks/useRepositories';
+import { GetRepositoriesQuery } from '../../generated/graphql';
 
 const styles = StyleSheet.create({
   separator: {
@@ -10,10 +11,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export const RepositoryList = () => {
-  const { repositories } = useRepositories();
+type RepositoryListContainerProps = {
+  repositories: GetRepositoriesQuery['repositories'] | undefined;
+};
 
-  // Get the nodes from the edges array
+export const RepositoryListContainer = ({
+  repositories,
+}: RepositoryListContainerProps) => {
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node as Repository)
     : [];
@@ -31,4 +35,9 @@ export const RepositoryList = () => {
       keyExtractor={(item) => item.id}
     />
   );
+};
+
+export const RepositoryList = () => {
+  const { repositories } = useRepositories();
+  return <RepositoryListContainer repositories={repositories} />;
 };
