@@ -1,9 +1,10 @@
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { RepositoryItem } from './RepositoryItem';
 import { Repository } from '../../types';
 import { useRepositories } from '../../hooks/useRepositories';
 import { GetRepositoriesQuery } from '../../generated/graphql';
+import { useHistory } from 'react-router-native';
 
 const styles = StyleSheet.create({
   separator: {
@@ -20,11 +21,20 @@ export const RepositoryListContainer: React.FC<RepositoryListContainerProps> =
     const repositoryNodes = repositories
       ? repositories.edges.map((edge) => edge.node as Repository)
       : [];
+    const history = useHistory();
 
     const ItemSeparator = () => <View style={styles.separator} />;
-    const renderItem = ({ item }: { item: Repository }) => (
-      <RepositoryItem repository={item} />
-    );
+    const renderItem = ({ item }: { item: Repository }) => {
+      const onPress = () => {
+        history.push(`/repositories/${item.id}`);
+      };
+
+      return (
+        <Pressable onPress={onPress}>
+          <RepositoryItem repository={item} />
+        </Pressable>
+      );
+    };
 
     return (
       <FlatList

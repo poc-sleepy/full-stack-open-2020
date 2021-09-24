@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, ScrollView } from 'react-native';
+import { View, Image, ScrollView, Button } from 'react-native';
 import { Text } from '../Text';
 import { theme } from '../../theme';
 import { Repository } from '../../types';
@@ -41,7 +41,15 @@ const RepositoryProperty = ({
   );
 };
 
-export const RepositoryItem = ({ repository }: { repository: Repository }) => {
+type RepositoryItemProps = {
+  repository: Repository;
+  isSingle?: boolean;
+};
+
+export const RepositoryItem: React.FC<RepositoryItemProps> = ({
+  repository,
+  isSingle,
+}) => {
   const style = {
     cardContainer: {
       padding: 10,
@@ -112,6 +120,14 @@ export const RepositoryItem = ({ repository }: { repository: Repository }) => {
           value={repository.ratingAverage}
         />
       </View>
+      {isSingle && (
+        <Button
+          onPress={() => {
+            console.log(repository.name);
+          }}
+          title="Open In GitHub"
+        />
+      )}
     </View>
   );
 };

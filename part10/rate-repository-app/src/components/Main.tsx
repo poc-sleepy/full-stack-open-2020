@@ -9,6 +9,7 @@ import { AppBar } from './AppBar';
 import { theme } from '../theme';
 import { SignIn } from './SignIn';
 import { SignOut } from './SignOut';
+import { SingleRepository } from './SingleRepository';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,6 +30,9 @@ export const Main = () => {
         </Route>
         <Route path="/signout" exact>
           <SignOut />
+        </Route>
+        <Route path="/repositories/:id" exact>
+          <SingleRepository />
         </Route>
         <Route path="/" exact>
           <RepositoryList />
