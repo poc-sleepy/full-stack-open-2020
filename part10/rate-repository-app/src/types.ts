@@ -11,6 +11,7 @@ export type Repository = {
   description: string;
   language: string;
   ownerAvatarUrl: string;
+  url?: string;
 };
 
 export type ServerResponse = {

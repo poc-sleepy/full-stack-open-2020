@@ -1,10 +1,11 @@
 import React from 'react';
 import { FlatList, View, StyleSheet, Pressable } from 'react-native';
+import { useHistory } from 'react-router-native';
+
 import { RepositoryItem } from './RepositoryItem';
 import { Repository } from '../../types';
 import { useRepositories } from '../../hooks/useRepositories';
 import { GetRepositoriesQuery } from '../../generated/graphql';
-import { useHistory } from 'react-router-native';
 
 const styles = StyleSheet.create({
   separator: {

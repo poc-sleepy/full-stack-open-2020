@@ -1,24 +1,17 @@
 import React from 'react';
 import { useParams } from 'react-router';
+import { useRepository } from '../hooks/useRepository';
+import { Repository } from '../types';
 import { RepositoryItem } from './RepositoryList/RepositoryItem';
+import { Text } from './Text';
 
-export const SingleRepository: React.FC = () => {
+export const SingleRepository = () => {
   const id = useParams<{ id: string }>().id;
+  const { repository, loading } = useRepository(id);
 
-  const repository = {
-    id: 'jaredpalmer.formik',
-    name: 'jaredpalmer.formik',
-    ownerName: 'Matti',
-    createdAt: '2021-12-01T00:00:00',
-    fullName: `jaredpalmer/formik:${id}`,
-    description: 'Build forms in React, without the tears',
-    language: 'TypeScript',
-    forksCount: 1619,
-    stargazersCount: 21856,
-    ratingAverage: 88,
-    reviewCount: 3,
-    ownerAvatarUrl: 'https://avatars2.githubusercontent.com/u/4060187?v=4',
-  };
-
-  return <RepositoryItem repository={repository} isSingle={true} />;
+  return !loading ? (
+    <RepositoryItem repository={repository as Repository} isSingle={true} />
+  ) : (
+    <Text>Loading...</Text>
+  );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Image, ScrollView, Button } from 'react-native';
+import { openURL } from 'expo-linking';
 import { Text } from '../Text';
 import { theme } from '../../theme';
 import { Repository } from '../../types';
@@ -123,7 +124,7 @@ export const RepositoryItem: React.FC<RepositoryItemProps> = ({
       {isSingle && (
         <Button
           onPress={() => {
-            console.log(repository.name);
+            repository.url && openURL(repository.url);
           }}
           title="Open In GitHub"
         />
