@@ -56,11 +56,9 @@ describe('RepositoryList', () => {
         ],
       };
 
-      const { debug, getAllByTestId } = render(
+      const { getAllByTestId } = render(
         <RepositoryListContainer repositories={repositories} />
       );
-
-      debug();
 
       // Repository [0]
       expect(getAllByTestId('repositoryFullName')[0]).toHaveTextContent(
