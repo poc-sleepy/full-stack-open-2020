@@ -9,20 +9,16 @@ query getRepositories {
     }
     edges {
       node {
-        id
-        name
-        ownerName
-        createdAt
-        fullName
-        reviewCount
-        ratingAverage
-        forksCount
-        stargazersCount
-        description
-        language
-        ownerAvatarUrl
+        ...RepositoryDetails
       }
     }
+  }
+}
+
+query getRepository($id: ID!) {
+  repository(id: $id) {
+    ...RepositoryDetails
+    url
   }
 }
 

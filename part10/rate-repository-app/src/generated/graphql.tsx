@@ -4,10 +4,12 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -214,6 +216,22 @@ export type UserEdge = {
   node: User;
 };
 
+export type RepositoryDetailsFragment = {
+  __typename?: 'Repository';
+  id: string;
+  name: string;
+  ownerName: string;
+  createdAt: any;
+  fullName: string;
+  reviewCount: number;
+  ratingAverage: number;
+  forksCount?: Maybe<number>;
+  stargazersCount?: Maybe<number>;
+  description?: Maybe<string>;
+  language?: Maybe<string>;
+  ownerAvatarUrl?: Maybe<string>;
+};
+
 export type SignInMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
@@ -262,6 +280,30 @@ export type GetRepositoriesQuery = {
   };
 };
 
+export type GetRepositoryQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetRepositoryQuery = {
+  __typename?: 'Query';
+  repository?: Maybe<{
+    __typename?: 'Repository';
+    url?: Maybe<string>;
+    id: string;
+    name: string;
+    ownerName: string;
+    createdAt: any;
+    fullName: string;
+    reviewCount: number;
+    ratingAverage: number;
+    forksCount?: Maybe<number>;
+    stargazersCount?: Maybe<number>;
+    description?: Maybe<string>;
+    language?: Maybe<string>;
+    ownerAvatarUrl?: Maybe<string>;
+  }>;
+};
+
 export type GetAuthorizedUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAuthorizedUserQuery = {
@@ -269,6 +311,22 @@ export type GetAuthorizedUserQuery = {
   authorizedUser?: Maybe<{ __typename?: 'User'; id: string; username: string }>;
 };
 
+export const RepositoryDetailsFragmentDoc = gql`
+  fragment RepositoryDetails on Repository {
+    id
+    name
+    ownerName
+    createdAt
+    fullName
+    reviewCount
+    ratingAverage
+    forksCount
+    stargazersCount
+    description
+    language
+    ownerAvatarUrl
+  }
+`;
 export const SignInDocument = gql`
   mutation SignIn($username: String!, $password: String!) {
     authorize(credentials: { username: $username, password: $password }) {
@@ -329,22 +387,12 @@ export const GetRepositoriesDocument = gql`
       }
       edges {
         node {
-          id
-          name
-          ownerName
-          createdAt
-          fullName
-          reviewCount
-          ratingAverage
-          forksCount
-          stargazersCount
-          description
-          language
-          ownerAvatarUrl
+          ...RepositoryDetails
         }
       }
     }
   }
+  ${RepositoryDetailsFragmentDoc}
 `;
 
 /**
@@ -395,6 +443,66 @@ export type GetRepositoriesLazyQueryHookResult = ReturnType<
 export type GetRepositoriesQueryResult = Apollo.QueryResult<
   GetRepositoriesQuery,
   GetRepositoriesQueryVariables
+>;
+export const GetRepositoryDocument = gql`
+  query getRepository($id: ID!) {
+    repository(id: $id) {
+      ...RepositoryDetails
+      url
+    }
+  }
+  ${RepositoryDetailsFragmentDoc}
+`;
+
+/**
+ * __useGetRepositoryQuery__
+ *
+ * To run a query within a React component, call `useGetRepositoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRepositoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRepositoryQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetRepositoryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetRepositoryQuery,
+    GetRepositoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetRepositoryQuery, GetRepositoryQueryVariables>(
+    GetRepositoryDocument,
+    options
+  );
+}
+export function useGetRepositoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetRepositoryQuery,
+    GetRepositoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetRepositoryQuery, GetRepositoryQueryVariables>(
+    GetRepositoryDocument,
+    options
+  );
+}
+export type GetRepositoryQueryHookResult = ReturnType<
+  typeof useGetRepositoryQuery
+>;
+export type GetRepositoryLazyQueryHookResult = ReturnType<
+  typeof useGetRepositoryLazyQuery
+>;
+export type GetRepositoryQueryResult = Apollo.QueryResult<
+  GetRepositoryQuery,
+  GetRepositoryQueryVariables
 >;
 export const GetAuthorizedUserDocument = gql`
   query getAuthorizedUser {
