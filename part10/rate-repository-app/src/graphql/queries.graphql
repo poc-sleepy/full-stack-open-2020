@@ -19,6 +19,13 @@ query getRepository($id: ID!) {
   repository(id: $id) {
     ...RepositoryDetails
     url
+    reviews {
+      edges {
+        node {
+          ...ReviewDetails
+        }
+      }
+    }
   }
 }
 

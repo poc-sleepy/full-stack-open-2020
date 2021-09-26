@@ -12,3 +12,14 @@ fragment RepositoryDetails on Repository {
   language
   ownerAvatarUrl
 }
+
+fragment ReviewDetails on Review {
+  id
+  user {
+    id
+    username
+  }
+  rating
+  createdAt
+  text
+}

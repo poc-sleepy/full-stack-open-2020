@@ -232,6 +232,15 @@ export type RepositoryDetailsFragment = {
   ownerAvatarUrl?: Maybe<string>;
 };
 
+export type ReviewDetailsFragment = {
+  __typename?: 'Review';
+  id: string;
+  rating: number;
+  createdAt: any;
+  text?: Maybe<string>;
+  user: { __typename?: 'User'; id: string; username: string };
+};
+
 export type SignInMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
@@ -301,6 +310,20 @@ export type GetRepositoryQuery = {
     description?: Maybe<string>;
     language?: Maybe<string>;
     ownerAvatarUrl?: Maybe<string>;
+    reviews: {
+      __typename?: 'ReviewConnection';
+      edges: Array<{
+        __typename?: 'ReviewEdge';
+        node: {
+          __typename?: 'Review';
+          id: string;
+          rating: number;
+          createdAt: any;
+          text?: Maybe<string>;
+          user: { __typename?: 'User'; id: string; username: string };
+        };
+      }>;
+    };
   }>;
 };
 
@@ -325,6 +348,18 @@ export const RepositoryDetailsFragmentDoc = gql`
     description
     language
     ownerAvatarUrl
+  }
+`;
+export const ReviewDetailsFragmentDoc = gql`
+  fragment ReviewDetails on Review {
+    id
+    user {
+      id
+      username
+    }
+    rating
+    createdAt
+    text
   }
 `;
 export const SignInDocument = gql`
@@ -449,9 +484,17 @@ export const GetRepositoryDocument = gql`
     repository(id: $id) {
       ...RepositoryDetails
       url
+      reviews {
+        edges {
+          node {
+            ...ReviewDetails
+          }
+        }
+      }
     }
   }
   ${RepositoryDetailsFragmentDoc}
+  ${ReviewDetailsFragmentDoc}
 `;
 
 /**
