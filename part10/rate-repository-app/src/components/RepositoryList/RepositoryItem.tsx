@@ -3,8 +3,9 @@ import { View, Image, ScrollView, Button } from 'react-native';
 import { openURL } from 'expo-linking';
 import { Text } from '../Text';
 import { theme } from '../../theme';
-import { Repository } from '../../types';
 import { Badge } from '../Badge';
+import { ReviewList } from '../ReviewList';
+import { Repository } from '../../generated/graphql';
 
 type RepositoryPropertyProps = {
   label: string;
@@ -81,7 +82,7 @@ export const RepositoryItem: React.FC<RepositoryItemProps> = ({
           <Image
             style={style.avatorImage}
             source={{
-              uri: repository.ownerAvatarUrl,
+              uri: repository.ownerAvatarUrl ? repository.ownerAvatarUrl : '',
             }}
           />
         </View>
@@ -103,12 +104,12 @@ export const RepositoryItem: React.FC<RepositoryItemProps> = ({
         <RepositoryProperty
           testID="repositoryStargazers"
           label="Stars"
-          value={repository.stargazersCount}
+          value={repository.stargazersCount ? repository.stargazersCount : 0}
         />
         <RepositoryProperty
           testID="repositoryForks"
           label="Forks"
-          value={repository.forksCount}
+          value={repository.forksCount ? repository.forksCount : 0}
         />
         <RepositoryProperty
           testID="repositoryReviews"
@@ -122,12 +123,15 @@ export const RepositoryItem: React.FC<RepositoryItemProps> = ({
         />
       </View>
       {isSingle && (
-        <Button
-          onPress={() => {
-            repository.url && openURL(repository.url);
-          }}
-          title="Open In GitHub"
-        />
+        <>
+          <Button
+            onPress={() => {
+              repository.url && openURL(repository.url);
+            }}
+            title="Open In GitHub"
+          />
+          <ReviewList reviews={repository.reviews} />
+        </>
       )}
     </View>
   );
