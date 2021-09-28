@@ -3,7 +3,7 @@ import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { useHistory } from 'react-router-native';
 
 import { RepositoryItem } from './RepositoryItem';
-import { Repository } from '../../types';
+import { Repository } from '../../generated/graphql';
 import { useRepositories } from '../../hooks/useRepositories';
 import { GetRepositoriesQuery } from '../../generated/graphql';
 

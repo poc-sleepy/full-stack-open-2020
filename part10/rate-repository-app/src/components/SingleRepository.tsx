@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
 import { useRepository } from '../hooks/useRepository';
-import { Repository } from '../types';
+import { Repository } from '../generated/graphql';
 import { RepositoryItem } from './RepositoryList/RepositoryItem';
 import { Text } from './Text';
 
