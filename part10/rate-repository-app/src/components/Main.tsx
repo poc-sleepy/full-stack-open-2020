@@ -10,6 +10,7 @@ import { theme } from '../theme';
 import { SignIn } from './SignIn';
 import { SignOut } from './SignOut';
 import { SingleRepository } from './SingleRepository';
+import { CreateReview } from './CreateReview';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,6 +26,9 @@ export const Main = () => {
     <View style={styles.container}>
       <AppBar />
       <Switch>
+        <Route path="/reviews/create" exact>
+          <CreateReview />
+        </Route>
         <Route path="/signin" exact>
           <SignIn />
         </Route>
