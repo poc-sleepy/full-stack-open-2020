@@ -35,5 +35,6 @@ export const theme = {
   },
   borderColor: {
     error: red,
+    primary,
   },
 };

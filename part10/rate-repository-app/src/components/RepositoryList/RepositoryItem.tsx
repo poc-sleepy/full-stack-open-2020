@@ -122,8 +122,9 @@ export const RepositoryItem: React.FC<RepositoryItemProps> = ({
           value={repository.ratingAverage}
         />
       </View>
+
       {isSingle && (
-        <>
+        <View>
           <Button
             onPress={() => {
               repository.url && openURL(repository.url);
@@ -131,7 +132,7 @@ export const RepositoryItem: React.FC<RepositoryItemProps> = ({
             title="Open In GitHub"
           />
           <ReviewList reviews={repository.reviews} />
-        </>
+        </View>
       )}
     </View>
   );

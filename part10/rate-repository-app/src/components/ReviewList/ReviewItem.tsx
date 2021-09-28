@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Text } from '../Text';
 import { theme } from '../../theme';
 import { Review } from '../../generated/graphql';
+import { format } from 'date-fns';
 
 type ReviewItemProps = {
   review: Review;
@@ -17,26 +18,28 @@ export const ReviewItem: React.FC<ReviewItemProps> = ({ review }) => {
     cardTop: {
       flexDirection: 'row' as const,
     },
+    cardTopleft: {
+      width: 50,
+      height: 50,
+      borderColor: theme.borderColor.primary,
+      borderWidth: 2,
+      borderRadius: 25,
+      alignItems: 'center' as const,
+      justifyContent: 'center' as const,
+    },
     cardTopRight: {
       marginLeft: 10,
     },
-    cardBottom: {
-      flexDirection: 'row' as const,
-      textAlign: 'center',
-      marginTop: 10,
-    },
-    avatorImage: {
-      width: 50,
-      height: 50,
-      borderRadius: 5,
-    },
   };
+  const createdAt = Date.parse(review.createdAt);
 
   return (
     <View style={style.cardContainer}>
       <View style={style.cardTop}>
-        <View>
-          <Text>rate: {review.rating}</Text>
+        <View style={style.cardTopleft}>
+          <Text color="primary" fontSize="subheading" fontWeight="bold">
+            {review.rating}
+          </Text>
         </View>
         <View style={style.cardTopRight}>
           <Text
@@ -47,7 +50,7 @@ export const ReviewItem: React.FC<ReviewItemProps> = ({ review }) => {
             {review.user.username}
           </Text>
           <Text testID="reviewCreatedAt" color="textSecondary">
-            {review.createdAt}
+            {format(createdAt, 'dd.MM.yyyy')}
           </Text>
           <Text testID="reviewText">{review.text}</Text>
         </View>
