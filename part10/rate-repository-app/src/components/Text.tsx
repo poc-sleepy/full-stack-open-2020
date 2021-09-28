@@ -1,10 +1,5 @@
-import React from 'react';
-import {
-  Text as NativeText,
-  StyleSheet,
-  StyleProp,
-  TextStyle,
-} from 'react-native';
+import React, { ComponentProps } from 'react';
+import { Text as NativeText, StyleSheet } from 'react-native';
 
 import { theme } from '../theme';
 
@@ -32,22 +27,19 @@ const styles = StyleSheet.create({
   },
 });
 
-interface TextProps {
+interface TextProps extends ComponentProps<typeof NativeText> {
   color?: 'textSecondary' | 'primary' | 'inverse';
   fontSize?: 'subheading';
   fontWeight?: 'bold';
-  style?: StyleProp<TextStyle>;
-  children: any;
-  testID?: string;
 }
 
-export const Text = ({
+export const Text: React.FC<TextProps> = ({
   color,
   fontSize,
   fontWeight,
   style,
   ...props
-}: TextProps) => {
+}) => {
   const textStyle = [
     styles.text,
     color === 'textSecondary' && styles.colorTextSecondary,
