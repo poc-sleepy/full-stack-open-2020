@@ -3,13 +3,14 @@ import React from 'react';
 import { Button, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import * as yup from 'yup';
+import { useMakeReviewMutation } from '../generated/graphql';
 import { FormikTextInput } from './FormikTextInput';
 
 const initialValues = {
-  repositoryOwner: '',
+  ownerName: '',
   repositoryName: '',
-  rate: '0',
-  reviewText: '',
+  rating: '0',
+  text: '',
 };
 
 type CreateReviewFormProps = {
@@ -20,24 +21,24 @@ const CreateReviewForm: React.FC<CreateReviewFormProps> = ({ onSubmit }) => {
   return (
     <View>
       <FormikTextInput
-        testID="repositoryOwnerField"
-        name="repositoryOwner"
-        placeholder="Repository Owner Username"
-      />
-      <FormikTextInput
         testID="repositoryNameField"
         name="repositoryName"
         placeholder="Repository Name"
       />
-      <FormikTextInput testID="rateField" name="rate" placeholder="0" />
+      <FormikTextInput
+        testID="ownerNameField"
+        name="ownerName"
+        placeholder="Repository Owner Username"
+      />
+      <FormikTextInput testID="ratingField" name="rating" placeholder="0" />
       <FormikTextInput
         testID="reviewTextField"
-        name="reviewText"
+        name="text"
         placeholder="Review"
         multiline={true}
         numberOfLines={5}
       />
-      <Button testID="submitButton" onPress={onSubmit} title="Sign In" />
+      <Button testID="submitButton" onPress={onSubmit} title="Create Review" />
     </View>
   );
 };
@@ -46,11 +47,9 @@ export const CreateReviewContainer: React.FC<CreateReviewFormProps> = ({
   onSubmit,
 }) => {
   const validationSchema = yup.object().shape({
-    repositoryOwner: yup
-      .string()
-      .required('Repository Owner Username is required'),
+    ownerName: yup.string().required('Repository Owner Username is required'),
     repositoryName: yup.string().required('Repository Name is required'),
-    rate: yup
+    rating: yup
       .number()
       .required('Rate is required')
       .integer('Rate is expected to be integer')
@@ -70,19 +69,24 @@ export const CreateReviewContainer: React.FC<CreateReviewFormProps> = ({
 };
 
 export const CreateReview = () => {
-  // const [signIn] = useSignIn();
   const history = useHistory();
+  const [mutate] = useMakeReviewMutation();
 
   type onSubmitProps = {
-    repositoryOwner: string;
     repositoryName: string;
-    rate: string;
-    reviewText: string;
+    ownerName: string;
+    rating: number;
+    text: string;
   };
 
-  const onSubmit = (values: onSubmitProps) => {
-    console.log(values);
-    history.push('/');
+  const onSubmit = async (values: onSubmitProps) => {
+    const { data } = await mutate({
+      variables: { ...values, rating: Number(values.rating) },
+    });
+    console.log(data);
+    if (data && data.createReview) {
+      history.push(`/repositories/${data.createReview?.repositoryId}`);
+    }
   };
 
   return <CreateReviewContainer onSubmit={onSubmit} />;

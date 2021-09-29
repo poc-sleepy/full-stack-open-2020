@@ -254,6 +254,26 @@ export type SignInMutation = {
   }>;
 };
 
+export type MakeReviewMutationVariables = Exact<{
+  repositoryName: Scalars['String'];
+  ownerName: Scalars['String'];
+  rating: Scalars['Int'];
+  text?: Maybe<Scalars['String']>;
+}>;
+
+export type MakeReviewMutation = {
+  __typename?: 'Mutation';
+  createReview?: Maybe<{
+    __typename?: 'Review';
+    id: string;
+    repositoryId: string;
+    userId: string;
+    rating: number;
+    createdAt: any;
+    text?: Maybe<string>;
+  }>;
+};
+
 export type GetRepositoriesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetRepositoriesQuery = {
@@ -409,6 +429,76 @@ export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
 export type SignInMutationOptions = Apollo.BaseMutationOptions<
   SignInMutation,
   SignInMutationVariables
+>;
+export const MakeReviewDocument = gql`
+  mutation MakeReview(
+    $repositoryName: String!
+    $ownerName: String!
+    $rating: Int!
+    $text: String
+  ) {
+    createReview(
+      review: {
+        repositoryName: $repositoryName
+        ownerName: $ownerName
+        rating: $rating
+        text: $text
+      }
+    ) {
+      id
+      repositoryId
+      userId
+      rating
+      createdAt
+      text
+    }
+  }
+`;
+export type MakeReviewMutationFn = Apollo.MutationFunction<
+  MakeReviewMutation,
+  MakeReviewMutationVariables
+>;
+
+/**
+ * __useMakeReviewMutation__
+ *
+ * To run a mutation, you first call `useMakeReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMakeReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [makeReviewMutation, { data, loading, error }] = useMakeReviewMutation({
+ *   variables: {
+ *      repositoryName: // value for 'repositoryName'
+ *      ownerName: // value for 'ownerName'
+ *      rating: // value for 'rating'
+ *      text: // value for 'text'
+ *   },
+ * });
+ */
+export function useMakeReviewMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    MakeReviewMutation,
+    MakeReviewMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<MakeReviewMutation, MakeReviewMutationVariables>(
+    MakeReviewDocument,
+    options
+  );
+}
+export type MakeReviewMutationHookResult = ReturnType<
+  typeof useMakeReviewMutation
+>;
+export type MakeReviewMutationResult =
+  Apollo.MutationResult<MakeReviewMutation>;
+export type MakeReviewMutationOptions = Apollo.BaseMutationOptions<
+  MakeReviewMutation,
+  MakeReviewMutationVariables
 >;
 export const GetRepositoriesDocument = gql`
   query getRepositories {
