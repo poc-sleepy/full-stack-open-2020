@@ -45,10 +45,11 @@ export const AppBar = () => {
     <View style={styles.container}>
       <ScrollView horizontal>
         <AppBarTab to="/">Repositories</AppBarTab>
-        {!user && <AppBarTab to="/signin">Sign In</AppBarTab>}
+        {!user && <AppBarTab to="/signin">Sign in</AppBarTab>}
+        {!user && <AppBarTab to="/signup">Sign up</AppBarTab>}
         {user && <AppBarTab to="/reviews/create">Create a review</AppBarTab>}
-        {user && <AppBarTab to="/signout">Sign Out</AppBarTab>}
-        {user && <Text color="inverse">Logged In as {user?.username}</Text>}
+        {user && <AppBarTab to="/signout">Sign out</AppBarTab>}
+        {user && <Text color="inverse">Logged in as {user?.username}</Text>}
       </ScrollView>
     </View>
   );

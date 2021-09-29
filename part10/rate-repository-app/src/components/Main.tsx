@@ -11,6 +11,7 @@ import { SignIn } from './SignIn';
 import { SignOut } from './SignOut';
 import { SingleRepository } from './SingleRepository';
 import { CreateReview } from './CreateReview';
+import { SignUp } from './SignUp';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,6 +32,9 @@ export const Main = () => {
         </Route>
         <Route path="/signin" exact>
           <SignIn />
+        </Route>
+        <Route path="/signup" exact>
+          <SignUp />
         </Route>
         <Route path="/signout" exact>
           <SignOut />
