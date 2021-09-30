@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { useHistory } from 'react-router-native';
 
@@ -6,6 +6,8 @@ import { RepositoryItem } from './RepositoryItem';
 import { Repository } from '../../generated/graphql';
 import { useRepositories } from '../../hooks/useRepositories';
 import { GetRepositoriesQuery } from '../../generated/graphql';
+import { Picker } from '@react-native-picker/picker';
+import { ItemValue } from '@react-native-picker/picker/typings/Picker';
 
 const styles = StyleSheet.create({
   separator: {
@@ -15,6 +17,21 @@ const styles = StyleSheet.create({
 
 type RepositoryListContainerProps = {
   repositories: GetRepositoriesQuery['repositories'] | undefined;
+};
+
+export const OrderPicker = () => {
+  const [selectedOrder, setSelectedOrder] = useState<ItemValue>();
+
+  return (
+    <Picker
+      selectedValue={selectedOrder}
+      onValueChange={(itemValue, _itemIndex) => setSelectedOrder(itemValue)}
+    >
+      <Picker.Item label="Latest repositories" value="latest" />
+      <Picker.Item label="Highest rated repositories" value="highest" />
+      <Picker.Item label="Lowest rated repositories" value="lowest" />
+    </Picker>
+  );
 };
 
 export const RepositoryListContainer: React.FC<RepositoryListContainerProps> =
@@ -43,6 +60,7 @@ export const RepositoryListContainer: React.FC<RepositoryListContainerProps> =
         ItemSeparatorComponent={ItemSeparator}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        ListHeaderComponent={OrderPicker}
       />
     );
   };
