@@ -290,7 +290,10 @@ export type SignUpMutation = {
   }>;
 };
 
-export type GetRepositoriesQueryVariables = Exact<{ [key: string]: never }>;
+export type GetRepositoriesQueryVariables = Exact<{
+  orderBy?: Maybe<AllRepositoriesOrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+}>;
 
 export type GetRepositoriesQuery = {
   __typename?: 'Query';
@@ -568,8 +571,11 @@ export type SignUpMutationOptions = Apollo.BaseMutationOptions<
   SignUpMutationVariables
 >;
 export const GetRepositoriesDocument = gql`
-  query getRepositories {
-    repositories {
+  query getRepositories(
+    $orderBy: AllRepositoriesOrderBy
+    $orderDirection: OrderDirection
+  ) {
+    repositories(orderBy: $orderBy, orderDirection: $orderDirection) {
       totalCount
       pageInfo {
         hasPreviousPage
@@ -599,6 +605,8 @@ export const GetRepositoriesDocument = gql`
  * @example
  * const { data, loading, error } = useGetRepositoriesQuery({
  *   variables: {
+ *      orderBy: // value for 'orderBy'
+ *      orderDirection: // value for 'orderDirection'
  *   },
  * });
  */

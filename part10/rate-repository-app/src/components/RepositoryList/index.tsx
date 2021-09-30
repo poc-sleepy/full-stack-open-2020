@@ -3,7 +3,7 @@ import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { useHistory } from 'react-router-native';
 
 import { RepositoryItem } from './RepositoryItem';
-import { Repository } from '../../generated/graphql';
+import { AllRepositoriesOrderBy, Repository } from '../../generated/graphql';
 import { useRepositories } from '../../hooks/useRepositories';
 import { GetRepositoriesQuery } from '../../generated/graphql';
 import { Picker } from '@react-native-picker/picker';
@@ -66,6 +66,8 @@ export const RepositoryListContainer: React.FC<RepositoryListContainerProps> =
   };
 
 export const RepositoryList = () => {
-  const { repositories } = useRepositories();
+  const { repositories } = useRepositories({
+    orderBy: AllRepositoriesOrderBy.RatingAverage,
+  });
   return <RepositoryListContainer repositories={repositories} />;
 };

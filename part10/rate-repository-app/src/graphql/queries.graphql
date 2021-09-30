@@ -1,5 +1,8 @@
-query getRepositories {
-  repositories {
+query getRepositories(
+  $orderBy: AllRepositoriesOrderBy
+  $orderDirection: OrderDirection
+) {
+  repositories(orderBy: $orderBy, orderDirection: $orderDirection) {
     totalCount
     pageInfo {
       hasPreviousPage
