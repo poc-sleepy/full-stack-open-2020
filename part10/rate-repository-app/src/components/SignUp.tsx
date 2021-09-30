@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import * as yup from 'yup';
+import { useSignUpMutation } from '../generated/graphql';
 import { useSignIn } from '../hooks/useSignIn';
 import { FormikTextInput } from './FormikTextInput';
 
@@ -65,20 +66,31 @@ export const SignUpContainer: React.FC<SignUpFormProps> = ({ onSubmit }) => {
 };
 
 export const SignUp = () => {
+  const [mutate] = useSignUpMutation();
   const [signIn] = useSignIn();
   const history = useHistory();
 
   type onSubmitProps = {
     username: string;
     password: string;
+    passwordConfirm: string;
   };
 
   const onSubmit = async (values: onSubmitProps) => {
-    await signIn({
-      username: values.username,
-      password: values.password,
+    const { data } = await mutate({
+      variables: {
+        username: values.username,
+        password: values.password,
+      },
     });
-    history.push('/');
+
+    if (data) {
+      await signIn({
+        username: values.username,
+        password: values.password,
+      });
+      history.push('/');
+    }
   };
 
   return <SignUpContainer onSubmit={onSubmit} />;

@@ -26,3 +26,12 @@ mutation MakeReview(
     text
   }
 }
+
+mutation SignUp($username: String!, $password: String!) {
+  createUser(user: { username: $username, password: $password }) {
+    id
+    username
+    createdAt
+    reviewCount
+  }
+}
