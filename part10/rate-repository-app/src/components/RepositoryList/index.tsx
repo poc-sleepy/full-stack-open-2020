@@ -3,7 +3,11 @@ import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import { useHistory } from 'react-router-native';
 
 import { RepositoryItem } from './RepositoryItem';
-import { AllRepositoriesOrderBy, Repository } from '../../generated/graphql';
+import {
+  AllRepositoriesOrderBy,
+  OrderDirection,
+  Repository,
+} from '../../generated/graphql';
 import { useRepositories } from '../../hooks/useRepositories';
 import { GetRepositoriesQuery } from '../../generated/graphql';
 import { Picker } from '@react-native-picker/picker';
@@ -15,17 +19,22 @@ const styles = StyleSheet.create({
   },
 });
 
-type RepositoryListContainerProps = {
-  repositories: GetRepositoriesQuery['repositories'] | undefined;
+type OrderPickerProps = {
+  selectedOrder: any;
+  setSelectedOrder: React.Dispatch<React.SetStateAction<ItemValue | undefined>>;
 };
 
-export const OrderPicker = () => {
-  const [selectedOrder, setSelectedOrder] = useState<ItemValue>();
-
+export const OrderPicker: React.FC<OrderPickerProps> = ({
+  selectedOrder,
+  setSelectedOrder,
+}) => {
   return (
     <Picker
       selectedValue={selectedOrder}
-      onValueChange={(itemValue, _itemIndex) => setSelectedOrder(itemValue)}
+      onValueChange={(itemValue, _itemIndex) => {
+        console.log(setSelectedOrder);
+        setSelectedOrder(itemValue);
+      }}
     >
       <Picker.Item label="Latest repositories" value="latest" />
       <Picker.Item label="Highest rated repositories" value="highest" />
@@ -34,8 +43,18 @@ export const OrderPicker = () => {
   );
 };
 
+type RepositoryListContainerProps = {
+  repositories: GetRepositoriesQuery['repositories'] | undefined;
+  selectedOrder: {
+    selectedOrder: any;
+    setSelectedOrder: React.Dispatch<
+      React.SetStateAction<ItemValue | undefined>
+    >;
+  };
+};
+
 export const RepositoryListContainer: React.FC<RepositoryListContainerProps> =
-  ({ repositories }) => {
+  ({ repositories, selectedOrder }) => {
     const repositoryNodes = repositories
       ? repositories.edges.map((edge) => edge.node as Repository)
       : [];
@@ -60,14 +79,39 @@ export const RepositoryListContainer: React.FC<RepositoryListContainerProps> =
         ItemSeparatorComponent={ItemSeparator}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={OrderPicker}
+        ListHeaderComponent={
+          <OrderPicker
+            selectedOrder={selectedOrder.selectedOrder}
+            setSelectedOrder={selectedOrder.setSelectedOrder}
+          />
+        }
       />
     );
   };
 
 export const RepositoryList = () => {
+  type orderOption = 'latest' | 'highest' | 'lowest';
+
+  const orderToOption = (orderOption: orderOption | undefined = 'latest') => {
+    return {
+      orderBy:
+        orderOption === 'latest'
+          ? AllRepositoriesOrderBy.CreatedAt
+          : AllRepositoriesOrderBy.RatingAverage,
+      orderDirection:
+        orderOption === 'lowest' ? OrderDirection.Asc : OrderDirection.Desc,
+    };
+  };
+
+  const [selectedOrder, setSelectedOrder] = useState<ItemValue>();
   const { repositories } = useRepositories({
-    orderBy: AllRepositoriesOrderBy.RatingAverage,
+    ...orderToOption(selectedOrder as orderOption),
   });
-  return <RepositoryListContainer repositories={repositories} />;
+
+  return (
+    <RepositoryListContainer
+      repositories={repositories}
+      selectedOrder={{ selectedOrder, setSelectedOrder }}
+    />
+  );
 };
