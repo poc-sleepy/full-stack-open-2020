@@ -1,8 +1,13 @@
 query getRepositories(
+  $searchKeyword: String
   $orderBy: AllRepositoriesOrderBy
   $orderDirection: OrderDirection
 ) {
-  repositories(orderBy: $orderBy, orderDirection: $orderDirection) {
+  repositories(
+    searchKeyword: $searchKeyword
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+  ) {
     totalCount
     pageInfo {
       hasPreviousPage

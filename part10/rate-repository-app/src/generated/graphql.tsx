@@ -291,6 +291,7 @@ export type SignUpMutation = {
 };
 
 export type GetRepositoriesQueryVariables = Exact<{
+  searchKeyword?: Maybe<Scalars['String']>;
   orderBy?: Maybe<AllRepositoriesOrderBy>;
   orderDirection?: Maybe<OrderDirection>;
 }>;
@@ -572,10 +573,15 @@ export type SignUpMutationOptions = Apollo.BaseMutationOptions<
 >;
 export const GetRepositoriesDocument = gql`
   query getRepositories(
+    $searchKeyword: String
     $orderBy: AllRepositoriesOrderBy
     $orderDirection: OrderDirection
   ) {
-    repositories(orderBy: $orderBy, orderDirection: $orderDirection) {
+    repositories(
+      searchKeyword: $searchKeyword
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
       totalCount
       pageInfo {
         hasPreviousPage
@@ -605,6 +611,7 @@ export const GetRepositoriesDocument = gql`
  * @example
  * const { data, loading, error } = useGetRepositoriesQuery({
  *   variables: {
+ *      searchKeyword: // value for 'searchKeyword'
  *      orderBy: // value for 'orderBy'
  *      orderDirection: // value for 'orderDirection'
  *   },
