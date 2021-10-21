@@ -1,15 +1,9 @@
 import {
-  AllRepositoriesOrderBy,
-  OrderDirection,
+  GetRepositoriesQueryVariables,
   useGetRepositoriesQuery,
 } from '../generated/graphql';
 
-type useRepositoriesProps = {
-  orderBy?: AllRepositoriesOrderBy;
-  orderDirection?: OrderDirection;
-};
-
-export const useRepositories = (props: useRepositoriesProps = {}) => {
+export const useRepositories = (props: GetRepositoriesQueryVariables = {}) => {
   const { data, loading } = useGetRepositoriesQuery({
     fetchPolicy: 'cache-and-network',
     variables: props,
